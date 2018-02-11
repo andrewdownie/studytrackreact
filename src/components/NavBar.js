@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 
 class NavBar extends Component {
+    constructor(props){
+       super(props); 
+        this.state = {msg: "fart oh whoa"};
+    }
+
 
     render(){
+
         return (
             <Navbar>
                 <Navbar.Header>
@@ -16,7 +22,7 @@ class NavBar extends Component {
                         Link
                     </NavItem>
                     <NavItem eventKey={2} href="#">
-                        Link
+                        Link {this.state.msg}
                     </NavItem>
                 </Nav>
             </Navbar>
