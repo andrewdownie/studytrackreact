@@ -38,6 +38,7 @@ class App extends Component {
             this._updateSigninStatus(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
           });
 
+          gapi.auth2.getAuthInstance().signIn( () => console.log("woof"));
 
           //TODO: redo this with a promise?
           gapi.client.load('sheets', 'v4', () => {
@@ -57,8 +58,12 @@ class App extends Component {
     // Apprently this is being called after gapi.client is loaded, but before gapi.client.sheets is loaded
     gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
-      range: 'Class Data!A2:E',
+      range: 'A1:E1',
     }).then(function(response) {
+      console.log("RESULT OF CALL:");
+      console.log(response);
+      console.log(response.result);
+
       var range = response.result;
       if (range.values.length > 0) {
         //appendPre('Name, Major:');
@@ -86,9 +91,10 @@ class App extends Component {
   _updateSigninStatus(isSignedIn) {
 
     if(isSignedIn){
-      this.state.gapi.client.people.people.get({ resourceName: 'people/me' }).then((result)=>{
+      /*this.state.gapi.client.people.people.get({ resourceName: 'people/me' }).then((result)=>{
         this.setState({loginName: result.result.names[0].givenName});
-      });
+      });*/
+      console.log("isSignedIn: " + isSignedIn);
     } else {
       this.setState({loginName: ''});
     }
