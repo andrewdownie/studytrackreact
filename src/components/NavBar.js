@@ -4,7 +4,25 @@ import {Navbar, Nav, NavItem} from 'react-bootstrap';
 class NavBar extends Component {
     constructor(props){
        super(props); 
+
+       if(this.props.gapi == null){
+            console.log("gapi is null");
+       }
+       else{
+           console.log("not null");
+       }
+
         this.state = {msg: "fart oh whoa"};
+    }
+
+
+    signInButtonClick(){
+        console.log("Sign in button click");
+        if(this.props.isSignedIn){
+            //TODO: how make signing out work?
+            //TODO: cannot read clear property of null (where tf do I try to read clear, and why is this even running before I click the button???)
+            this.props.gapi.auth.signOut();
+        }
     }
 
 
@@ -18,6 +36,13 @@ class NavBar extends Component {
 
     render(){
 
+       if(this.props.gapi == null){
+            console.log("gapi is null");
+       }
+       else{
+           console.log("not null");
+       }
+
         return (
             <Navbar>
                 <Navbar.Header>
@@ -29,7 +54,7 @@ class NavBar extends Component {
                     <NavItem eventKey={1} href="#">
                         Link
                     </NavItem>
-                    <NavItem eventKey={2} href="#">
+                    <NavItem onClick={this.signInButtonClick()} eventKey={2} href="#">
                         {this.signInButtonText()}
                     </NavItem>
                 </Nav>

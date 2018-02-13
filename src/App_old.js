@@ -103,13 +103,8 @@ class App extends Component {
   }
 
   render() {
-      var _gapi = null;
-      if(this.state != null){
-          _gapi = this.state.gapi;
-      }
-
     return (
-      <NavBar isSignedIn={this.state != null && this.state.signedIn} gapi={_gapi}/>
+      <NavBar/>
     );
   }
 }
