@@ -8,6 +8,14 @@ class NavBar extends Component {
     }
 
 
+    signInButtonText(){
+        if(this.props.isSignedIn){
+            return <span>Sign Out</span>
+        }
+        return <span>Sign In</span>
+    }
+
+
     render(){
 
         return (
@@ -22,7 +30,7 @@ class NavBar extends Component {
                         Link
                     </NavItem>
                     <NavItem eventKey={2} href="#">
-                        Link {this.state.msg}
+                        {this.signInButtonText()}
                     </NavItem>
                 </Nav>
             </Navbar>

@@ -104,7 +104,7 @@ class App extends Component {
 
   render() {
     return (
-      <NavBar/>
+      <NavBar isSignedIn={this.state != null && this.state.signedIn}/>
     );
   }
 }
