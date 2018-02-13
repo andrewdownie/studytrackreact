@@ -88,7 +88,7 @@ class App extends Component {
 
   // {THIS ISN'T MY CODES }
   // I dont really get what this does atm, but it doesn't cause errors, so that's nice
-  _updateSigninStatus(isSignedIn) {
+  _updateSigninStatus = (isSignedIn) =>{
 
     if(isSignedIn){
       /*this.state.gapi.client.people.people.get({ resourceName: 'people/me' }).then((result)=>{
@@ -96,10 +96,10 @@ class App extends Component {
       });*/
       console.log("isSignedIn: " + isSignedIn);
     } else {
-      this.setState({loginName: ''});
+      //this.setState({loginName: ''});//TODO: why does this cause a null error?
     }
 
-    this.setState({signedIn: isSignedIn});
+    this.setState({signedIn: isSignedIn});//TODO: why does this cause a null error?
   }
 
   render() {

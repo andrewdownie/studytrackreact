@@ -16,17 +16,25 @@ class NavBar extends Component {
     }
 
 
-    signInButtonClick(){
-        console.log("Sign in button click");
+    signInButtonClick = () => {
+        console.log("Sign in button click what is this being called??");
         if(this.props.isSignedIn){
-            //TODO: how make signing out work?
-            //TODO: cannot read clear property of null (where tf do I try to read clear, and why is this even running before I click the button???)
-            this.props.gapi.auth.signOut();
+
+            console.log(this.props.gapi.auth);
+            console.log(this.props.gapi.auth2);
+
+            var auth2 = this.props.gapi.auth2.getAuthInstance();
+            if(this.props.gapi.auth != null){
+                //TODO: the line below cause exceptions
+                //auth.signOut();
+                console.log("Signing out...");
+                auth2.signOut();
+            }
         }
     }
 
 
-    signInButtonText(){
+    signInButtonText = () => {
         if(this.props.isSignedIn){
             return <span>Sign Out</span>
         }
@@ -54,7 +62,7 @@ class NavBar extends Component {
                     <NavItem eventKey={1} href="#">
                         Link
                     </NavItem>
-                    <NavItem onClick={this.signInButtonClick()} eventKey={2} href="#">
+                    <NavItem onClick={this.signInButtonClick} eventKey={2} href="#">
                         {this.signInButtonText()}
                     </NavItem>
                 </Nav>
