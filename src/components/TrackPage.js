@@ -73,6 +73,7 @@ class TrackPage extends Component {
 
 
         var range = response.result;
+        console.log(range);
         if (range.values.length > 0) {
             console.log('Name, Major');
 
@@ -86,7 +87,7 @@ class TrackPage extends Component {
         } else {
             console.log("no data found");
         }
-
+        console.log("Setting sheet data to: " + output);
         this.setState({sheetData: output});
 
     }
@@ -96,8 +97,10 @@ class TrackPage extends Component {
         console.log(this.state.sheetData);
         //TODO: the sheet is loaded here, I don't know where I should put this, as I want it to run once, to grab intial values and then cache?
         if(this.props.isSignedIn && this.state.sheetData == null){
-            console.log("signed in, loaded sheets now");
+            console.log("signed in, load sheets now");
             this.props.gapi.client.load('sheets', 'v4', () => {
+                //TODO: it's currently not making it to here, hoping it's because I accidently spammed requests
+                //TODO: it looks like it does work, it just takes half an hour
                 this._readSheetList();
             });
         }
