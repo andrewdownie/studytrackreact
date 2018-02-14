@@ -37,48 +37,12 @@ class App extends Component {
 					this._signInStatusUpdated(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
 				});
 
-				gapi.auth2.getAuthInstance().signIn().then(
-					() => {
-						gapi.client.load('sheets', 'v4', () => {
-							this._readSheetList(gapi);
-						})
-					}
-
-				);
 
 
 			}.bind(this));
 		});
 	}
 
-
-	// TODO: should this stuff go into a component?
-	_readSheetList(gapi) {
-		gapi.client.sheets.spreadsheets.values.get({
-			spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
-			range: 'A1:E1',
-		}).then(function (response) {
-			console.log("RESULT OF CALL:");
-			console.log(response);
-			console.log(response.result);
-
-			var range = response.result;
-			if (range.values.length > 0) {
-				console.log('Name, Major');
-				for (var i = 0; i < range.values.length; i++) {
-					var row = range.values[i];
-					// Print columns A and E, which correspond to indices 0 and 4.
-					console.log(row[0] + ', ' + row[4]);
-				}
-			} else {
-				console.log("no data found");
-			}
-		}, function (response) {
-			console.log('Error: ' + response.result.error.message);
-		});
-
-
-	}
 
 	// Callback, called when user signIn state changes
 	_signInStatusUpdated = (isSignedIn) => {
