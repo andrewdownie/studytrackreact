@@ -1,14 +1,11 @@
-import React, {
-	Component
-} from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-
+import TrackPage from './components/TrackPage';
 import NavBar from './components/NavBar';
 
 class App extends Component {
-
 
 	//SOURCES:
 	//  - https://www.reddit.com/r/reactjs/comments/67cqzr/using_the_google_api_in_a_react_app_need_a_bit_of/
@@ -37,14 +34,10 @@ class App extends Component {
 					this._signInStatusUpdated(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
 				});
 
-
-
 			}.bind(this));
 		});
 	}
 
-
-	// Callback, called when user signIn state changes
 	_signInStatusUpdated = (isSignedIn) => {
 		this.setState({
 			signedIn: isSignedIn
@@ -56,7 +49,11 @@ class App extends Component {
 		var _gapi = this.state ? this.state.gapi : null;
 
 		return ( 
-			<NavBar isSignedIn = {_isSignedIn} gapi = {_gapi} />
+			//TODO: what the hell am I supposed to wrap the elements in...? is a div fine?
+			<div>
+				<NavBar isSignedIn = {_isSignedIn} gapi = {_gapi} />
+				<TrackPage />
+			</div>
 		);
 	}
 }

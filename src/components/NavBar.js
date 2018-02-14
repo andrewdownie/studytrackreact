@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
+import React, { Component } from 'react';
+
 
 class NavBar extends Component {
 	constructor(props){
-	   super(props); 
+		super(props); 
 		this.state = {};
 	}
-
 
 	signInButtonClick = () => {
 		var auth2 = this.props.gapi.auth2.getAuthInstance();
@@ -27,10 +27,11 @@ class NavBar extends Component {
 				}
 			);
 		}
-
 	}
 
 	// TODO: should this stuff go into a component?
+	// TODO: ya it should go into the body right? It shouldn't be chained, it should just check the prop to see if things are signed in,
+	//			if they are signed in then it should perform the request to load contents into the body, the navbar shouldn't care about the actual data from the sheet
 	_readSheetList(gapi) {
 		gapi.client.sheets.spreadsheets.values.get({
 			spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
@@ -63,9 +64,7 @@ class NavBar extends Component {
 		return <span>Sign In</span>
 	}
 
-
 	render(){
-
 		return (
 			<Navbar>
 				<Navbar.Header>
@@ -86,7 +85,6 @@ class NavBar extends Component {
 			</Navbar>
 		);
 	}
-
 
 }
 
