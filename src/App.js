@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+	Component
+} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
@@ -8,110 +10,91 @@ import NavBar from './components/NavBar';
 class App extends Component {
 
 
-  //SOURCES:
-  //  - https://www.reddit.com/r/reactjs/comments/67cqzr/using_the_google_api_in_a_react_app_need_a_bit_of/
-  //  - https://github.com/dmison/polydactyl/blob/master/src/components/App.jsx
-  componentDidMount(){
-      console.log("Component did mount");
+	//SOURCES:
+	//  - https://www.reddit.com/r/reactjs/comments/67cqzr/using_the_google_api_in_a_react_app_need_a_bit_of/
+	//  - https://github.com/dmison/polydactyl/blob/master/src/components/App.jsx
+	componentDidMount() {
+		console.log("Component did mount");
 
-      require('google-client-api')().then((gapi)=>{
-        console.log('initializing GAPI...');
-        var CLIENT_ID = '794809467159-f7ngrrspdm6vkma7b6e898d7et7j4p1u.apps.googleusercontent.com';
-        var API_KEY = 'AIzaSyDPpbEG8KS9Eu3-yrx9TAlCqaCaCVNCN48';
-        var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-        var SCOPES = 'https://www.googleapis.com/auth/drive.file';
-  
-        gapi.client.init({
-          discoveryDocs: DISCOVERY_DOCS,
-          clientId: CLIENT_ID,
-          apiKey: API_KEY,
-          scope: SCOPES
-        }).then(function () {
-          console.log('GAPI Initialized.');
-          // Listen for sign-in state changes.
-          gapi.auth2.getAuthInstance().isSignedIn.listen(this._updateSigninStatus);
+		require('google-client-api')().then((gapi) => {
+			console.log('initializing GAPI...');
+			var CLIENT_ID = '794809467159-f7ngrrspdm6vkma7b6e898d7et7j4p1u.apps.googleusercontent.com';
+			var API_KEY = 'AIzaSyDPpbEG8KS9Eu3-yrx9TAlCqaCaCVNCN48';
+			var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+			var SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
+			gapi.client.init({
+				discoveryDocs: DISCOVERY_DOCS,
+				clientId: CLIENT_ID,
+				apiKey: API_KEY,
+				scope: SCOPES
+			}).then(function () {
+				console.log('GAPI Initialized.');
+				gapi.auth2.getAuthInstance().isSignedIn.listen(this._signInStatusUpdated);
 
+				this.setState({gapi: gapi}, () => {
+					// TODO: so we're manually intializing the state, and then manually calling the callback that handles when the sign in state changes... neat
+					this._signInStatusUpdated(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
+				});
 
-          this.setState({gapi: gapi}, ()=>{
-            // Handle the initial sign-in state.
-            this._updateSigninStatus(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
-          });
+				gapi.auth2.getAuthInstance().signIn().then(
+					() => {
+						gapi.client.load('sheets', 'v4', () => {
+							this._readSheetList(gapi);
+						})
+					}
 
-          gapi.auth2.getAuthInstance().signIn( () => console.log("woof"));
-
-          //TODO: redo this with a promise?
-          gapi.client.load('sheets', 'v4', () => {
-            // TODO: currently passing the gapi is a parm, how the hell do you actually manage the gapi in react?
-            //    TODO: someone said they have it load on a base component, and then refernece it from there in all child compoents somehow?
-            this._readSheetList(gapi);
-          });
-  
-        }.bind(this));
-      });
-  }
+				);
 
 
-  _readSheetList(gapi){
-    //This is to test api call using gapi object
-
-    // Apprently this is being called after gapi.client is loaded, but before gapi.client.sheets is loaded
-    gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
-      range: 'A1:E1',
-    }).then(function(response) {
-      console.log("RESULT OF CALL:");
-      console.log(response);
-      console.log(response.result);
-
-      var range = response.result;
-      if (range.values.length > 0) {
-        //appendPre('Name, Major:');
-        console.log('Name, Major');
-        for (var i = 0; i < range.values.length; i++) {
-          var row = range.values[i];
-          // Print columns A and E, which correspond to indices 0 and 4.
-          //appendPre(row[0] + ', ' + row[4]);
-          console.log(row[0] + ', ' + row[4]);
-        }
-      } else {
-        //appendPre('No data found.');
-        console.log("no data found");
-      }
-    }, function(response) {
-      //appendPre('Error: ' + response.result.error.message);
-      console.log('Error: ' + response.result.error.message);
-    });
+			}.bind(this));
+		});
+	}
 
 
-  }
+	// TODO: should this stuff go into a component?
+	_readSheetList(gapi) {
+		gapi.client.sheets.spreadsheets.values.get({
+			spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
+			range: 'A1:E1',
+		}).then(function (response) {
+			console.log("RESULT OF CALL:");
+			console.log(response);
+			console.log(response.result);
 
-  // {THIS ISN'T MY CODES }
-  // I dont really get what this does atm, but it doesn't cause errors, so that's nice
-  _updateSigninStatus = (isSignedIn) =>{
+			var range = response.result;
+			if (range.values.length > 0) {
+				console.log('Name, Major');
+				for (var i = 0; i < range.values.length; i++) {
+					var row = range.values[i];
+					// Print columns A and E, which correspond to indices 0 and 4.
+					console.log(row[0] + ', ' + row[4]);
+				}
+			} else {
+				console.log("no data found");
+			}
+		}, function (response) {
+			console.log('Error: ' + response.result.error.message);
+		});
 
-    if(isSignedIn){
-      /*this.state.gapi.client.people.people.get({ resourceName: 'people/me' }).then((result)=>{
-        this.setState({loginName: result.result.names[0].givenName});
-      });*/
-      console.log("isSignedIn: " + isSignedIn);
-    } else {
-      //this.setState({loginName: ''});//TODO: why does this cause a null error?
-    }
 
-    this.setState({signedIn: isSignedIn});//TODO: why does this cause a null error?
-  }
+	}
 
-  render() {
-      var _gapi = null;
-      if(this.state != null){
-          _gapi = this.state.gapi;
-      }
+	// Callback, called when user signIn state changes
+	_signInStatusUpdated = (isSignedIn) => {
+		this.setState({
+			signedIn: isSignedIn
+		}); 
+	}
 
-    return (
-      <NavBar isSignedIn={this.state != null && this.state.signedIn} gapi={_gapi}/>
-    );
-  }
+	render() {
+		var _isSignedIn = this.state ? this.state.signedIn : false;
+		var _gapi = this.state ? this.state.gapi : null;
+
+		return ( 
+			<NavBar isSignedIn = {_isSignedIn} gapi = {_gapi} />
+		);
+	}
 }
 
 export default App;
