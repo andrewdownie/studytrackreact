@@ -18,7 +18,7 @@ class App extends Component {
 			var CLIENT_ID = '794809467159-f7ngrrspdm6vkma7b6e898d7et7j4p1u.apps.googleusercontent.com';
 			var API_KEY = 'AIzaSyDPpbEG8KS9Eu3-yrx9TAlCqaCaCVNCN48';
 			var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-			var SCOPES = 'https://www.googleapis.com/auth/drive.file';
+            var SCOPES = 'https://www.googleapis.com/auth/drive.file';
 
 			gapi.client.init({
 				discoveryDocs: DISCOVERY_DOCS,

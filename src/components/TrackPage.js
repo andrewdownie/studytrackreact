@@ -15,7 +15,7 @@ class TrackPage extends Component {
     }
 
 
-	_readSheetList(){
+	_readSheetData(){
         var gapi = this.props.gapi;
 
         if(!gapi){
@@ -28,6 +28,7 @@ class TrackPage extends Component {
             return "";
         }
 
+        //TODO: make it load the correct sheet by default
 		gapi.client.sheets.spreadsheets.values.get({
 			spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
 			range: 'A1:E1',
@@ -95,14 +96,31 @@ class TrackPage extends Component {
     render(){
         console.log("Sheet data is:");
         console.log(this.state.sheetData);
-        //TODO: the sheet is loaded here, I don't know where I should put this, as I want it to run once, to grab intial values and then cache?
-        if(this.props.isSignedIn && this.state.sheetData == null){
+        if(this.props.isSignedIn && this.state.sheetData == null){//TODO: is this the best way to make sure the sheet loading runs once?
             console.log("signed in, load sheets now");
-            this.props.gapi.client.load('sheets', 'v4', () => {
-                //TODO: it's currently not making it to here, hoping it's because I accidently spammed requests
-                //TODO: it looks like it does work, it just takes half an hour
-                this._readSheetList();
+
+            //TODO: parallel promise??
+            //TODO: need to load the drive api here... need to find the signature to do this
+            this.props.gapi.client.load('drive', 'v2', () => {
+                //TODO: load all of the sheets this app has access to
+                //TODO: then grab the (?newest?) one, and feed it into the readSheetData call
+
+                
+                //TODO: for some reason drive.list() isn't a function?
+                var listRequest = this.props.gapi.client.drive.files.list();
+                
+                //TODO: add parameter for name of sheet
+                listRequest.execute(function(response){
+                    console.log("RESPONSE OF LOADING FILES IS:");
+                    console.log(response.files);
+                });
+
             });
+
+            this.props.gapi.client.load('sheets', 'v4', () => {
+                this._readSheetData();
+            });
+
         }
 
         var gapi = this.props.gapi;
