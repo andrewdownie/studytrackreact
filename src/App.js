@@ -39,10 +39,9 @@ class App extends Component {
 	}
 
 	_signInStatusUpdated = (isSignedIn) => {
-		this.setState({
-			signedIn: isSignedIn
-		}); 
+		this.setState({signedIn: isSignedIn}); 
 	}
+
 
 	render() {
 		var _isSignedIn = this.state ? this.state.signedIn : false;
@@ -50,9 +49,10 @@ class App extends Component {
 
 		return ( 
 			//TODO: what the hell am I supposed to wrap the elements in...? is a div fine?
+			//TODO: replace is signed in with ref-ing gapi directly
 			<div>
-				<NavBar isSignedIn = {_isSignedIn} gapi = {_gapi} />
-				<TrackPage />
+				<NavBar isSignedIn={_isSignedIn} gapi={_gapi} />
+				<TrackPage isSignedIn={_isSignedIn} gapi={_gapi} />
 			</div>
 		);
 	}
