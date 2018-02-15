@@ -42,7 +42,7 @@ class TrackPage extends Component {
 
 
             var range = response.result;
-            if (range.values.length > 0) {
+            if (range.values != null && range.values.length > 0) {
                 console.log('Name, Major');
 
                 for (var i = 0; i < range.values.length; i++) {
@@ -53,7 +53,7 @@ class TrackPage extends Component {
                 }
 
             } else {
-                console.log("no data found");
+                console.log("no data found, is the target spreadsheet empty?");
             }
 
             this.setState({sheetData: output});
@@ -113,11 +113,10 @@ class TrackPage extends Component {
     }
 
 
-    _findUserDataSheet(){
+    _findUserDataSheet(userdata_sheet_name){
         return new Promise((resolve, reject) => {
 
             //TODO: I don't know where to put this atm, should I create a component full of static vars that holds all the google connection setup data?
-            var USERDATA_SHEET_NAME = "StudyTrackUserData"
             console.log("signed in, load sheets now");
 
             this.props.gapi.client.load('drive', 'v2', () => {
@@ -133,38 +132,49 @@ class TrackPage extends Component {
                     if(len > 0){
                         for(var i = 0; i < response.files.length; i++){
                             //console.log(response.files[i]);
-                            if(response.files[i].name == USERDATA_SHEET_NAME){
+                            if(response.files[i].name == userdata_sheet_name){
                                 sheetID = response.files[i].id;
                             }
                         }
                         console.log("last sheet id is: " + sheetID);
                     }
 
-                    if(sheetID == null){
-                        //TODO: create a userdata spreadsheet for the user somewhere around here
-                        console.log("no userdata sheet found, creating a new one now...");
-                        reject(sheetID);
-                    }
-                    else{
-                        resolve(sheetID);
-                    }
+                    resolve(sheetID);
                 });
             });
 
         });
     }
 
+    _createUserDataSheet(){}
+
 
     render(){
         console.log("Sheet data is:");
         console.log(this.state.sheetData);
 
+        var USERDATA_SHEET_NAME = "StudyTrackUserData"
 
         if(this.props.isSignedIn && this.state.sheetData == null){//TODO: is this the best way to make sure the sheet loading runs once?
-            this._findUserDataSheet().then((sheetID) =>{
+            this._findUserDataSheet(USERDATA_SHEET_NAME).then((sheetID) =>{
+
 
                 this.props.gapi.client.load('sheets', 'v4', () => {
-                    this._readSheetData(sheetID);
+                    if(sheetID == null){
+                        var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
+                            { "properties": { "title": USERDATA_SHEET_NAME } },
+                        );
+
+                        createRequest.execute((response) => {
+                            console.log(response.spreadsheetId);
+                            this._readSheetData(response.spreadsheetId);
+                        });
+
+                    }
+                    else{
+                        //TODO: how do I get the ID of the created sheet
+                        this._readSheetData(sheetID);
+                    }
                 });
 
             });
