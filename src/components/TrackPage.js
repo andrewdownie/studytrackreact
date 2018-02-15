@@ -15,7 +15,7 @@ class TrackPage extends Component {
     }
 
 
-	_readSheetData(){
+	_readSheetData(sheetID){
         var gapi = this.props.gapi;
 
         if(!gapi){
@@ -30,7 +30,8 @@ class TrackPage extends Component {
 
         //TODO: make it load the correct sheet by default
 		gapi.client.sheets.spreadsheets.values.get({
-			spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
+            //spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
+            spreadsheetId: sheetID,
 			range: 'A1:E1',
         }).then(function(response){
             var output = "";
@@ -96,6 +97,10 @@ class TrackPage extends Component {
     render(){
         console.log("Sheet data is:");
         console.log(this.state.sheetData);
+
+        //TODO: I don't know where to put this atm, should I create a component full of static vars that holds all the google connection setup data?
+        var USERDATA_SHEET_NAME = "StudyTrackUserData"
+
         if(this.props.isSignedIn && this.state.sheetData == null){//TODO: is this the best way to make sure the sheet loading runs once?
             console.log("signed in, load sheets now");
 
@@ -106,20 +111,27 @@ class TrackPage extends Component {
                 //TODO: then grab the (?newest?) one, and feed it into the readSheetData call
 
                 
-                //TODO: for some reason drive.list() isn't a function?
                 var listRequest = this.props.gapi.client.drive.files.list();
                 
+                console.log("RESPONSE OF LOADING FILES IS:");
                 //TODO: add parameter for name of sheet
-                listRequest.execute(function(response){
-                    console.log("RESPONSE OF LOADING FILES IS:");
-                    console.log(response.files);
+                var lastSheet;
+                listRequest.execute((response) => {
+                    for(var i = 0; i < response.files.length; i++){
+                        //console.log(response.files[i]);
+                        lastSheet = response.files[i].id;
+                    }
+
+                    console.log("last sheet id is: " + lastSheet);
+                    this.props.gapi.client.load('sheets', 'v4', () => {
+                        this._readSheetData(lastSheet);
+                    });
                 });
 
+
+
             });
 
-            this.props.gapi.client.load('sheets', 'v4', () => {
-                this._readSheetData();
-            });
 
         }
 
