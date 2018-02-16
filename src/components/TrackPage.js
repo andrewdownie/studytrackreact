@@ -222,27 +222,28 @@ class TrackPage extends Component {
                             else{
                                 console.log("nope");
                                 //TODO: create the sheet here
-                                var createSheet= this.props.gapi.client.sheets.spreadsheets.batchUpdate(
-                                    { 
-                                        "spreadsheetId": sheetID,
-                                        "addSheet": [
-                                        {
-                                            "properties": {
-                                                "title" : "meow"
-                                            }
-                                        }]
-                                    });
-                                /*
-                                "spreadsheetId": string,
-                                "properties": {
-                                    object(SpreadsheetProperties)
+
+                                var createSheet = this.props.gapi.client.sheets.spreadsheets.batchUpdate(
+                                {
+                                    "spreadsheetId": sheetID
                                 },
-                                "sheets": [
-                                    {
-                                    object(Sheet)
-                                    }
-                                ],
-                                */
+                                {
+                                    "requests": [
+                                        {
+                                            "addSheet": [
+                                            {
+                                                "properties": {
+                                                    "title" : "meow",
+                                                    "spreadsheetId": sheetID,
+                                                    "sheetType": "GRID",
+                                                    "gridProperties": {
+                                                        "rowCount": 50,
+                                                        "columnCount": 9
+                                                    }
+                                                }
+                                            }]
+                                    }]
+                                });
 
                                 createSheet.execute((response) => {
                                     console.log(response);
