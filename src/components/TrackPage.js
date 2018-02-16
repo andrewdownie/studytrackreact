@@ -146,7 +146,13 @@ class TrackPage extends Component {
         });
     }
 
-    _createUserDataSheet(){}
+
+    _checkForThisYearsSheet(){
+        //TODO: check for this years sheet existance
+        //TODO: if it doesn't exist create it
+        //TODO: return as a promise, so we can chain this together with reading outside
+    }
+
 
 
     render(){
@@ -154,12 +160,24 @@ class TrackPage extends Component {
         console.log(this.state.sheetData);
 
         var USERDATA_SHEET_NAME = "StudyTrackUserData"
+        var USERDATA_APPS_SCRIPT_ID = "1aF4mAD1Od_Us75EidR7XKjN_74AaT8RYNrYRss9UxaU_iwrv5402ThNj";
 
+
+        // in the following if statement:
+        //  1. find user data spread sheet
+        //  2. load the sheets api 
+        //  3. create the user data spread sheet if it doesn't exist
+        //  4. read the user data spread sheet
+        //  5. create the current years user data spread sheet if it doesn't exist
+        //  6. read the current years user data spreadsheet
         if(this.props.isSignedIn && this.state.sheetData == null){//TODO: is this the best way to make sure the sheet loading runs once?
+
+
             this._findUserDataSheet(USERDATA_SHEET_NAME).then((sheetID) =>{
-
-
+                
                 this.props.gapi.client.load('sheets', 'v4', () => {
+                    //TODO: this if statement splits things into two async path,s
+                    //TODO: is there some way to elegantly merge these while keeping control flow?
                     if(sheetID == null){
                         var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
                             { "properties": { "title": USERDATA_SHEET_NAME } },
@@ -167,13 +185,25 @@ class TrackPage extends Component {
 
                         createRequest.execute((response) => {
                             console.log(response.spreadsheetId);
-                            this._readSheetData(response.spreadsheetId);
+
+                            //this._readSheetData(response.spreadsheetId);
                         });
 
                     }
                     else{
-                        //TODO: how do I get the ID of the created sheet
-                        this._readSheetData(sheetID);
+                        //this._readSheetData(sheetID);
+
+
+
+                        //TODO: get the list of sheet names
+                        var listSheets = this.props.gapi.client.sheets.spreadsheets.get(
+                            {spreadsheetId: sheetID}
+                        );
+
+                        listSheets.execute((response) => {
+                            console.log(response);
+                        });
+
                     }
                 });
 
