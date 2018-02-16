@@ -230,20 +230,19 @@ class TrackPage extends Component {
                                 {
                                     "requests": [
                                         {
-                                            "addSheet": [
-                                            {
-                                                "properties": {
-                                                    "title" : "meow",
-                                                    "spreadsheetId": sheetID,
-                                                    "sheetType": "GRID",
-                                                    "gridProperties": {
-                                                        "rowCount": 50,
-                                                        "columnCount": 9
-                                                    }
-                                                }
-                                            }]
-                                    }]
-                                });
+                                        "addSheet": {
+                                            "properties": {
+                                            "title": this._year().toString(),
+                                            "gridProperties": {
+                                                "columnCount": 1,
+                                                "rowCount": 365
+                                            }
+                                            }
+                                        }
+                                        }
+                                    ]
+                                    }
+                                );
 
                                 createSheet.execute((response) => {
                                     console.log(response);
