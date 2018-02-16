@@ -94,6 +94,10 @@ class TrackPage extends Component {
 
     }
 
+    _year(){
+        return new Date().getUTCFullYear();
+    }
+
     _weekOfYear(){
         var d = new Date();
         var dayNum = d.getUTCDay() || 7;
@@ -202,6 +206,50 @@ class TrackPage extends Component {
 
                         listSheets.execute((response) => {
                             console.log(response);
+                            var sheetFound = false;
+
+                            for(var i = 0; i < response.sheets.length; i++){
+                                console.log(this._year());
+                                if(response.sheets[i].properties.title == this._year()){
+                                    sheetFound = true;
+                                    break;
+                                }
+                            }
+
+                            if(sheetFound){
+                                console.log("we found it boi");
+                            }
+                            else{
+                                console.log("nope");
+                                //TODO: create the sheet here
+                                var createSheet= this.props.gapi.client.sheets.spreadsheets.batchUpdate(
+                                    { 
+                                        "spreadsheetId": sheetID,
+                                        "addSheet": [
+                                        {
+                                            "properties": {
+                                                "title" : "meow"
+                                            }
+                                        }]
+                                    });
+                                /*
+                                "spreadsheetId": string,
+                                "properties": {
+                                    object(SpreadsheetProperties)
+                                },
+                                "sheets": [
+                                    {
+                                    object(Sheet)
+                                    }
+                                ],
+                                */
+
+                                createSheet.execute((response) => {
+                                    console.log(response);
+                                });
+                            }
+
+
                         });
 
                     }
