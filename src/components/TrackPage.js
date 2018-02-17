@@ -15,58 +15,8 @@ class TrackPage extends Component {
     }
 
 
-	_readSheetData(sheetID){
-        var gapi = this.props.gapi;
-
-        if(!gapi){
-            return "";
-        }
-        if(!gapi.client){
-            return "";
-        }
-        if(!gapi.client.sheets){
-            return "";
-        }
-
-        //TODO: make it load the correct sheet by default
-		gapi.client.sheets.spreadsheets.values.get({
-            //spreadsheetId: '1u9ljq0razYyn-yTou6e8yAoHuLnCdGKU_a7URpbeSvg',
-            spreadsheetId: sheetID,
-			range: 'A1:E1',
-        }).then(function(response){
-            var output = "";
-
-            console.log("RESULT OF CALL:");
-            console.log(response);
-            console.log(response.result);
-
-
-            var range = response.result;
-            if (range.values != null && range.values.length > 0) {
-                console.log('Name, Major');
-
-                for (var i = 0; i < range.values.length; i++) {
-                    var row = range.values[i];
-                    // Print columns A and E, which correspond to indices 0 and 4.
-                    //console.log(row[0] + ', ' + row[4]);
-                    output += row[0] + ', ' + row[4] + '\n';
-                }
-
-            } else {
-                console.log("no data found, is the target spreadsheet empty?");
-            }
-
-            this.setState({sheetData: output});
-
-        }.bind(this),
-        function (response) {
-			console.log('Error: ' + response.result.error.message);
-        });
-
-    }
-
-    //TODO: using this method to just try to get this working using setState...
-    _ParseSheetDataFromAjax(response){
+    _handleSheetData(response){
+        //Given the result of grabbing cell data from a sheet, prints to the terminal
         var output = "";
 
         console.log("RESULT OF CALL:");
@@ -75,186 +25,231 @@ class TrackPage extends Component {
 
 
         var range = response.result;
-        console.log(range);
-        if (range.values.length > 0) {
+        if (range.values != null && range.values.length > 0) {
             console.log('Name, Major');
 
             for (var i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
                 // Print columns A and E, which correspond to indices 0 and 4.
                 //console.log(row[0] + ', ' + row[4]);
-                output += row[0] + ', ' + row[4] + '\n';
+                output += row[0] + '\n';
             }
 
         } else {
-            console.log("no data found");
+            console.log("no data found, is the target spreadsheet empty?");
         }
-        console.log("Setting sheet data to: " + output);
+
         this.setState({sheetData: output});
-
-    }
-
-    _year(){
-        return new Date().getUTCFullYear();
-    }
-
-    _weekOfYear(){
-        var d = new Date();
-        var dayNum = d.getUTCDay() || 7;
-        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-        var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-        return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
-    }
-
-    _sheetName(){
-        var d = new Date();
-        return d.getFullYear().toString().substr(-2) + this._weekOfYear();
-    }
-
-    _lastWeeksSheetName(){
-        var d = new Date();
-        return d.getFullYear().toString().substr(-2) + (this._weekOfYear() - 1);
     }
 
 
-    _findUserDataSheet(userdata_sheet_name){
+	_readSheetData(sheetID){
         return new Promise((resolve, reject) => {
+            var gapi = this.props.gapi;
 
-            //TODO: I don't know where to put this atm, should I create a component full of static vars that holds all the google connection setup data?
-            console.log("signed in, load sheets now");
+            if(!gapi){
+                return "";
+            }
+            if(!gapi.client){
+                return "";
+            }
+            if(!gapi.client.sheets){
+                return "";
+            }
 
-            this.props.gapi.client.load('drive', 'v2', () => {
-
-                
-                var listRequest = this.props.gapi.client.drive.files.list();
-                
-                console.log("RESPONSE OF LOADING FILES IS:");
-                //TODO: add parameter for name of sheet
-                var sheetID = null;
-                listRequest.execute((response) => {
-                    var len = response.files.length;
-                    if(len > 0){
-                        for(var i = 0; i < response.files.length; i++){
-                            //console.log(response.files[i]);
-                            if(response.files[i].name == userdata_sheet_name){
-                                sheetID = response.files[i].id;
-                            }
-                        }
-                        console.log("last sheet id is: " + sheetID);
-                    }
-
-                    resolve(sheetID);
-                });
+            gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: sheetID,
+                //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
+                //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
+                range: this._year() + '!A1:A365'
+            }).then(function(response){
+                resolve(response);
+            }.bind(this),
+            function (response) {
+                console.log('Error: ' + response.result.error.message);
             });
 
         });
     }
 
 
-    _checkForThisYearsSheet(){
-        //TODO: check for this years sheet existance
-        //TODO: if it doesn't exist create it
-        //TODO: return as a promise, so we can chain this together with reading outside
+    _checkIfUserDataSSExists(userdata_sheet_name){
+        return new Promise((resolve, reject) => {
+
+            var listSheets = this.props.gapi.client.drive.files.list();
+            
+            console.log("RESPONSE OF LOADING FILES IS:");
+            var sheetID = null;
+            listSheets.execute((response) => {
+                var len = response.files.length;
+                if(len > 0){
+                    for(var i = 0; i < response.files.length; i++){
+                        //console.log(response.files[i]);
+                        if(response.files[i].name == userdata_sheet_name){
+                            sheetID = response.files[i].id;
+                        }
+                    }
+                    console.log("last sheet id is: " + sheetID);
+                }
+
+                resolve(sheetID);
+            });
+
+        });
+    }
+    
+    _createThisYearsSheet(sheetID){
+        return new Promise((resolve, reject) => {
+            var createSheet = this.props.gapi.client.sheets.spreadsheets.batchUpdate(
+            {
+                "spreadsheetId": sheetID
+            },
+            {
+                "requests": [
+                    {
+                    "addSheet": {
+                        "properties": {
+                        "title": this._year().toString(),
+                        "gridProperties": {
+                            "columnCount": 1,
+                            "rowCount": 365
+                        }
+                        }
+                    }
+                    }
+                ]
+                }
+            );
+
+            createSheet.execute((response) => {
+                resolve(response);
+            });
+        });
+    }
+
+    _checkIfSheetExists(spreadSheetId){
+        return new Promise((resolve, reject) => {
+            var listSheets = this.props.gapi.client.sheets.spreadsheets.get(
+                {spreadsheetId: spreadSheetId}
+            );
+
+            listSheets.execute((response) => {
+                console.log(response);
+                var sheetFound = false;
+
+                for(var i = 0; i < response.sheets.length; i++){
+                    console.log(this._year());
+                    if(response.sheets[i].properties.title == this._year()){
+                        sheetFound = true;
+                        break;
+                    }
+                }
+                resolve(sheetFound);
+            });
+        });
+    }
+
+    _createSheetIfNotExists(sheetExists, sheetID){
+        return new Promise((resolve, reject) => {
+            if(sheetExists){
+                console.log("we found it boi");
+                resolve(this.gapi);
+            }
+            else{
+                console.log("Creating sheet for year " + this._year());
+                this._createThisYearsSheet(sheetID).then((response) => {
+                    console.log(response);
+                    resolve(this.gapi);
+                });
+            }
+        });
+    }
+
+    _createUserDataSS(userdata_sheet_name){
+        return new Promise((resolve, reject) => {
+            var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
+                { "properties": { "title": userdata_sheet_name} },
+            );
+
+            createRequest.execute((response) => {
+                resolve(response);
+            });
+        });
+    }
+
+    _createUserDataSSIfNotExists(spreadSheetExists, userdata_sheet_name){
+        return new Promise((resolve, reject) => {
+            if(spreadSheetExists == false){
+                this._createUserDataSS(userdata_sheet_name)
+                .then((response) => {
+                    resolve(response);
+                });
+            }
+            else{
+                resolve();
+            }
+        });
+    }
+
+
+    _loadAPIs(){
+        return new Promise((resolve, reject) => {
+
+            var loadDriveAPI = new Promise((resolve, reject) => {
+                this.props.gapi.client.load('drive', 'v2', () => {
+                    resolve();
+                });
+            });
+
+            var loadSheetsAPI = new Promise((resolve, reject) => {
+                this.props.gapi.client.load('sheets', 'v4', () => {
+                    resolve();
+                });
+            });
+
+            Promise.all([loadDriveAPI, loadSheetsAPI]).then(values => { 
+                resolve();
+            });
+
+        });
     }
 
 
 
     render(){
-        console.log("Sheet data is:");
+        console.log("Sheet state data is:");
         console.log(this.state.sheetData);
 
         var USERDATA_SHEET_NAME = "StudyTrackUserData"
         var USERDATA_APPS_SCRIPT_ID = "1aF4mAD1Od_Us75EidR7XKjN_74AaT8RYNrYRss9UxaU_iwrv5402ThNj";
 
+        if(this.props.isSignedIn && this.state.sheetData == null){
 
-        // in the following if statement:
-        //  1. find user data spread sheet
-        //  2. load the sheets api 
-        //  3. create the user data spread sheet if it doesn't exist
-        //  4. read the user data spread sheet
-        //  5. create the current years user data spread sheet if it doesn't exist
-        //  6. read the current years user data spreadsheet
-        if(this.props.isSignedIn && this.state.sheetData == null){//TODO: is this the best way to make sure the sheet loading runs once?
+            this._loadAPIs()
+            .then(() => {
 
+                this._checkIfUserDataSSExists(USERDATA_SHEET_NAME)
+                .then((spreadsheetId) =>{
 
-            this._findUserDataSheet(USERDATA_SHEET_NAME).then((sheetID) =>{
-                
-                this.props.gapi.client.load('sheets', 'v4', () => {
-                    //TODO: this if statement splits things into two async path,s
-                    //TODO: is there some way to elegantly merge these while keeping control flow?
-                    if(sheetID == null){
-                        var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
-                            { "properties": { "title": USERDATA_SHEET_NAME } },
-                        );
+                    this._createUserDataSSIfNotExists(spreadsheetId != null, USERDATA_SHEET_NAME)
+                    .then(() => {
 
-                        createRequest.execute((response) => {
-                            console.log(response.spreadsheetId);
+                        this._checkIfSheetExists(spreadsheetId)
+                        .then((sheetExists) => {
 
-                            //this._readSheetData(response.spreadsheetId);
-                        });
+                            this._createSheetIfNotExists(sheetExists, spreadsheetId)
+                            .then(() => {
 
-                    }
-                    else{
-                        //this._readSheetData(sheetID);
+                                this._readSheetData(spreadsheetId)
+                                .then((sheetDataResult) => {
 
+                                    this._handleSheetData(sheetDataResult);
 
-
-                        //TODO: get the list of sheet names
-                        var listSheets = this.props.gapi.client.sheets.spreadsheets.get(
-                            {spreadsheetId: sheetID}
-                        );
-
-                        listSheets.execute((response) => {
-                            console.log(response);
-                            var sheetFound = false;
-
-                            for(var i = 0; i < response.sheets.length; i++){
-                                console.log(this._year());
-                                if(response.sheets[i].properties.title == this._year()){
-                                    sheetFound = true;
-                                    break;
-                                }
-                            }
-
-                            if(sheetFound){
-                                console.log("we found it boi");
-                            }
-                            else{
-                                console.log("nope");
-                                //TODO: create the sheet here
-
-                                var createSheet = this.props.gapi.client.sheets.spreadsheets.batchUpdate(
-                                {
-                                    "spreadsheetId": sheetID
-                                },
-                                {
-                                    "requests": [
-                                        {
-                                        "addSheet": {
-                                            "properties": {
-                                            "title": this._year().toString(),
-                                            "gridProperties": {
-                                                "columnCount": 1,
-                                                "rowCount": 365
-                                            }
-                                            }
-                                        }
-                                        }
-                                    ]
-                                    }
-                                );
-
-                                createSheet.execute((response) => {
-                                    console.log(response);
                                 });
-                            }
-
-
+                            });
                         });
-
-                    }
+                    });
                 });
-
             });
         }
 
@@ -278,6 +273,19 @@ class TrackPage extends Component {
         );
     }
 
+
+    // HELPER FUNCTIONS
+    _year(){
+        return new Date().getUTCFullYear();
+    }
+
+    _weekOfYear(){
+        var d = new Date();
+        var dayNum = d.getUTCDay() || 7;
+        d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+        return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+    }
 }
 
 export default TrackPage;
