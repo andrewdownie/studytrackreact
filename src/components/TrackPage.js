@@ -94,6 +94,7 @@ class TrackPage extends Component {
     }
     
     _checkIfSheetExists(chaindata){
+
         return new Promise((resolve, reject) => {
             var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
                 {spreadsheetId: chaindata.spreadsheet.id}
@@ -116,15 +117,18 @@ class TrackPage extends Component {
     }
 
     _createSheetIfNotExists(chaindata){
+        console.log("create sheet if not exists (why does this fail?)");
+
         return new Promise((resolve, reject) => {
             if(chaindata.studysheet.exists){
                 console.log("no need to create sheet");
                 resolve(chaindata);
             }
             else{
+                console.log("create study sheet now");
                 var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
                 {
-                    "spreadsheetId":chaindata.spreadsheet.id
+                    "spreadsheetId": chaindata.spreadsheet.id
                 },
                 {
                     "requests": [
@@ -143,7 +147,8 @@ class TrackPage extends Component {
                     }
                 );
 
-                createSheet.execute(() => {
+                createSheet.execute((response) => {
+                    console.log(response);
                     //TODO: Do I need to grab the id of the study sheet here?
                     chaindata.studysheet.exists = true;
                     resolve(chaindata);
@@ -206,13 +211,9 @@ class TrackPage extends Component {
                 title: "StudyTrackUserData",
                 id: null
             },
-            projectsheet: {
-                exists: false,
-                title: this._year() + "-projects"
-            },
             studysheet: {
                 exists: false,
-                title: this._year() + "-study"
+                title: this._year().toString()
             }
         };
     }
