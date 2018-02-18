@@ -16,6 +16,7 @@ class TrackPage extends Component {
 
 
     _addStudyDataToPage(response){
+        console.log("add study data to page");
         //Given the result of grabbing cell data from a sheet, prints to the terminal
         var output = "";
 
@@ -41,6 +42,7 @@ class TrackPage extends Component {
 
 
 	_readStudyData(chaindata){
+        console.log("read study data");
         return new Promise((resolve, reject) => {
             var gapi = chaindata.gapi;
 
@@ -59,7 +61,7 @@ class TrackPage extends Component {
                 spreadsheetId: chaindata.spreadsheet.id,
                 //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
                 //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-                range: this._year() + '!A1:A365'
+                range: chaindata.studysheet.title + '!A1:A365'
             }).then(function(response){
                 resolve(response);
             }.bind(this),
@@ -71,10 +73,11 @@ class TrackPage extends Component {
     }
 
 
-    _checkIfUserDataSSExists(chaindata){
+    _checkIfSSExists(chaindata){
+        console.log("check if ss exists");
         return new Promise((resolve, reject) => {
 
-            var listSheets = this.props.gapi.client.drive.files.list();
+            var listSheets = chaindata.gapi.client.drive.files.list();
             
             console.log("RESPONSE OF LOADING FILES IS:");
             listSheets.execute((response) => {
@@ -82,21 +85,22 @@ class TrackPage extends Component {
                 if(len > 0){
                     for(var i = 0; i < response.files.length; i++){
                         //console.log(response.files[i]);
-                        if(response.files[i].name == chaindata.spreadsheet.name){
+                        if(response.files[i].name == chaindata.spreadsheet.title){
                             chaindata.spreadsheet.id = response.files[i].id;
                             chaindata.spreadsheet.exists = true;
                         }
                     }
                     console.log("last sheet id is: " + chaindata.spreadsheet.id);
                 }
-
+                console.log("ss id set to : " + chaindata.spreadsheet.id);
                 resolve(chaindata);
             });
 
         });
     }
     
-    _createSheet(chaindata){
+    /*_createSheet = (chaindata) => {
+        console.log("create sheet");
         return new Promise((resolve, reject) => {
             var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
             {
@@ -123,10 +127,12 @@ class TrackPage extends Component {
                 resolve(chaindata);
             });
         });
-    }
+    }*/
 
     _checkIfSheetExists(chaindata){
+        console.log("check if sheet exists");
         return new Promise((resolve, reject) => {
+            console.log(chaindata.spreadsheet.id);
             var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
                 {spreadsheetId: chaindata.spreadsheet.id}
             );
@@ -136,8 +142,8 @@ class TrackPage extends Component {
                 chaindata.studysheet.exists = false;
 
                 for(var i = 0; i < response.sheets.length; i++){
-                    console.log(this._year());
-                    if(response.sheets[i].properties.title == this._year()){
+                    //console.log(this._year());
+                    if(response.sheets[i].properties.title == chaindata.studysheet.title){
                         chaindata.studysheet.exists = true;
                         break;
                     }
@@ -148,24 +154,54 @@ class TrackPage extends Component {
     }
 
     _createSheetIfNotExists(chaindata){
+        console.log("create sheet if not exists");
         return new Promise((resolve, reject) => {
             if(chaindata.studysheet.exists){
                 console.log("no need to create sheet");
                 resolve(chaindata);
             }
             else{
-                console.log("Creating sheet for year " + this._year());
-                this._createSheet(chaindata.spreadsheet.id).then((response) => {
-                    console.log(response);
+                var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
+                {
+                    "spreadsheetId":chaindata.spreadsheet.id
+                },
+                {
+                    "requests": [
+                        {
+                        "addSheet": {
+                            "properties": {
+                            "title": chaindata.studysheet.title,
+                            "gridProperties": {
+                                "columnCount": 1,
+                                "rowCount": 365
+                            }
+                            }
+                        }
+                        }
+                    ]
+                    }
+                );
+
+                createSheet.execute(() => {
+                    //TODO: Do I need to grab the id of the study sheet here?
                     chaindata.studysheet.exists = true;
                     resolve(chaindata);
                 });
+
+
+                //TODO: this is in the execute area
+                /*this._createSheet(chaindata.spreadsheet.id).then((response) => {
+                    console.log(response);
+                    chaindata.studysheet.exists = true;
+                    resolve(chaindata);
+                });*/
             }
         });
     }
 
-    _createUserDataSS(chaindata){
-    return new Promise((resolve, reject) => {
+    /*_createSS(chaindata){
+        console.log("create ss");
+        return new Promise((resolve, reject) => {
             var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
                 { "properties": { "title": chaindata.spreadsheet.name} },
             );
@@ -175,16 +211,23 @@ class TrackPage extends Component {
                 resolve(chaindata);
             });
         });
-    }
+    }*/
 
-    _createUserDataSSIfNotExists(chaindata){
+    _createSSIfNotExists(chaindata){
+        console.log("Create ss if not exists");
         return new Promise((resolve, reject) => {
             if(chaindata.spreadsheet.exists == false){
-                this._createUserDataSS(chaindata.spreadsheet.name)
-                .then((response) => {
+                var createRequest = chaindata.gapi.client.sheets.spreadsheets.create(
+                    { "properties": { "title": chaindata.spreadsheet.name} },
+                );
+
+                createRequest.execute((response) => {
+                    chaindata.spreadsheet.id = response.id;
                     chaindata.spreadsheet.exists = true;
                     resolve(chaindata);
                 });
+
+
             }
             else{
                 resolve(chaindata);
@@ -221,16 +264,16 @@ class TrackPage extends Component {
             gapi: gapi,
             spreadsheet: {
                 exists: false,
-                name: "StudyTrackUserData",
+                title: "StudyTrackUserData",
                 id: null
             },
             projectsheet: {
                 exists: false,
-                name: this._year() + "-study"
+                title: this._year() + "-projects"
             },
             studysheet: {
                 exists: false,
-                name: this._year() + "-projects"
+                title: this._year() + "-study"
             }
         };
     }
@@ -245,6 +288,17 @@ class TrackPage extends Component {
             var chaindata = this._initializeChainData(this.props.gapi);
 
             this._loadAPIs(chaindata)
+            .then(this._checkIfSSExists)
+            .then(this._createSSIfNotExists)
+            .then(this._checkIfSheetExists)
+            .then(this._createSheetIfNotExists)
+            .then(this._readStudyData)
+            .then((response) => {
+                this._addStudyDataToPage(response);
+            });
+
+
+            /*this._loadAPIs(chaindata)
             .then((chaindata) => {
 
                 this._checkIfUserDataSSExists(chaindata)
@@ -269,7 +323,7 @@ class TrackPage extends Component {
                         });
                     });
                 });
-            });
+            });*/
         }
 
         var gapi = this.props.gapi;
