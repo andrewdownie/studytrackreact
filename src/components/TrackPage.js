@@ -40,10 +40,11 @@ class TrackPage extends Component {
     }
 
 
-	_readStudyData(sheetId){
+	_readStudyData(chaindata){
         return new Promise((resolve, reject) => {
-            var gapi = this.props.gapi;
+            var gapi = chaindata.gapi;
 
+            //TODO: do I still need these checks?
             if(!gapi){
                 return "";
             }
@@ -55,7 +56,7 @@ class TrackPage extends Component {
             }
 
             gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: sheetId,
+                spreadsheetId: chaindata.spreadsheet.id,
                 //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
                 //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
                 range: this._year() + '!A1:A365'
@@ -70,43 +71,43 @@ class TrackPage extends Component {
     }
 
 
-    _checkIfUserDataSSExists(spreadsheetName){
+    _checkIfUserDataSSExists(chaindata){
         return new Promise((resolve, reject) => {
 
             var listSheets = this.props.gapi.client.drive.files.list();
             
             console.log("RESPONSE OF LOADING FILES IS:");
-            var sheetID = null;
             listSheets.execute((response) => {
                 var len = response.files.length;
                 if(len > 0){
                     for(var i = 0; i < response.files.length; i++){
                         //console.log(response.files[i]);
-                        if(response.files[i].name == spreadsheetName){
-                            sheetID = response.files[i].id;
+                        if(response.files[i].name == chaindata.spreadsheet.name){
+                            chaindata.spreadsheet.id = response.files[i].id;
+                            chaindata.spreadsheet.exists = true;
                         }
                     }
-                    console.log("last sheet id is: " + sheetID);
+                    console.log("last sheet id is: " + chaindata.spreadsheet.id);
                 }
 
-                resolve(sheetID);
+                resolve(chaindata);
             });
 
         });
     }
     
-    _createSheet(spreadsheetId, sheetName){
+    _createSheet(chaindata){
         return new Promise((resolve, reject) => {
-            var createSheet = this.props.gapi.client.sheets.spreadsheets.batchUpdate(
+            var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
             {
-                "spreadsheetId":spreadsheetId 
+                "spreadsheetId":chaindata.spreadsheet.id
             },
             {
                 "requests": [
                     {
                     "addSheet": {
                         "properties": {
-                        "title": sheetName,
+                        "title": chaindata.studysheet.name,
                         "gridProperties": {
                             "columnCount": 1,
                             "rowCount": 365
@@ -118,78 +119,81 @@ class TrackPage extends Component {
                 }
             );
 
-            createSheet.execute((response) => {
-                resolve(response);
+            createSheet.execute(() => {
+                resolve(chaindata);
             });
         });
     }
 
-    _checkIfSheetExists(spreadsheetId){
+    _checkIfSheetExists(chaindata){
         return new Promise((resolve, reject) => {
-            var listSheets = this.props.gapi.client.sheets.spreadsheets.get(
-                {spreadsheetId: spreadsheetId}
+            var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
+                {spreadsheetId: chaindata.spreadsheet.id}
             );
 
             listSheets.execute((response) => {
                 console.log(response);
-                var sheetFound = false;
+                chaindata.studysheet.exists = false;
 
                 for(var i = 0; i < response.sheets.length; i++){
                     console.log(this._year());
                     if(response.sheets[i].properties.title == this._year()){
-                        sheetFound = true;
+                        chaindata.studysheet.exists = true;
                         break;
                     }
                 }
-                resolve(sheetFound);
+                resolve(chaindata);
             });
         });
     }
 
-    _createSheetIfNotExists(spreadsheetId, sheetExists){
+    _createSheetIfNotExists(chaindata){
         return new Promise((resolve, reject) => {
-            if(sheetExists){
-                console.log("we found it boi");
-                resolve(this.gapi);
+            if(chaindata.studysheet.exists){
+                console.log("no need to create sheet");
+                resolve(chaindata);
             }
             else{
                 console.log("Creating sheet for year " + this._year());
-                this._createSheet(spreadsheetId).then((response) => {
+                this._createSheet(chaindata.spreadsheet.id).then((response) => {
                     console.log(response);
-                    resolve(this.gapi);
+                    chaindata.studysheet.exists = true;
+                    resolve(chaindata);
                 });
             }
         });
     }
 
-    _createUserDataSS(spreadsheetName){
+    _createUserDataSS(chaindata){
     return new Promise((resolve, reject) => {
             var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
-                { "properties": { "title": spreadsheetName} },
+                { "properties": { "title": chaindata.spreadsheet.name} },
             );
 
             createRequest.execute((response) => {
-                resolve(response);
+                chaindata.spreadsheet.exists = true;
+                resolve(chaindata);
             });
         });
     }
 
-    _createUserDataSSIfNotExists(spreadsheetName, spreadsheetExists){
+    _createUserDataSSIfNotExists(chaindata){
         return new Promise((resolve, reject) => {
-            if(spreadsheetExists == false){
-                this._createUserDataSS(spreadsheetName)
+            if(chaindata.spreadsheet.exists == false){
+                this._createUserDataSS(chaindata.spreadsheet.name)
                 .then((response) => {
-                    resolve(response);
+                    chaindata.spreadsheet.exists = true;
+                    resolve(chaindata);
                 });
             }
             else{
-                resolve();
+                resolve(chaindata);
             }
         });
     }
 
 
-    _loadAPIs(){
+    _loadAPIs(chaindata){
         return new Promise((resolve, reject) => {
 
             var loadDriveAPI = new Promise((resolve, reject) => {
@@ -205,10 +209,30 @@ class TrackPage extends Component {
             });
 
             Promise.all([loadDriveAPI, loadSheetsAPI]).then(values => { 
-                resolve();
+                //TODO: create chain data structure here
+                resolve(chaindata);
             });
 
         });
+    }
+
+    _initializeChainData(gapi){
+        return {
+            gapi: gapi,
+            spreadsheet: {
+                exists: false,
+                name: "StudyTrackUserData",
+                id: null
+            },
+            projectsheet: {
+                exists: false,
+                name: this._year() + "-study"
+            },
+            studysheet: {
+                exists: false,
+                name: this._year() + "-projects"
+            }
+        };
     }
 
 
@@ -217,27 +241,25 @@ class TrackPage extends Component {
         console.log("Sheet state data is:");
         console.log(this.state.sheetData);
 
-        var USERDATA_SHEET_NAME = "StudyTrackUserData"
-        var USERDATA_APPS_SCRIPT_ID = "1aF4mAD1Od_Us75EidR7XKjN_74AaT8RYNrYRss9UxaU_iwrv5402ThNj";
-
         if(this.props.isSignedIn && this.state.sheetData == null){
+            var chaindata = this._initializeChainData(this.props.gapi);
 
-            this._loadAPIs()
-            .then(() => {
+            this._loadAPIs(chaindata)
+            .then((chaindata) => {
 
-                this._checkIfUserDataSSExists(USERDATA_SHEET_NAME)
-                .then((spreadsheetId) =>{
+                this._checkIfUserDataSSExists(chaindata)
+                .then((chaindata) =>{
 
-                    this._createUserDataSSIfNotExists(spreadsheetId != null, USERDATA_SHEET_NAME)
-                    .then(() => {
+                    this._createUserDataSSIfNotExists(chaindata)
+                    .then((chaindata) => {
 
-                        this._checkIfSheetExists(spreadsheetId)
-                        .then((sheetExists) => {
+                        this._checkIfSheetExists(chaindata)
+                        .then((chaindata) => {
 
-                            this._createSheetIfNotExists(sheetExists, spreadsheetId)
-                            .then(() => {
+                            this._createSheetIfNotExists(chaindata)
+                            .then((chaindata) => {
 
-                                this._readStudyData(spreadsheetId)
+                                this._readStudyData(chaindata)
                                 .then((sheetDataResult) => {
 
                                     this._addStudyDataToPage(sheetDataResult);
