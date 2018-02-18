@@ -92,7 +92,7 @@ class TrackPage extends Component {
 
         });
     }
-    
+
     _checkIfSheetExists(chaindata){
 
         return new Promise((resolve, reject) => {
@@ -121,7 +121,6 @@ class TrackPage extends Component {
 
         return new Promise((resolve, reject) => {
             if(chaindata.studysheet.exists){
-                console.log("no need to create sheet");
                 resolve(chaindata);
             }
             else{
@@ -149,7 +148,6 @@ class TrackPage extends Component {
 
                 createSheet.execute((response) => {
                     console.log(response);
-                    //TODO: Do I need to grab the id of the study sheet here?
                     chaindata.studysheet.exists = true;
                     resolve(chaindata);
                 });
@@ -160,6 +158,7 @@ class TrackPage extends Component {
 
     _createSSIfNotExists(chaindata){
         return new Promise((resolve, reject) => {
+
             if(chaindata.spreadsheet.exists == false){
                 var createRequest = chaindata.gapi.client.sheets.spreadsheets.create(
                     { "properties": { "title": chaindata.spreadsheet.name} },
@@ -170,7 +169,6 @@ class TrackPage extends Component {
                     chaindata.spreadsheet.exists = true;
                     resolve(chaindata);
                 });
-
 
             }
             else{
@@ -196,11 +194,17 @@ class TrackPage extends Component {
             });
 
             Promise.all([loadDriveAPI, loadSheetsAPI]).then(values => { 
-                //TODO: create chain data structure here
                 resolve(chaindata);
             });
 
         });
+    }
+
+    _setupJsonProject(projectName){
+        return{
+            projectName: projectName,
+            studyTimeMS: 0
+        };
     }
 
     _initializeChainData(gapi){
@@ -218,9 +222,35 @@ class TrackPage extends Component {
         };
     }
 
+    _findTodaysData(studyData){
+        //TODO: todays data is always null....
+
+        if(studyData == null){
+            return null;
+        }
+
+        var today = this._dayOfYear();
+        var todaysData = null;
+
+        if(studyData.length >= today - 1){
+            todaysData = studyData[todaysData - 1];
+        }
+
+        console.log("todays data is: ");
+        console.log(todaysData);
+
+        return todaysData;
+    }
+
+    _findWeeksData(weekOfYear){
+
+    }
+
 
 
     render(){
+        var studyData = null;
+
         console.log("Sheet state data is:");
         console.log(this.state.sheetData);
 
@@ -235,10 +265,14 @@ class TrackPage extends Component {
             .then(this._readStudyData)
             .then((response) => {
                 this._addStudyDataToPage(response);
+                studyData = response;
             });
 
-
         }
+
+        var todaysData = this._findTodaysData(studyData);
+        console.log("Todays data is: " + todaysData);
+        
 
         var gapi = this.props.gapi;
         return(
@@ -254,14 +288,22 @@ class TrackPage extends Component {
             
 
             <TrackProjects />
-            <Today />
+            <Today todaysData={todaysData} />
             <PreviousWeeks />
         </Grid>
         );
     }
 
+    _dayOfYear(){
+        //https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+        var oneDay = 1000 * 60 * 60 * 24;
+        var day = Math.floor(diff / oneDay);
+        return day;
+    }
 
-    // HELPER FUNCTIONS
     _year(){
         return new Date().getUTCFullYear();
     }
