@@ -15,7 +15,7 @@ class TrackPage extends Component {
     }
 
 
-    _handleSheetData(response){
+    _addStudyDataToPage(response){
         //Given the result of grabbing cell data from a sheet, prints to the terminal
         var output = "";
 
@@ -26,12 +26,9 @@ class TrackPage extends Component {
 
         var range = response.result;
         if (range.values != null && range.values.length > 0) {
-            console.log('Name, Major');
 
             for (var i = 0; i < range.values.length; i++) {
                 var row = range.values[i];
-                // Print columns A and E, which correspond to indices 0 and 4.
-                //console.log(row[0] + ', ' + row[4]);
                 output += row[0] + '\n';
             }
 
@@ -43,7 +40,7 @@ class TrackPage extends Component {
     }
 
 
-	_readSheetData(sheetID){
+	_readStudyData(sheetId){
         return new Promise((resolve, reject) => {
             var gapi = this.props.gapi;
 
@@ -58,7 +55,7 @@ class TrackPage extends Component {
             }
 
             gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: sheetID,
+                spreadsheetId: sheetId,
                 //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
                 //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
                 range: this._year() + '!A1:A365'
@@ -73,7 +70,7 @@ class TrackPage extends Component {
     }
 
 
-    _checkIfUserDataSSExists(userdata_sheet_name){
+    _checkIfUserDataSSExists(spreadsheetName){
         return new Promise((resolve, reject) => {
 
             var listSheets = this.props.gapi.client.drive.files.list();
@@ -85,7 +82,7 @@ class TrackPage extends Component {
                 if(len > 0){
                     for(var i = 0; i < response.files.length; i++){
                         //console.log(response.files[i]);
-                        if(response.files[i].name == userdata_sheet_name){
+                        if(response.files[i].name == spreadsheetName){
                             sheetID = response.files[i].id;
                         }
                     }
@@ -98,18 +95,18 @@ class TrackPage extends Component {
         });
     }
     
-    _createThisYearsSheet(sheetID){
+    _createSheet(spreadsheetId, sheetName){
         return new Promise((resolve, reject) => {
             var createSheet = this.props.gapi.client.sheets.spreadsheets.batchUpdate(
             {
-                "spreadsheetId": sheetID
+                "spreadsheetId":spreadsheetId 
             },
             {
                 "requests": [
                     {
                     "addSheet": {
                         "properties": {
-                        "title": this._year().toString(),
+                        "title": sheetName,
                         "gridProperties": {
                             "columnCount": 1,
                             "rowCount": 365
@@ -127,10 +124,10 @@ class TrackPage extends Component {
         });
     }
 
-    _checkIfSheetExists(spreadSheetId){
+    _checkIfSheetExists(spreadsheetId){
         return new Promise((resolve, reject) => {
             var listSheets = this.props.gapi.client.sheets.spreadsheets.get(
-                {spreadsheetId: spreadSheetId}
+                {spreadsheetId: spreadsheetId}
             );
 
             listSheets.execute((response) => {
@@ -149,7 +146,7 @@ class TrackPage extends Component {
         });
     }
 
-    _createSheetIfNotExists(sheetExists, sheetID){
+    _createSheetIfNotExists(spreadsheetId, sheetExists){
         return new Promise((resolve, reject) => {
             if(sheetExists){
                 console.log("we found it boi");
@@ -157,7 +154,7 @@ class TrackPage extends Component {
             }
             else{
                 console.log("Creating sheet for year " + this._year());
-                this._createThisYearsSheet(sheetID).then((response) => {
+                this._createSheet(spreadsheetId).then((response) => {
                     console.log(response);
                     resolve(this.gapi);
                 });
@@ -165,10 +162,10 @@ class TrackPage extends Component {
         });
     }
 
-    _createUserDataSS(userdata_sheet_name){
-        return new Promise((resolve, reject) => {
+    _createUserDataSS(spreadsheetName){
+    return new Promise((resolve, reject) => {
             var createRequest = this.props.gapi.client.sheets.spreadsheets.create(
-                { "properties": { "title": userdata_sheet_name} },
+                { "properties": { "title": spreadsheetName} },
             );
 
             createRequest.execute((response) => {
@@ -177,10 +174,10 @@ class TrackPage extends Component {
         });
     }
 
-    _createUserDataSSIfNotExists(spreadSheetExists, userdata_sheet_name){
+    _createUserDataSSIfNotExists(spreadsheetName, spreadsheetExists){
         return new Promise((resolve, reject) => {
-            if(spreadSheetExists == false){
-                this._createUserDataSS(userdata_sheet_name)
+            if(spreadsheetExists == false){
+                this._createUserDataSS(spreadsheetName)
                 .then((response) => {
                     resolve(response);
                 });
@@ -240,10 +237,10 @@ class TrackPage extends Component {
                             this._createSheetIfNotExists(sheetExists, spreadsheetId)
                             .then(() => {
 
-                                this._readSheetData(spreadsheetId)
+                                this._readStudyData(spreadsheetId)
                                 .then((sheetDataResult) => {
 
-                                    this._handleSheetData(sheetDataResult);
+                                    this._addStudyDataToPage(sheetDataResult);
 
                                 });
                             });
