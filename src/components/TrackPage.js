@@ -59,7 +59,7 @@ class TrackPage extends Component {
                 spreadsheetId: chaindata.spreadsheet.id,
                 //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
                 //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-                range: chaindata.studysheet.title + '!A1:A365'
+                range: chaindata.studysheet.title + '!A1:A366'
             }).then(function(response){
                 resolve(response);
             },//.bind(this),
@@ -136,7 +136,7 @@ class TrackPage extends Component {
                             "title": chaindata.studysheet.title,
                             "gridProperties": {
                                 "columnCount": 1,
-                                "rowCount": 365
+                                "rowCount": 366
                             }
                             }
                         }
@@ -294,7 +294,7 @@ class TrackPage extends Component {
             
 
             <TrackProjects />
-            <Today todaysData={todaysData} />
+            <Today todaysData={JSON.parse(todaysData)} />
             <PreviousWeeks />
         </Grid>
         );
