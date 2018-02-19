@@ -6,8 +6,9 @@ import PreviousWeeks from './PreviousWeeks';
 import StudyChart from './StudyChart';
 
 import date_util from '../pure_utils/date_util';
+import gapi_util from '../pure_utils/gapi_util';
 
-import gapi_util from './../pure_utils/gapi_util';
+import Chartify from '../pure_utils/Chartify';
 
 //TODO: does this actually need to be a class?
 class TrackPage extends Component {
@@ -114,7 +115,7 @@ class TrackPage extends Component {
             
 
             <TrackProjects />
-            <StudyChart studyData={JSON.parse(todaysData)} />
+            <StudyChart studyData={Chartify.Day(JSON.parse(todaysData))} />
             <PreviousWeeks />
         </Grid>
         );

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Chart } from 'react-google-charts';
-import ChartifyDay from '../pure_helpers/StudyChartHelp';
 
 
 class StudyChart extends Component{
@@ -13,7 +12,8 @@ class StudyChart extends Component{
         var chartData = [];
 
         if(this.props.studyData != null){
-            chartData = ChartifyDay(this.props.studyData);
+            //NOTE: studyData should be be converted using Chartify
+            chartData = this.props.studyData;
         }
 
         return(
@@ -21,7 +21,7 @@ class StudyChart extends Component{
                 <Chart
                 chartType="ColumnChart"
                 data={chartData}
-                options={{isStacked: true, legend: { position: 'right', maxLines: 3, textStyle: {color: 'black', fontSize: 16 } }}}
+                options={{isStacked: true, legend: { position: 'none', maxLines: 0, textStyle: {color: 'black', fontSize: 16 } }}}
                 graph_id="ColumnChart"
                 width="100%"
                 height="400px"

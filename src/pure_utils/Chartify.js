@@ -1,23 +1,44 @@
 ///
+/// ChartifyWeek
+///
+const Week = (weekInfo) => {
+    /*
+        Given a list of days(up to 7 rows in the sheet),
+        returns a json object ready to be passed into the data parameter of a google chart object
+    */
+    if(weekInfo == null){
+        return [];
+    }
+
+    for(var i = 0; i < weekInfo.length; i++){
+        //TOOD: go through each day in the week, chartify each, and then total the days into one single chart
+    }
+}
+
+///
 /// ChartifyDay
 ///
-const ChartifyDay = (chartData) => {
+const Day = (dayInfo) => {
     /*
         Given a list of projects(a single row in the sheet),
         returns a json object ready to be passed into the data parameter of a google chart object
     */
+    if(dayInfo == null){
+        return [];
+    }
+
+
     var header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
 
     var output = [];
     output.push(header);
 
-    for(var i = 0; i < chartData.projects.length; i++){
-        output.push(ChartifyProject(chartData.projects[i]));
+    for(var i = 0; i < dayInfo.projects.length; i++){
+        output.push(ChartifyProject(dayInfo.projects[i]));
     }
 
     return output;
 }
-export default ChartifyDay;
 
 ///
 /// ChartifyProject
@@ -47,3 +68,11 @@ const ChartifyProject = (projectInfo) => {
 
     return [title, studied, outMin, outIdeal, ""];
 }
+
+
+const Chartify = {
+    Week,
+    Day
+}
+
+export default Chartify;

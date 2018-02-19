@@ -80,7 +80,6 @@ const CreateSheetIfNotExists = (chaindata) => {
             resolve(chaindata);
         }
         else{
-            console.log("create study sheet now");
             var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
             {
                 "spreadsheetId": chaindata.spreadsheet.id
@@ -93,7 +92,7 @@ const CreateSheetIfNotExists = (chaindata) => {
                         "title": chaindata.studysheet.title,
                         "gridProperties": {
                             "columnCount": 1,
-                            "rowCount": 366
+                            "rowCount":366 
                         }
                         }
                     }
@@ -117,7 +116,7 @@ const CreateSSIfNotExists = (chaindata) => {
 
         if(chaindata.spreadsheet.exists === false){
             var createRequest = chaindata.gapi.client.sheets.spreadsheets.create(
-                { "properties": { "title": chaindata.spreadsheet.name} },
+                { "properties": { "title": chaindata.spreadsheet.title} },
             );
 
             createRequest.execute((response) => {
