@@ -1,5 +1,5 @@
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
-import React, { Component } from 'react';
+import React from 'react';
 
 
 const NavBar = (props) => {
@@ -14,7 +14,6 @@ const NavBar = (props) => {
 		else{
 			//TODO: sign in here
 			console.log("Signing in...");
-			var gapi = props.gapi;
 			auth2.signIn().then(
 				//DO NOTHING...
 			);

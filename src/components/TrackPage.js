@@ -17,7 +17,7 @@ class TrackPage extends Component {
 
     _addStudyDataToPage(response){
         //Given the result of grabbing cell data from a sheet, prints to the terminal
-        var output = "";
+        //var output = "";
 
         console.log("RESULT OF CALL:");
         console.log(response);
@@ -28,8 +28,8 @@ class TrackPage extends Component {
         if (range.values != null && range.values.length > 0) {
 
             for (var i = 0; i < range.values.length; i++) {
-                var row = range.values[i];
-                output += row[0] + '\n';
+                //var row = range.values[i];
+                //output += row[0] + '\n';
             }
 
         } else {
@@ -62,7 +62,7 @@ class TrackPage extends Component {
                 range: chaindata.studysheet.title + '!A1:A365'
             }).then(function(response){
                 resolve(response);
-            }.bind(this),
+            },//.bind(this),
             function (response) {
                 console.log('Error: ' + response.result.error.message);
             });
@@ -81,7 +81,7 @@ class TrackPage extends Component {
                 if(len > 0){
                     for(var i = 0; i < response.files.length; i++){
                         //console.log(response.files[i]);
-                        if(response.files[i].name == chaindata.spreadsheet.title){
+                        if(response.files[i].name === chaindata.spreadsheet.title){
                             chaindata.spreadsheet.id = response.files[i].id;
                             chaindata.spreadsheet.exists = true;
                         }
@@ -106,7 +106,7 @@ class TrackPage extends Component {
 
                 for(var i = 0; i < response.sheets.length; i++){
                     //console.log(this._year());
-                    if(response.sheets[i].properties.title == chaindata.studysheet.title){
+                    if(response.sheets[i].properties.title === chaindata.studysheet.title){
                         chaindata.studysheet.exists = true;
                         break;
                     }
@@ -158,7 +158,7 @@ class TrackPage extends Component {
     _createSSIfNotExists(chaindata){
         return new Promise((resolve, reject) => {
 
-            if(chaindata.spreadsheet.exists == false){
+            if(chaindata.spreadsheet.exists === false){
                 var createRequest = chaindata.gapi.client.sheets.spreadsheets.create(
                     { "properties": { "title": chaindata.spreadsheet.name} },
                 );
@@ -231,7 +231,7 @@ class TrackPage extends Component {
         console.log("notwtf> study data was not null in find todays data");
         console.log(studyData);
 
-        var today = parseInt(this._dayOfYear());
+        var today = parseInt(this._dayOfYear(), 10);
         var todaysData = null;
 
         console.log(today - 1);
