@@ -6,10 +6,12 @@ import { Chart } from 'react-google-charts';
 const calcChartify = (projectInfo) => {
     // Takes json data from the sheet, and repacks it to plug into google charts
 
+    console.log(projectInfo.studied);
+
     var title = projectInfo.title;
-    var studied = projectInfo.studied;
+    var studied = parseInt(projectInfo.studied, 10);
     var min = projectInfo.min;
-    var ideal = projectInfo.ideal;
+    var ideal = projectInfo.ideal - min;
 
     var outMin, outIdeal;
 
@@ -21,9 +23,11 @@ const calcChartify = (projectInfo) => {
         outMin = min - studied;
         outIdeal = ideal;
     }
+
+
     
-    //return [title, studied, outMin, outIdeal];//TODO: things aren't being calculated correctly atm...
-    return [title, 200, 500, 1000, ""];
+    return [title, studied, outMin, outIdeal, ""];//TODO: things aren't being calculated correctly atm...
+    //return [title, 200, 500, 1000, ""];
 }
 
 const dataChartify = (chartData) => {
@@ -50,7 +54,6 @@ const Today = (props) => {
         chartData = dataChartify(props.todaysData);
 
         console.log(chartData);
-        console.log(exampleChartData);
     }
 
 
@@ -62,7 +65,7 @@ const Today = (props) => {
                 <Chart
                 chartType="ColumnChart"
                 data={chartData}
-                options={{isStacked: true, legend: { position: 'top', maxLines: 3, textStyle: {color: 'black', fontSize: 16 } }}}
+                options={{isStacked: true, legend: { position: 'right', maxLines: 3, textStyle: {color: 'black', fontSize: 16 } }}}
                 graph_id="ColumnChart"
                 width="100%"
                 height="400px"
