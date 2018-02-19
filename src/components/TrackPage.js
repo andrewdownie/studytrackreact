@@ -11,7 +11,7 @@ class TrackPage extends Component {
     constructor(props){
         super(props);
 
-        this.state = {sheetData: null};
+        this.state = {studyData: null};
     }
 
 
@@ -36,7 +36,7 @@ class TrackPage extends Component {
             console.log("no data found, is the target spreadsheet empty?");
         }
 
-        this.setState({sheetData: output});
+        //this.setState({sheetData: output});
     }
 
 
@@ -117,7 +117,6 @@ class TrackPage extends Component {
     }
 
     _createSheetIfNotExists(chaindata){
-        console.log("create sheet if not exists (why does this fail?)");
 
         return new Promise((resolve, reject) => {
             if(chaindata.studysheet.exists){
@@ -223,21 +222,24 @@ class TrackPage extends Component {
     }
 
     _findTodaysData(studyData){
-        //TODO: todays data is always null....
+
 
         if(studyData == null){
+            console.log("wtf> study data was null in find todays data");
             return null;
         }
+        console.log("notwtf> study data was not null in find todays data");
+        console.log(studyData);
 
-        var today = this._dayOfYear();
+        var today = parseInt(this._dayOfYear());
         var todaysData = null;
 
+        console.log(today - 1);
+        //TODO: why is study data undefined
+        console.log(studyData.length);
         if(studyData.length >= today - 1){
-            todaysData = studyData[todaysData - 1];
+            todaysData = studyData[today - 1];
         }
-
-        console.log("todays data is: ");
-        console.log(todaysData);
 
         return todaysData;
     }
@@ -247,34 +249,38 @@ class TrackPage extends Component {
     }
 
 
+    _initializeAPIsAndGetStudyData(chaindata){
+        this._loadAPIs(chaindata)
+        .then(this._checkIfSSExists)
+        .then(this._createSSIfNotExists)
+        .then(this._checkIfSheetExists)
+        .then(this._createSheetIfNotExists)
+        .then(this._readStudyData)
+        .then((response) => {
+            this.setState({studyData: response});
+        });
+    }
+
 
     render(){
         var studyData = null;
-
-        console.log("Sheet state data is:");
-        console.log(this.state.sheetData);
-
-        if(this.props.isSignedIn && this.state.sheetData == null){
-            var chaindata = this._initializeChainData(this.props.gapi);
-
-            this._loadAPIs(chaindata)
-            .then(this._checkIfSSExists)
-            .then(this._createSSIfNotExists)
-            .then(this._checkIfSheetExists)
-            .then(this._createSheetIfNotExists)
-            .then(this._readStudyData)
-            .then((response) => {
-                this._addStudyDataToPage(response);
-                studyData = response;
-            });
-
+        if(this.state.studyData != null){
+            studyData = this.state.studyData.result.values;
         }
 
-        var todaysData = this._findTodaysData(studyData);
-        console.log("Todays data is: " + todaysData);
-        
+        console.log("(meow)study data is: ");
+        console.log(studyData);
 
-        var gapi = this.props.gapi;
+        //TODO: why doesn't the correct data make it in???
+        var todaysData = this._findTodaysData(studyData);
+        console.log("todays data is: ");
+        console.log(todaysData);
+
+        if(this.props.isSignedIn && this.state.studyData == null){
+            var chaindata = this._initializeChainData(this.props.gapi);
+            studyData = this._initializeAPIsAndGetStudyData(chaindata);
+        }
+
         return(
         <Grid>
             <Row className="show-grid">

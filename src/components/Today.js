@@ -5,6 +5,7 @@ const Today= (props) => {
     return(
         <div>
             <h2>This is Today.js</h2>
+            <p>Todays data next:</p>
             <p>{props.todaysData}</p>
         </div>
     );
