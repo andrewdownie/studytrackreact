@@ -20,7 +20,7 @@ const Week = (weekInfo) => {
         for(var j = 0; j < weekInfo[i].projects.length; j++){
 
             var title = weekInfo[i].projects[j].title;
-            if(title in projectTotals == false){
+            if(title in projectTotals === false){
                 projectTotals[title] = {};
                 projectTotals[title].studied = 0;
                 projectTotals[title].min = 0;
