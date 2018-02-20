@@ -127,10 +127,10 @@ class TrackPage extends Component {
 
             <TrackProjects />
             <p>Today:</p>
-            <StudyChart studyData={Chartify.Day(todaysData)} />
-            <StudyChart studyData={Chartify.Day(todaysData)} />
+            <StudyChart graph_id="chart1" studyData={Chartify.Day(todaysData)} />
+            <StudyChart graph_id="chart2" studyData={Chartify.Day(todaysData)} />
             <p>This week:</p>
-            <StudyChart studyData={week} />
+            <StudyChart graph_id="chart3" studyData={week} />
             {/*<PreviousWeeks />*/}
         </Grid>
         );

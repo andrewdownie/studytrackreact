@@ -13,12 +13,12 @@ class StudyChart extends Component{
         }
 
         return(
-            <div className={'my-pretty-chart-container'}>
+            <div className={this.props.graph_id}>
                 <Chart
                 chartType="ColumnChart"
                 data={chartData}
                 options={{isStacked: true, legend: { position: 'none', maxLines: 0, textStyle: {color: 'black', fontSize: 16 } }}}
-                graph_id="ColumnChart"
+                graph_id={this.props.graph_id}
                 width="100%"
                 height="400px"
                 legend_toggle
