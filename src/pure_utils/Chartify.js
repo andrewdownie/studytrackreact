@@ -10,9 +10,36 @@ const Week = (weekInfo) => {
         return [];
     }
 
+    var projectTotals = {};
+    var output = [];
+
+    output.push(chart_data_header);
+
+
     for(var i = 0; i < weekInfo.length; i++){
-        //TOOD: go through each day in the week, chartify each, and then total the days into one single chart
+        for(var j = 0; j < weekInfo[i].projects.length; j++){
+
+            var title = weekInfo[i].projects[j].title;
+            if(title in projectTotals == false){
+                projectTotals[title] = {};
+                projectTotals[title].studied = 0;
+                projectTotals[title].min = 0;
+                projectTotals[title].ideal = 0;
+            }
+
+            projectTotals[title].studied += weekInfo[i].projects[j].studied;
+            projectTotals[title].min += weekInfo[i].projects[j].min;
+            projectTotals[title].ideal += weekInfo[i].projects[j].ideal;
+
+        }
     }
+
+    for(var key in projectTotals){
+        output.push([key, projectTotals[key].studied, projectTotals[key].min, projectTotals[key].ideal, ""]);
+    }
+
+    console.log(output);
+    return output;
 }
 
 ///
@@ -28,13 +55,11 @@ const Day = (dayInfo) => {
     }
 
 
-    var header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
-
     var output = [];
-    output.push(header);
+    output.push(chart_data_header);
 
     for(var i = 0; i < dayInfo.projects.length; i++){
-        output.push(ChartifyProject(dayInfo.projects[i]));
+        output.push(Project(dayInfo.projects[i]));
     }
 
     return output;
@@ -43,7 +68,7 @@ const Day = (dayInfo) => {
 ///
 /// ChartifyProject
 ///
-const ChartifyProject = (projectInfo) => {
+const Project = (projectInfo) => {
     /*
         Takes a single json project from the sheet, and repacks it to plug into google charts
         (calculates the studied/min/ideal relative to each other so they will chart properly,
@@ -69,6 +94,7 @@ const ChartifyProject = (projectInfo) => {
     return [title, studied, outMin, outIdeal, ""];
 }
 
+const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
 
 const Chartify = {
     Week,

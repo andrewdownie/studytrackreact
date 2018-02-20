@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import { Chart } from 'react-google-charts';
 
 
 class StudyChart extends Component{
-    constructor(props){
-        super(props);
-    }
 
     render(){
         var chartData = [];

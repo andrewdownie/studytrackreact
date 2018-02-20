@@ -58,7 +58,6 @@ const CheckIfSheetExists = (chaindata) => {
         );
 
         listSheets.execute((response) => {
-            console.log(response);
             chaindata.studysheet.exists = false;
 
             for(var i = 0; i < response.sheets.length; i++){

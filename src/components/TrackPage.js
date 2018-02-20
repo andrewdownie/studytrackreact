@@ -42,31 +42,43 @@ class TrackPage extends Component {
         };
     }
 
-    _findTodaysData(studyData){
-
-
-        if(studyData == null){
-            console.log("wtf> study data was null in find todays data");
-            return null;
-        }
-        console.log("notwtf> study data was not null in find todays data");
-        console.log(studyData);
-
-        var today = parseInt(date_util.DayOfYear(), 10);
+    _findDaysData(studyData, dayOfYear){
         var todaysData = null;
 
-        console.log(today - 1);
-        //TODO: why is study data undefined
-        console.log(studyData.length);
-        if(studyData.length >= today - 1){
-            todaysData = studyData[today - 1];
+        if(studyData == null){
+            return null;
+        }
+        if(dayOfYear > 366){
+            return null;
         }
 
-        return todaysData;
+        if(studyData.length >= dayOfYear - 1){
+            todaysData = studyData[dayOfYear - 1];
+        }
+
+        return JSON.parse(todaysData);
     }
 
-    _findWeeksData(weekOfYear){
+    _findWeeksData(studyData, weekOfYear){
+        var weeksData = [];
+        if(studyData == null){
+            return null;
+        }
 
+        var firstDayOfWeek = (weekOfYear - 1) * 7;
+        for(var i = 0; i < 7; i++){
+
+            var dayData = this._findDaysData(studyData, firstDayOfWeek + i);
+            if(dayData != null){
+                weeksData.push(dayData);
+            }
+            else{
+                break;
+            }
+
+        }
+
+        return weeksData;
     }
 
 
@@ -90,17 +102,16 @@ class TrackPage extends Component {
             studyData = this.state.studyData.result.values;
         }
 
-        console.log("(meow)study data is: ");
-        console.log(studyData);
-
-        //TODO: why doesn't the correct data make it in???
-        var todaysData = this._findTodaysData(studyData);
-        console.log("todays data is: ");
-        console.log(todaysData);
+        var todaysData = this._findDaysData(studyData, date_util.DayOfYear());
 
         if(this.props.isSignedIn && this.state.studyData == null){
             studyData = this._initializeAPIsAndGetStudyData();
         }
+
+        var weeksData = this._findWeeksData(studyData, date_util.WeekOfYear());
+        var week = Chartify.Week(weeksData);
+        //console.log(weeksData);
+        //var weekJson = JSON.parse(weeksData);
 
         return(
         <Grid>
@@ -115,8 +126,12 @@ class TrackPage extends Component {
             
 
             <TrackProjects />
-            <StudyChart studyData={Chartify.Day(JSON.parse(todaysData))} />
-            <PreviousWeeks />
+            <p>Today:</p>
+            <StudyChart studyData={Chartify.Day(todaysData)} />
+            <StudyChart studyData={Chartify.Day(todaysData)} />
+            <p>This week:</p>
+            <StudyChart studyData={week} />
+            {/*<PreviousWeeks />*/}
         </Grid>
         );
     }
