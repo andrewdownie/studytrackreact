@@ -1,4 +1,4 @@
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Button, PageHeader, Table} from 'react-bootstrap';
 import React, { Component } from 'react';
 
 import StudyChart from './StudyChart';
@@ -63,34 +63,98 @@ class TrackPage extends Component {
         var twoWeeksAgoJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear() - 2);
         var twoWeeksAgoData = Chartify.Week(twoWeeksAgoJson);
 
-        var threeWeeksAgoJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear() - 3);
-        var threeWeeksAgoData = Chartify.Week(threeWeeksAgoJson);
 
+
+        //TODO: split this into appropriate components based on seperation of concerns...
+        //TODO: oh sweet jebus there is a lot to seperate out here
         return(
         <Grid>
+
             <Row className="show-grid">
                 <Col xs={12} >
-                    <h1>Track</h1>
+                    <PageHeader>Projects</PageHeader>
                 </Col>
                 <Col xs={12} >
-                    <p>{this.state.sheetData}</p>
+                    <Row className="show-grid">
+                        <Col xs={12} >
+                            <Button>New Project</Button>
+                            <Button>Start Study Session</Button>
+                        </Col>
+                    </Row>
+                    <br/>
+                    <Row className="show-grid">
+                        <Col xs={12} >
+                            {/*<Button bsStyle="link">CTCI</Button>
+                            <Button bsStyle="link">Study Track React</Button>
+                            <Button bsStyle="link">Multiplayer AStar</Button>*/}
+
+                            <Table condensed hover>
+                                <thead>
+                                    <tr>
+                                        <th>Project</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><Button bsStyle="link">CTCI</Button></td>
+                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
+                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Button bsStyle="link">Study Track React</Button></td>
+                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
+                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Button bsStyle="link">Multiplayer AStar</Button></td>
+                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
+                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Button bsStyle="link">Really really really really long name</Button></td>
+                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
+                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </Col>
+                    </Row>
                 </Col>
             </Row>
-            
-            <h2>Today</h2>
-            <StudyChart graph_id="chart_today" studyData={Chartify.Day(todaysData)} />
 
-            <h2>Current Week</h2>
-            <StudyChart graph_id="chart_1weekago" studyData={currentWeeksData} />
+            <Row className="show-grid">
+                <Col xs={12} >
+                    <br/>
+                    <br/>
+                    <br/>
+                    <PageHeader>Track</PageHeader>
+                </Col>
+                <Col xs={12} >
+                    <Row className="show-grid">
+                        <Col sm={6} >
+                            <h2>Today</h2>
+                            <StudyChart graph_id="chart_today" studyData={Chartify.Day(todaysData)} />
+                        </Col>
+                        <Col sm={6} >
+                            <h2>Current Week</h2>
+                            <StudyChart graph_id="chart_1weekago" studyData={currentWeeksData} />
+                        </Col>
+                    </Row>
 
-            <h2>Last Week</h2>
-            <StudyChart graph_id="chart_2weeksago" studyData={lastWeeksData} />
-
-            <h2>Two Weeks Ago</h2>
-            <StudyChart graph_id="chart_3weeksago" studyData={twoWeeksAgoData} />
-            
-            <h2>Three Weeks Ago</h2>
-            <StudyChart graph_id="chart_4weeksago" studyData={threeWeeksAgoData} />
+                    <Row className="show-grid">
+                        <Col sm={6} >
+                            <h2>Last Week</h2>
+                            <StudyChart graph_id="chart_2weeksago" studyData={lastWeeksData} />
+                        </Col>
+                        <Col sm={6} >
+                            <h2>Two Weeks Ago</h2>
+                            <StudyChart graph_id="chart_3weeksago" studyData={twoWeeksAgoData} />
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
 
         </Grid>
         );
