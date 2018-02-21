@@ -1,3 +1,7 @@
+//TODO: uhhh so is anything in this file actually pure?
+// because the rule is that pure utils can depend on pure utils, date seems like fairly foundational util...
+
+
 const DayOfYear = () => {
     //https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
     var now = new Date();
@@ -20,9 +24,14 @@ const WeekOfYear = () => {
     return parseInt(Math.ceil((((d - yearStart) / 86400000) + 1)/7), 10);
 }
 
+const FirstDayOfWeek = (weekOfYear) => {
+    return (weekOfYear - 1) * 7;
+}
+
 const date_util = {
     DayOfYear,
     Year,
-    WeekOfYear
+    WeekOfYear,
+    FirstDayOfWeek,
 }
 export default date_util;

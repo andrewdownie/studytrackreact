@@ -154,6 +154,21 @@ const LoadAPIs = (chaindata) => {
     });
 }
 
+const InitializeGAPIChainData = (gapi, studySheetName) => {
+    return {
+        gapi: gapi,
+        spreadsheet: {
+            exists: false,
+            title: "StudyTrackUserData",
+            id: null
+        },
+        studysheet: {
+            exists: false,
+            title: studySheetName.toString()
+        }
+    };
+}
+
 
 const gapi_util = {
     LoadAPIs,
@@ -161,6 +176,7 @@ const gapi_util = {
     CreateSSIfNotExists,
     CheckIfSheetExists,
     CheckIfSSExists,
-    ReadStudyData
+    ReadStudyData,
+    InitializeGAPIChainData,
 }
 export default gapi_util;
