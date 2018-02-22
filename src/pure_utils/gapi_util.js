@@ -1,3 +1,5 @@
+import sheetdata_util from './sheetdata_util';
+
 const ReadStudyData = (chaindata) => {
     return new Promise((resolve, reject) => {
         var gapi = chaindata.gapi;
@@ -101,7 +103,6 @@ const CreateSheetIfNotExists = (chaindata) => {
             );
 
             createSheet.execute((response) => {
-                console.log(response);
                 chaindata.studysheet.exists = true;
                 chaindata.studysheet.justCreated = true;
                 resolve(chaindata);
@@ -113,9 +114,53 @@ const CreateSheetIfNotExists = (chaindata) => {
 
 const FillSheetIfJustCreated = (chaindata) => {
     return new Promise((resolve, reject) => {
-        //TODO: ...this
+        //TODO: create a list of 63 week objects, and place them into the target sheet
 
-        
+        if(chaindata.studysheet.justCreated == false){
+            resolve(chaindata);
+        }
+        else{
+            var rows = [];
+            for(var i = 0; i < 63; i++){
+                var curRow = {}
+                curRow.effectiveValue = {};
+                curRow.effectiveValue.stringValue = JSON.stringify(sheetdata_util.CreateWeekData());
+                rows.push(curRow);
+            }
+
+            console.log(rows);
+
+            //TODO: does this need a field parameter
+            //TODO: why doesn't this work, the error message means nothing to mean
+            var updateRequest = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
+            {
+                "spreadsheetId": chaindata.spreadsheet.id
+            },
+            {
+                "requests": [
+                    {
+                    "updateCells": {
+                        "rows": {
+                            "values": rows
+                        }, //TODO: it looks like each row is a list (where each index is a col in the current row)
+                        "range": {
+                            "rowIndex": 0,
+                            "columnIndex": 0,
+                            "sheetId": 0
+                        }
+                    }
+                    }
+                ]
+                }
+            );
+
+            updateRequest.execute((response) => {
+                //TODO: how do I check for success / failure
+                resolve(chaindata);
+            });
+
+        }
+
     });
 }
 
@@ -188,5 +233,6 @@ const gapi_util = {
     CheckIfSSExists,
     ReadStudyData,
     InitializeGAPIChainData,
+    FillSheetIfJustCreated,
 }
 export default gapi_util;

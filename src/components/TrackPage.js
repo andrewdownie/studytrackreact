@@ -1,4 +1,4 @@
-import {Grid, Row, Col, Button, PageHeader, Table} from 'react-bootstrap';
+import {Grid, Row, Col, Button, ButtonGroup, PageHeader, Table} from 'react-bootstrap';
 import React, { Component } from 'react';
 
 import StudyChart from './StudyChart';
@@ -90,8 +90,10 @@ class TrackPage extends Component {
                     </PageHeader>
                 </Col>
                 <Col xs={12}>
-                    <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
-                    <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
+                    <ButtonGroup vertical block>
+                        <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
+                        <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
+                    </ButtonGroup>
                 </Col>
                 <Col xs={12}>
                     <div className="margin-bottom-md"></div>
