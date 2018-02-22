@@ -9,6 +9,11 @@ import gapi_util from '../pure_utils/gapi_util';
 
 import Chartify from '../pure_utils/Chartify';
 
+import FaEdit from 'react-icons/lib/fa/edit';
+import FaPlus from 'react-icons/lib/fa/plus';
+import MdSchedule from 'react-icons/lib/md/schedule';
+import FaPlayCircle from 'react-icons/lib/fa/play-circle';
+
 //TODO: does this actually need to be a class?
 class TrackPage extends Component {
 
@@ -72,50 +77,45 @@ class TrackPage extends Component {
 
             <Row className="show-grid">
                 <Col xs={12} >
-                    <PageHeader>Projects</PageHeader>
+                    <PageHeader>
+                            Projects
+                    </PageHeader>
+                </Col>
+                <Col xs={12}>
+                    <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
+                    <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
+                </Col>
+                <Col xs={12}>
+                    <div className="margin-bottom-md"></div>
                 </Col>
                 <Col xs={12} >
-                    <Row className="show-grid">
-                        <Col xs={12} >
-                            <Button>New Project</Button>
-                            <Button>Start Study Session</Button>
-                        </Col>
-                    </Row>
-                    <br/>
                     <Row className="show-grid">
                         <Col xs={12} >
                             {/*<Button bsStyle="link">CTCI</Button>
                             <Button bsStyle="link">Study Track React</Button>
                             <Button bsStyle="link">Multiplayer AStar</Button>*/}
 
-                            <Table condensed hover>
-                                <thead>
-                                    <tr>
-                                        <th>Project</th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
+                            <Table hover>
                                 <tbody>
                                     <tr>
-                                        <td><Button bsStyle="link">CTCI</Button></td>
-                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
-                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> CTCI</Button></td>
+                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
-                                        <td><Button bsStyle="link">Study Track React</Button></td>
-                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
-                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Study Track React</Button></td>
+                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
-                                        <td><Button bsStyle="link">Multiplayer AStar</Button></td>
-                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
-                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Multiplayer AStar</Button></td>
+                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
-                                        <td><Button bsStyle="link">Really really really really long name</Button></td>
-                                        <td><Button bsSize="small" bsStyle="warning">Rename</Button></td>
-                                        <td><Button bsSize="small" bsStyle="danger">Delete</Button></td>
+                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Really really really really really really long name</Button></td>
+                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> SEAL PANGS</Button></td>
+                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                 </tbody>
                             </Table>
