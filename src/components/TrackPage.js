@@ -20,7 +20,9 @@ class TrackPage extends Component {
     constructor(props){
         super(props);
 
-        this.state = {studyData: null};
+        //loadedFromRemote will cause the ajax chain to run every time the page is fully reloaded
+        //TODO: eventually studyData will be set to local cache contents right away
+        this.state = {studyData: null, loadedFromRemote: false};
     }
 
 
@@ -40,9 +42,11 @@ class TrackPage extends Component {
         .then(gapi_util.CreateSSIfNotExists)
         .then(gapi_util.CheckIfSheetExists)
         .then(gapi_util.CreateSheetIfNotExists)
+        .then(gapi_util.FillSheetIfJustCreated)
         .then(gapi_util.ReadStudyData)
         .then((response) => {
-            this.setState({studyData: response});
+            this.setState({studyData: response, loadedFromRemote: true});
+            
         });
     }
 
@@ -55,8 +59,12 @@ class TrackPage extends Component {
 
         var todaysData = sheetdata_util.GetData_Day(studyData, date_util.DayOfYear());
 
-        if(this.props.isSignedIn && this.state.studyData == null){
+        if(this.props.isSignedIn && this.state.loadedFromRemote == false){
             studyData = this._initializeAPIsAndGetStudyData();
+        }
+
+        if(studyData != null){
+            //console.log("try pushing data to the sheet here or wat?");
         }
 
         var currentWeeksJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear());
@@ -82,8 +90,8 @@ class TrackPage extends Component {
                     </PageHeader>
                 </Col>
                 <Col xs={12}>
-                    <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
                     <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
+                    <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
                 </Col>
                 <Col xs={12}>
                     <div className="margin-bottom-md"></div>
@@ -91,9 +99,6 @@ class TrackPage extends Component {
                 <Col xs={12} >
                     <Row className="show-grid">
                         <Col xs={12} >
-                            {/*<Button bsStyle="link">CTCI</Button>
-                            <Button bsStyle="link">Study Track React</Button>
-                            <Button bsStyle="link">Multiplayer AStar</Button>*/}
 
                             <Table hover>
                                 <tbody>

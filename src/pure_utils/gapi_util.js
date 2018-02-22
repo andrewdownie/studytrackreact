@@ -103,10 +103,19 @@ const CreateSheetIfNotExists = (chaindata) => {
             createSheet.execute((response) => {
                 console.log(response);
                 chaindata.studysheet.exists = true;
+                chaindata.studysheet.justCreated = true;
                 resolve(chaindata);
             });
 
         }
+    });
+}
+
+const FillSheetIfJustCreated = (chaindata) => {
+    return new Promise((resolve, reject) => {
+        //TODO: ...this
+
+        
     });
 }
 
@@ -164,6 +173,7 @@ const InitializeGAPIChainData = (gapi, studySheetName) => {
         },
         studysheet: {
             exists: false,
+            justCreated: false,
             title: studySheetName.toString()
         }
     };

@@ -39,12 +39,42 @@ const GetData_Week = (studyData, weekOfYear) => {
     return weeksData;
 }
 
-const UpdateData_StudyTime = (projectName) => {
+const UpdateData_StudyTime = (projectName, dayOfYear) => {
 
 }
 
-const UpdateData_MinGoal = (projectName) => {
+const UpdateData_MinGoal = (projectName, dayOfYear) => {
 
+}
+
+const CreateWeekData = (projectGoals) => {
+    //TODO: will project goals (a list of projectGoals) turn into a json list properly?
+    return (
+        {
+            weeklyGoals: {
+                projectGoals
+            },
+            studyData: []
+        }
+    );
+}
+
+const CreateProjectGoal = (title, minGoal, idealGoal) => {
+    return (
+        {
+            title: name,
+            minGoal: minGoal,
+            idealGoal: idealGoal,
+        }
+    );
+}
+const CreateProjectStudyTime = (title, studyTime=0) => {
+    return (
+        {
+            title: title,
+            studyTime: studyTime,
+        }
+    );
 }
 
 
