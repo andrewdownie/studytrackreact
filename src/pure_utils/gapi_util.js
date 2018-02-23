@@ -132,25 +132,22 @@ const FillSheetIfJustCreated = (chaindata) => {
 
             //TODO: does this need a field parameter
             //TODO: why doesn't this work, the error message means nothing to mean
-            var updateRequest = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
+            var updateRequest = chaindata.gapi.client.sheets.spreadsheets.values.batchUpdate(
             {
                 "spreadsheetId": chaindata.spreadsheet.id
             },
             {
-                "requests": [
+                "data": [
                     {
-                    "updateCells": {
-                        "rows": {
-                            "values": rows
-                        }, //TODO: it looks like each row is a list (where each index is a col in the current row)
-                        "range": {
-                            "rowIndex": 0,
-                            "columnIndex": 0,
-                            "sheetId": 0
-                        }
+                    "values": [
+                        [
+                        "meow - woof"
+                        ]
+                    ],
+                    "range": "2018!A1"
                     }
-                    }
-                ]
+                ],
+                "valueInputOption": "RAW"
                 }
             );
 
