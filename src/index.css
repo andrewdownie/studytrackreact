@@ -17,6 +17,10 @@ body {
     margin-bottom: 30px;
 }
 
-.btn-icon-width {
-    width: 50px;
+.edit-btn-width{
+    width: 80px;
+}
+
+table.project-table tbody tr td{
+    border: none;
 }

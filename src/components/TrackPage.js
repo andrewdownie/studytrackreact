@@ -102,27 +102,27 @@ class TrackPage extends Component {
                     <Row className="show-grid">
                         <Col xs={12} >
 
-                            <Table hover>
+                            <Table className="project-table" hover>
                                 <tbody>
                                     <tr>
                                         <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> CTCI</Button></td>
-                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
                                         <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Study Track React</Button></td>
-                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
                                         <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Multiplayer AStar</Button></td>
-                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
                                         <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Really really really really really really long name</Button></td>
-                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                     <tr>
                                         <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> SEAL PANGS</Button></td>
-                                        <td><Button className="btn-icon-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
+                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
                                     </tr>
                                 </tbody>
                             </Table>
