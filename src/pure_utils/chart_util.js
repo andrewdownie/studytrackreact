@@ -1,12 +1,13 @@
 ///
 /// ChartifyWeek
 ///
-const Week = (weekInfo) => {
+const Week = (weekInfoJson) => {
     /*
         Given a list of days(up to 7 rows in the sheet),
         returns a json object ready to be passed into the data parameter of a google chart object
     */
-    if(weekInfo == null){
+   console.log(JSON.parse(weekInfoJson));
+    if(weekInfoJson == null){
         return [];
     }
 
@@ -15,11 +16,20 @@ const Week = (weekInfo) => {
 
     output.push(chart_data_header);
 
+    //Get the names and goals of the projects
+    for(var key in weekInfoJson){
+        console.log(key);
+    }
+    console.log(weekInfoJson[0]);
+    for(var i = 0; i < weekInfoJson[0].length; i++){
+        console.log(weekInfoJson[i]);
+    }
 
-    for(var i = 0; i < weekInfo.length; i++){
-        for(var j = 0; j < weekInfo[i].projects.length; j++){
 
-            var title = weekInfo[i].projects[j].title;
+    for(var i = 1; i < weekInfoJson.length; i++){
+        for(var j = 0; j < weekInfoJson[i].projects.length; j++){
+
+            var title = weekInfoJson[i].projects[j].title;
             if(title in projectTotals === false){
                 projectTotals[title] = {};
                 projectTotals[title].studied = 0;
@@ -27,9 +37,9 @@ const Week = (weekInfo) => {
                 projectTotals[title].ideal = 0;
             }
 
-            projectTotals[title].studied += weekInfo[i].projects[j].studied;
-            projectTotals[title].min += weekInfo[i].projects[j].min;
-            projectTotals[title].ideal += weekInfo[i].projects[j].ideal;
+            projectTotals[title].studied += weekInfoJson[i].projects[j].studied;
+            projectTotals[title].min += weekInfoJson[i].projects[j].min;
+            projectTotals[title].ideal += weekInfoJson[i].projects[j].ideal;
 
         }
     }
@@ -96,9 +106,9 @@ const Project = (projectInfo) => {
 
 const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
 
-const Chartify = {
+const chart_util = {
     Week,
     Day
 }
 
-export default Chartify;
+export default chart_util;

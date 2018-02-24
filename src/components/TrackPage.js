@@ -4,10 +4,9 @@ import React, { Component } from 'react';
 import StudyChart from './StudyChart';
 
 import sheetdata_util from '../pure_utils/sheetdata_util';
+import chart_util from '../pure_utils/chart_util';
 import date_util from '../pure_utils/date_util';
 import gapi_util from '../pure_utils/gapi_util';
-
-import Chartify from '../pure_utils/Chartify';
 
 import FaEdit from 'react-icons/lib/fa/edit';
 import FaPlus from 'react-icons/lib/fa/plus';
@@ -45,7 +44,21 @@ class TrackPage extends Component {
         .then(gapi_util.FillSheetIfJustCreated)
         .then(gapi_util.ReadStudyData)
         .then((response) => {
-            this.setState({studyData: response, loadedFromRemote: true});
+
+            var studyData = [];
+            if(response.result.values != null && response.result.values.length > 0){
+                for(var i = 0; i < 53; i++){
+                    var rowData = [];
+                    for(var j = 0; j < 8; j++){
+                        rowData.push(JSON.parse(response.result.values[i][j]));
+                    }
+                    studyData.push(rowData);
+                }
+            }
+
+            console.log(studyData);
+            
+            this.setState({studyData: studyData, loadedFromRemote: true});
             
         });
     }
@@ -54,7 +67,7 @@ class TrackPage extends Component {
     render(){
         var studyData = null;
         if(this.state.studyData != null){
-            studyData = this.state.studyData.result.values;
+            studyData = this.state.studyData;
         }
 
         var todaysData = sheetdata_util.DayData(studyData, date_util.DayOfYear());
@@ -67,14 +80,15 @@ class TrackPage extends Component {
             //console.log("try pushing data to the sheet here or wat?");
         }
 
-        var currentWeeksJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear());
-        var currentWeeksData = Chartify.Week(currentWeeksJson);
+        var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear());
+        console.log(currentWeeksData);
+        var currentWeeksData = chart_util.Week(currentWeeksJson);
 
-        var lastWeeksJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear() - 1);
-        var lastWeeksData = Chartify.Week(lastWeeksJson);
+        var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 1);
+        var lastWeeksData = chart_util.Week(lastWeeksJson);
 
-        var twoWeeksAgoJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear() - 2);
-        var twoWeeksAgoData = Chartify.Week(twoWeeksAgoJson);
+        var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 2);
+        var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
 
 
 
@@ -142,7 +156,7 @@ class TrackPage extends Component {
                     <Row className="show-grid">
                         <Col sm={6} >
                             <h2>Today</h2>
-                            <StudyChart graph_id="chart_today" studyData={Chartify.Day(todaysData)} />
+                            <StudyChart graph_id="chart_today" studyData={chart_util.Day(todaysData)} />
                         </Col>
                         <Col sm={6} >
                             <h2>Current Week</h2>

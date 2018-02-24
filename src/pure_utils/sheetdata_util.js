@@ -1,49 +1,32 @@
 import date_util from './date_util';
 
 const DayData = (studyData, dayOfYear) => {
-    var weekOfYear = date_util.WeekOfYearFromDayOfYear(dayOfYear);
     var dayOfWeek = date_util.DayOfWeekFromDayOfYear(dayOfYear);
-    var todaysData = null;
+    var weekData = WeekData_DOY(dayOfYear);
 
-    //Initial validation
-    if(studyData == null){
-        return null;
-    }
-    else if(dayOfYear > 366){
-        return null;
-    }
-    else if(studyData.length < weekOfYear - 1){
+    if(weekData == null){
         return null;
     }
 
-    todaysData = studyData[weekOfYear - 1];
-    return todaysData[dayOfWeek + 1];
+    return JSON.parse(weekData[dayOfWeek]);
 }
+
+const WeekGoals = (studyData, weekOfYear) => {
+    //Each weeks goals are stored in the first cell of each row
+    return JSON.parse(studyData[weekOfYear][0]);
+}
+
 const WeekData_DOY = (studyData, dayOfYear) => {
     var weekOfYear = date_util.WeekOfYearFromDayOfYear(dayOfYear);
-    return WeekData_WOK(weekOfYear);
+    return WeekData_WOY(weekOfYear);
 }
 
-const WeekData_WOK = (studyData, weekOfYear) => {
-    var weeksData = [];
-    if(studyData == null){
+const WeekData_WOY = (studyData, weekOfYear) => {
+    if(!studyData){
         return null;
     }
-
-    var firstDayOfWeek = date_util.FirstDayOfWeek(weekOfYear);
-    for(var i = 0; i < 7; i++){
-
-        var dayData = DayData(studyData, firstDayOfWeek + i);
-        if(dayData != null){
-            weeksData.push(dayData);
-        }
-        else{
-            break;
-        }
-
-    }
-
-    return weeksData;
+    console.log(studyData[weekOfYear]);
+    return studyData[weekOfYear];
 }
 
 const UpdateData_StudyTime = (projectName, dayOfYear) => {
@@ -85,8 +68,9 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 
 const sheetdata_util = {
     DayData,
-    WeekData_WOK,
+    WeekData_WOY,
     WeekData_DOY,
+    WeekGoals,
     CreateWeekData,
 }
 export default sheetdata_util;
