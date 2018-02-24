@@ -44,21 +44,29 @@ const Week = (weekInfo) => {
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
         var studied = projectTotals[projName].studied;
+        console.log(studied);
 
         if(studied > minRemaining){
             minRemaining = 0;
-            idealRemaining = idealRemaining - (studied - minRemaining);
+            idealRemaining = idealRemaining - studied;
         }
         else{
             minRemaining = minRemaining - studied;
         }
 
-        //output.push([projName, studied, minRemaining, idealRemaining, ""]);
+        if(minRemaining < 0){
+            minRemaining = 0;
+        }
+        if(idealRemaining < 0){
+            idealRemaining = 0;
+        }
+
+        output.push([projName, studied, minRemaining, idealRemaining, ""]);
     }
 
-    for(var projName in projectTotals){
+    /*for(var projName in projectTotals){
         output.push([projName, projectTotals[projName].studied, projectTotals[projName].minGoal, projectTotals[projName].idealGoal, ""]);
-    }
+    }*/
 
     console.log(output);
     return output;
