@@ -1,13 +1,13 @@
 ///
 /// ChartifyWeek
 ///
-const Week = (weekInfoJson) => {
+const Week = (weekInfo) => {
     /*
         Given a list of days(up to 7 rows in the sheet),
         returns a json object ready to be passed into the data parameter of a google chart object
     */
-   console.log(JSON.parse(weekInfoJson));
-    if(weekInfoJson == null){
+   //console.log(JSON.parse(weekInfoJson));
+    if(weekInfo == null){
         return [];
     }
 
@@ -16,36 +16,48 @@ const Week = (weekInfoJson) => {
 
     output.push(chart_data_header);
 
-    //Get the names and goals of the projects
-    for(var key in weekInfoJson){
-        console.log(key);
-    }
-    console.log(weekInfoJson[0]);
-    for(var i = 0; i < weekInfoJson[0].length; i++){
-        console.log(weekInfoJson[i]);
-    }
+    //-Get the names and goals of the projects
+    var goals = weekInfo[0];
 
-
-    for(var i = 1; i < weekInfoJson.length; i++){
-        for(var j = 0; j < weekInfoJson[i].projects.length; j++){
-
-            var title = weekInfoJson[i].projects[j].title;
-            if(title in projectTotals === false){
-                projectTotals[title] = {};
-                projectTotals[title].studied = 0;
-                projectTotals[title].min = 0;
-                projectTotals[title].ideal = 0;
-            }
-
-            projectTotals[title].studied += weekInfoJson[i].projects[j].studied;
-            projectTotals[title].min += weekInfoJson[i].projects[j].min;
-            projectTotals[title].ideal += weekInfoJson[i].projects[j].ideal;
-
+    //TODO: change the list into just an object, so you can direclty index over that
+    for(var projSlot = 0; projSlot < goals.length; projSlot++){
+        for(var projName in goals[projSlot]){
+            projectTotals[projName] = {};
+            projectTotals[projName].minGoal = goals[projSlot][projName].minGoal;
+            projectTotals[projName].idealGoal = goals[projSlot][projName].idealGoal;
+            projectTotals[projName].studied = 0;
         }
     }
 
-    for(var key in projectTotals){
-        output.push([key, projectTotals[key].studied, projectTotals[key].min, projectTotals[key].ideal, ""]);
+    //Tally the amount of study time for each project
+    for(var i = 1; i < weekInfo.length; i++){
+        //TODO: change the list into just an object, so you can direclty index over that
+        for(var projSlot = 0; projSlot < weekInfo[i].length; projSlot++){
+            for(var projName in weekInfo[i][projSlot]){
+                projectTotals[projName].studied += weekInfo[i][projSlot][projName].studied;
+            }
+        }
+    }
+
+    //Adjust the min/ideal times using studied so they chart properly
+    for(var projName in projectTotals){
+        var idealRemaining = projectTotals[projName].idealGoal;
+        var minRemaining = projectTotals[projName].minGoal;
+        var studied = projectTotals[projName].studied;
+
+        if(studied > minRemaining){
+            minRemaining = 0;
+            idealRemaining = idealRemaining - (studied - minRemaining);
+        }
+        else{
+            minRemaining = minRemaining - studied;
+        }
+
+        //output.push([projName, studied, minRemaining, idealRemaining, ""]);
+    }
+
+    for(var projName in projectTotals){
+        output.push([projName, projectTotals[projName].studied, projectTotals[projName].minGoal, projectTotals[projName].idealGoal, ""]);
     }
 
     console.log(output);

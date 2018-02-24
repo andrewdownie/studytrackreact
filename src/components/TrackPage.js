@@ -47,15 +47,17 @@ class TrackPage extends Component {
 
             var studyData = [];
             if(response.result.values != null && response.result.values.length > 0){
-                for(var i = 0; i < 53; i++){
+                for(var i = 0; i < response.result.values.length; i++){
                     var rowData = [];
-                    for(var j = 0; j < 8; j++){
-                        rowData.push(JSON.parse(response.result.values[i][j]));
+                    for(var j = 0; j < response.result.values[i].length; j++){
+                        var jsonData = JSON.parse(response.result.values[i][j]);
+                        rowData.push(jsonData);
                     }
                     studyData.push(rowData);
                 }
             }
 
+            console.log("study data is:");
             console.log(studyData);
             
             this.setState({studyData: studyData, loadedFromRemote: true});

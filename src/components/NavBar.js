@@ -36,12 +36,14 @@ const NavBar = (props) => {
 				</Navbar.Brand>
 			</Navbar.Header>
 			<Nav>
-				<NavItem eventKey={1} href="#">
+                {/*
+                <NavItem eventKey={1} href="#">
 					Track
 				</NavItem>
 				<NavItem eventKey={1} href="#">
 					Setup Projects
 				</NavItem>
+                */}
 			</Nav>
 			<Nav pullRight>
 				<NavItem onClick={signInButtonClick} eventKey={2} href="#">

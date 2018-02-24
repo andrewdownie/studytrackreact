@@ -19,7 +19,7 @@ const ReadStudyData = (chaindata) => {
             spreadsheetId: chaindata.spreadsheet.id,
             //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
             //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-            range: chaindata.studysheet.title + '!A1:A53'
+            range: chaindata.studysheet.title + '!A1:H53'
         }).then(function(response){
             resolve(response);
         },//.bind(this),
@@ -112,6 +112,7 @@ const CreateSheetIfNotExists = (chaindata) => {
     });
 }
 
+//TODO: move this to sheetdata_util?
 const FillSheetIfJustCreated = (chaindata) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
@@ -132,8 +133,6 @@ const FillSheetIfJustCreated = (chaindata) => {
 
             console.log(rows);
 
-            //TODO: does this need a field parameter
-            //TODO: why doesn't this work, the error message means nothing to mean
             var updateRequest = chaindata.gapi.client.sheets.spreadsheets.values.batchUpdate(
             {
                 "spreadsheetId": chaindata.spreadsheet.id
