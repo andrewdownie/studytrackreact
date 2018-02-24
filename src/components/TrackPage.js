@@ -57,9 +57,9 @@ class TrackPage extends Component {
             studyData = this.state.studyData.result.values;
         }
 
-        var todaysData = sheetdata_util.GetData_Day(studyData, date_util.DayOfYear());
+        var todaysData = sheetdata_util.DayData(studyData, date_util.DayOfYear());
 
-        if(this.props.isSignedIn && this.state.loadedFromRemote == false){
+        if(this.props.isSignedIn && this.state.loadedFromRemote === false){
             studyData = this._initializeAPIsAndGetStudyData();
         }
 
@@ -67,13 +67,13 @@ class TrackPage extends Component {
             //console.log("try pushing data to the sheet here or wat?");
         }
 
-        var currentWeeksJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear());
+        var currentWeeksJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear());
         var currentWeeksData = Chartify.Week(currentWeeksJson);
 
-        var lastWeeksJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear() - 1);
+        var lastWeeksJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear() - 1);
         var lastWeeksData = Chartify.Week(lastWeeksJson);
 
-        var twoWeeksAgoJson = sheetdata_util.GetData_Week(studyData, date_util.WeekOfYear() - 2);
+        var twoWeeksAgoJson = sheetdata_util.WeekData_WOK(studyData, date_util.WeekOfYear() - 2);
         var twoWeeksAgoData = Chartify.Week(twoWeeksAgoJson);
 
 

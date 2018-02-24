@@ -92,7 +92,7 @@ const CreateSheetIfNotExists = (chaindata) => {
                         "properties": {
                         "title": chaindata.studysheet.title,
                         "gridProperties": {
-                            "columnCount": 1,
+                            "columnCount": 8,
                             "rowCount":53
                         }
                         }
@@ -116,15 +116,17 @@ const FillSheetIfJustCreated = (chaindata) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
 
-        if(chaindata.studysheet.justCreated == false){
+        if(chaindata.studysheet.justCreated === false){
             resolve(chaindata);
         }
         else{
             var rows = [];
-            for(var i = 0; i < 63; i++){
-                var curRow = {}
-                curRow.effectiveValue = {};
-                curRow.effectiveValue.stringValue = JSON.stringify(sheetdata_util.CreateWeekData());
+            for(var i = 0; i < 53; i++){
+                //curRow = sheetdata_util.CreateWeekData();
+                var curRow = [];
+                for(var j = 0; j < 8; j++){
+                    curRow.push("meow" + j);
+                }
                 rows.push(curRow);
             }
 
@@ -139,12 +141,9 @@ const FillSheetIfJustCreated = (chaindata) => {
             {
                 "data": [
                     {
-                    "values": [
-                        [
-                        "meow - woof"
-                        ]
-                    ],
-                    "range": "2018!A1"
+                    //"values": [["meow"], ["meow2"]],
+                    "values": rows,
+                    "range": "2018!A1:H53"
                     }
                 ],
                 "valueInputOption": "RAW"
@@ -154,6 +153,12 @@ const FillSheetIfJustCreated = (chaindata) => {
             updateRequest.execute((response) => {
                 //TODO: how do I check for success / failure
                 resolve(chaindata);
+                console.log("after request");
+            }, (reason) => {
+                console.log("filling new sheet with default values failed.");
+                console.log(reason);
+            }, (reason) => {
+                console.log(reason);
             });
 
         }
