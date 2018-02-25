@@ -36,6 +36,10 @@ const FirstDayOfWeek = (weekOfYear) => {
     return (weekOfYear - 1) * 7;
 }
 
+const CellFromDayOfYear = (dayOfYear) => {
+    return DayOfWeekFromDayOfYear(dayOfYear) + 1;
+}
+
 const date_util = {
     DayOfYear,
     Year,
@@ -43,5 +47,6 @@ const date_util = {
     FirstDayOfWeek,
     WeekOfYearFromDayOfYear,
     DayOfWeekFromDayOfYear,
+    CellFromDayOfYear,
 }
 export default date_util;

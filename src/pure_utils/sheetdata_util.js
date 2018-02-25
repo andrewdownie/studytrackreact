@@ -1,16 +1,5 @@
 import date_util from './date_util';
 
-const DayData = (studyData, dayOfYear) => {
-    var dayOfWeek = date_util.DayOfWeekFromDayOfYear(dayOfYear);
-    var weekData = WeekData_DOY(dayOfYear);
-
-    if(weekData == null){
-        return null;
-    }
-
-    return JSON.parse(weekData[dayOfWeek]);
-}
-
 const WeekGoals = (studyData, weekOfYear) => {
     //Each weeks goals are stored in the first cell of each row
     return JSON.parse(studyData[weekOfYear][0]);
@@ -67,7 +56,6 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 
 
 const sheetdata_util = {
-    DayData,
     WeekData_WOY,
     WeekData_DOY,
     WeekGoals,

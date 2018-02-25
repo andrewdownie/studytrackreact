@@ -1,6 +1,70 @@
-///
-/// ChartifyWeek
-///
+import date_util from "./date_util";
+
+//TODO: dayOfYear is becoming undefined even though when it's sent in it's a an int
+const Day = (weekInfo, dayOfYear) => {
+    //TODO: this runs twice in a row when the trackpage print runs once, 
+    // the first time its the correct number, then suddenly its undefined
+    console.log(dayOfYear);
+
+
+    if(weekInfo == null){
+        return [];
+    }
+
+    var todaysCellIndex = date_util.CellFromDayOfYear(dayOfYear);
+    console.log(dayOfYear);
+    console.log(todaysCellIndex);
+
+    var projectTotals = _WeeksGoals(weekInfo);
+    var output = [];
+
+    if(projectTotals == null){
+        return [];
+    }
+
+    for(var projName in projectTotals){
+        projectTotals[projName].idealGoal = projectTotals[projName].idealGoal / 7;
+        projectTotals[projName].minGoal = projectTotals[projName].minGoal / 7;
+    }
+
+    output.push(chart_data_header);
+
+    for(var projSlot = 0; projSlot < weekInfo[todaysCellIndex].length; projSlot++){
+        for(var projName in weekInfo[todaysCellIndex][projSlot]){
+            projectTotals[projName].studied += weekInfo[todaysCellIndex][projSlot][projName].studied;
+        }
+    }
+
+    //Adjust the min/ideal times using studied so they chart properly
+    //TODO: this is already done in the sheet data util
+    for(var projName in projectTotals){
+        var idealRemaining = projectTotals[projName].idealGoal;
+        var minRemaining = projectTotals[projName].minGoal;
+        var studied = projectTotals[projName].studied;
+        console.log(studied);
+
+        if(studied > minRemaining){
+            minRemaining = 0;
+            idealRemaining = idealRemaining - studied;
+        }
+        else{
+            minRemaining = minRemaining - studied;
+        }
+
+        if(minRemaining < 0){
+            minRemaining = 0;
+        }
+        if(idealRemaining < 0){
+            idealRemaining = 0;
+        }
+
+        output.push([projName, studied, minRemaining, idealRemaining, ""]);
+    }
+
+
+    return output;
+}
+
 const Week = (weekInfo) => {
     /*
         Given a list of days(up to 7 rows in the sheet),
@@ -11,22 +75,15 @@ const Week = (weekInfo) => {
         return [];
     }
 
-    var projectTotals = {};
+    var projectTotals;
     var output = [];
 
     output.push(chart_data_header);
 
-    //-Get the names and goals of the projects
-    var goals = weekInfo[0];
+    projectTotals = _WeeksGoals(weekInfo);
 
-    //TODO: change the list into just an object, so you can direclty index over that
-    for(var projSlot = 0; projSlot < goals.length; projSlot++){
-        for(var projName in goals[projSlot]){
-            projectTotals[projName] = {};
-            projectTotals[projName].minGoal = goals[projSlot][projName].minGoal;
-            projectTotals[projName].idealGoal = goals[projSlot][projName].idealGoal;
-            projectTotals[projName].studied = 0;
-        }
+    if(projectTotals == null){
+        return [];
     }
 
     //Tally the amount of study time for each project
@@ -40,6 +97,7 @@ const Week = (weekInfo) => {
     }
 
     //Adjust the min/ideal times using studied so they chart properly
+    //TODO: this is already done in the sheet data util
     for(var projName in projectTotals){
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
@@ -72,32 +130,34 @@ const Week = (weekInfo) => {
     return output;
 }
 
-///
-/// ChartifyDay
-///
-const Day = (dayInfo) => {
-    /*
-        Given a list of projects(a single row in the sheet),
-        returns a json object ready to be passed into the data parameter of a google chart object
-    */
-    if(dayInfo == null){
-        return [];
+
+const _WeeksGoals = (weekInfo) => {
+    var projectTotals = {};
+
+    if(weekInfo == null || weekInfo.length < 1){
+        return null;
     }
 
+    //-Get the names and goals of the projects
+    var goals = weekInfo[0];
 
-    var output = [];
-    output.push(chart_data_header);
-
-    for(var i = 0; i < dayInfo.projects.length; i++){
-        output.push(Project(dayInfo.projects[i]));
+    //TODO: change the list into just an object, so you can direclty index over that
+    for(var projSlot = 0; projSlot < goals.length; projSlot++){
+        for(var projName in goals[projSlot]){
+            projectTotals[projName] = {};
+            projectTotals[projName].minGoal = goals[projSlot][projName].minGoal;
+            projectTotals[projName].idealGoal = goals[projSlot][projName].idealGoal;
+            projectTotals[projName].studied = 0;
+        }
     }
-
-    return output;
+    return projectTotals;
 }
+
 
 ///
 /// ChartifyProject
 ///
+//TODO: I don't think I'm using this atm...
 const Project = (projectInfo) => {
     /*
         Takes a single json project from the sheet, and repacks it to plug into google charts

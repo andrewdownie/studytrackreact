@@ -72,24 +72,22 @@ class TrackPage extends Component {
             studyData = this.state.studyData;
         }
 
-        var todaysData = sheetdata_util.DayData(studyData, date_util.DayOfYear());
-
         if(this.props.isSignedIn && this.state.loadedFromRemote === false){
             studyData = this._initializeAPIsAndGetStudyData();
         }
 
-        if(studyData != null){
-            //console.log("try pushing data to the sheet here or wat?");
-        }
+        console.log(date_util.WeekOfYear());
 
         var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear());
-        console.log(currentWeeksData);
-        var currentWeeksData = chart_util.Week(currentWeeksJson);
-
         var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 1);
-        var lastWeeksData = chart_util.Week(lastWeeksJson);
-
         var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 2);
+
+
+        var doy = date_util.DayOfYear();
+        console.log(doy);
+        var todaysData = chart_util.Day(currentWeeksJson, doy);
+        var currentWeeksData = chart_util.Week(currentWeeksJson);
+        var lastWeeksData = chart_util.Week(lastWeeksJson);
         var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
 
 
@@ -158,7 +156,7 @@ class TrackPage extends Component {
                     <Row className="show-grid">
                         <Col sm={6} >
                             <h2>Today</h2>
-                            <StudyChart graph_id="chart_today" studyData={chart_util.Day(todaysData)} />
+                            <StudyChart graph_id="chart_today" studyData={todaysData} />
                         </Col>
                         <Col sm={6} >
                             <h2>Current Week</h2>
