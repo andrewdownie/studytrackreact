@@ -1,6 +1,8 @@
-import {Grid, Row, Col, Button, ButtonGroup, PageHeader, Table} from 'react-bootstrap';
+import {Grid, Row, Col, Button, PageHeader, Table} from 'react-bootstrap';
 import React, { Component } from 'react';
 
+
+import ProjectSection from '../components/project_section/ProjectSection';
 import StudyChart from './StudyChart';
 
 import sheetdata_util from '../pure_utils/sheetdata_util';
@@ -9,8 +11,6 @@ import date_util from '../pure_utils/date_util';
 import gapi_util from '../pure_utils/gapi_util';
 
 import FaEdit from 'react-icons/lib/fa/edit';
-import FaPlus from 'react-icons/lib/fa/plus';
-import MdSchedule from 'react-icons/lib/md/schedule';
 import FaPlayCircle from 'react-icons/lib/fa/play-circle';
 
 //TODO: does this actually need to be a class?
@@ -99,10 +99,7 @@ class TrackPage extends Component {
                     </PageHeader>
                 </Col>
                 <Col xs={12}>
-                    <ButtonGroup vertical block>
-                        <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
-                        <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
-                    </ButtonGroup>
+                    <ProjectSection />
                 </Col>
                 <Col xs={12}>
                     <div className="margin-bottom-md"></div>
