@@ -57,8 +57,6 @@ class TrackPage extends Component {
                 }
             }
 
-            console.log("study data is:");
-            console.log(studyData);
             
             this.setState({studyData: studyData, loadedFromRemote: true});
             
@@ -76,20 +74,17 @@ class TrackPage extends Component {
             studyData = this._initializeAPIsAndGetStudyData();
         }
 
-        console.log(date_util.WeekOfYear());
-
-        var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear());
-        var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 1);
-        var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, date_util.WeekOfYear() - 2);
-
-
+        var wok = date_util.WeekOfYear();
         var doy = date_util.DayOfYear();
-        console.log(doy);
+
+        var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 1);
+        var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 2);
+        var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, wok - 3);
+
         var todaysData = chart_util.Day(currentWeeksJson, doy);
         var currentWeeksData = chart_util.Week(currentWeeksJson);
         var lastWeeksData = chart_util.Week(lastWeeksJson);
         var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
-
 
 
         //TODO: split this into appropriate components based on seperation of concerns...

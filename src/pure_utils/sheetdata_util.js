@@ -14,7 +14,6 @@ const WeekData_WOY = (studyData, weekOfYear) => {
     if(!studyData){
         return null;
     }
-    console.log(studyData[weekOfYear]);
     return studyData[weekOfYear];
 }
 

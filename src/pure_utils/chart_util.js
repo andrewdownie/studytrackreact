@@ -4,7 +4,6 @@ import date_util from "./date_util";
 const Day = (weekInfo, dayOfYear) => {
     //TODO: this runs twice in a row when the trackpage print runs once, 
     // the first time its the correct number, then suddenly its undefined
-    console.log(dayOfYear);
 
 
     if(weekInfo == null){
@@ -12,8 +11,6 @@ const Day = (weekInfo, dayOfYear) => {
     }
 
     var todaysCellIndex = date_util.CellFromDayOfYear(dayOfYear);
-    console.log(dayOfYear);
-    console.log(todaysCellIndex);
 
     var projectTotals = _WeeksGoals(weekInfo);
     var output = [];
@@ -41,7 +38,6 @@ const Day = (weekInfo, dayOfYear) => {
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
         var studied = projectTotals[projName].studied;
-        console.log(studied);
 
         if(studied > minRemaining){
             minRemaining = 0;
@@ -102,7 +98,6 @@ const Week = (weekInfo) => {
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
         var studied = projectTotals[projName].studied;
-        console.log(studied);
 
         if(studied > minRemaining){
             minRemaining = 0;
@@ -126,7 +121,6 @@ const Week = (weekInfo) => {
         output.push([projName, projectTotals[projName].studied, projectTotals[projName].minGoal, projectTotals[projName].idealGoal, ""]);
     }*/
 
-    console.log(output);
     return output;
 }
 

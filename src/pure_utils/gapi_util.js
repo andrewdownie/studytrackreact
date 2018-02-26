@@ -1,5 +1,3 @@
-import sheetdata_util from './sheetdata_util';
-
 const ReadStudyData = (chaindata) => {
     return new Promise((resolve, reject) => {
         var gapi = chaindata.gapi;
