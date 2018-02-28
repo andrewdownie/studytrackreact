@@ -13,6 +13,7 @@ class ProjectList extends Component {
                     <Col xs={12} >
 
                         <Table className="project-table" hover>
+                        {/*TODO: this will be generated at runtime (at some point) which means I'll need child components to go here.*/}
                             <tbody>
                                 <tr>
                                     <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> CTCI</Button></td>

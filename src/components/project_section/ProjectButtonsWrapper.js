@@ -10,12 +10,12 @@ class ProjectButtonsWrapper extends Component{
     render(){
         return(
 
-                <Col sm={3} >
-                    <ButtonGroup vertical block>
-                        <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
-                        <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
-                    </ButtonGroup>
-                </Col>
+            <Col sm={3} >
+                <ButtonGroup vertical block>
+                    <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
+                    <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
+                </ButtonGroup>
+            </Col>
         );
     }
 }

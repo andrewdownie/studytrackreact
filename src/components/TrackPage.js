@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 
 import ProjectSection from '../components/project_section/ProjectSection';
-import StudyChart from './StudyChart';
+import ChartSection from './chart_section/ChartSection';
 
 import sheetdata_util from '../pure_utils/sheetdata_util';
 import chart_util from '../pure_utils/chart_util';
@@ -95,10 +95,11 @@ class TrackPage extends Component {
                     <PageHeader>
                             Projects
                     </PageHeader>
-                </Col>
-                <Col xs={12}>
                     <ProjectSection />
                 </Col>
+            </Row>
+
+            <Row>
                 <Col xs={12}>
                     <div className="margin-bottom-md"></div>
                 </Col>
@@ -106,33 +107,11 @@ class TrackPage extends Component {
 
             <Row className="show-grid">
                 <Col xs={12} >
-                    <br/>
-                    <br/>
-                    <br/>
-                    <PageHeader>Track</PageHeader>
+                   <PageHeader>Track</PageHeader>
+                   <ChartSection todaysData={todaysData} currentWeeksData={currentWeeksData} lastWeeksData={lastWeeksData} twoWeeksAgoData={twoWeeksAgoData}/>
                 </Col>
-                <Col xs={12} >
-                    <Row className="show-grid">
-                        <Col sm={6} >
-                            <h2>Today</h2>
-                            <StudyChart graph_id="chart_today" studyData={todaysData} />
-                        </Col>
-                        <Col sm={6} >
-                            <h2>Current Week</h2>
-                            <StudyChart graph_id="chart_1weekago" studyData={currentWeeksData} />
-                        </Col>
-                    </Row>
 
-                    <Row className="show-grid">
-                        <Col sm={6} >
-                            <h2>Last Week</h2>
-                            <StudyChart graph_id="chart_2weeksago" studyData={lastWeeksData} />
-                        </Col>
-                        <Col sm={6} >
-                            <h2>Two Weeks Ago</h2>
-                            <StudyChart graph_id="chart_3weeksago" studyData={twoWeeksAgoData} />
-                        </Col>
-                    </Row>
+                <Col xs={12} >
                 </Col>
             </Row>
 
