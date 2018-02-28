@@ -18,11 +18,32 @@ body {
     margin-bottom: 30px;
 }
 
-.edit-btn-width{
+.edit-project-btn{
     width: 80px;
 }
 
 table.project-table tbody tr td{
     border: none;
     vertical-align: middle;
+}
+
+/* Make project name text smaller below screen width of 400px */
+@media(max-width: 400px){
+    .btn-responsive{
+        font-size: 12px;
+        font-weight: 300;
+    }
+    .edit-project-btn{
+        width: 50px;
+        border: none;
+        margin: none;
+        padding: none;
+    }
+}
+
+/* Make the grid fluid for mobile devices, and centered for desktops (I don't actually know how to do this */
+@media (min-width: 600px) {
+    .container-fluid{
+        max-width: 1000px;
+    }
 }

@@ -10,8 +10,6 @@ import chart_util from '../pure_utils/chart_util';
 import date_util from '../pure_utils/date_util';
 import gapi_util from '../pure_utils/gapi_util';
 
-import FaEdit from 'react-icons/lib/fa/edit';
-import FaPlayCircle from 'react-icons/lib/fa/play-circle';
 
 //TODO: does this actually need to be a class?
 class TrackPage extends Component {
@@ -90,7 +88,7 @@ class TrackPage extends Component {
         //TODO: split this into appropriate components based on seperation of concerns...
         //TODO: oh sweet jebus there is a lot to seperate out here
         return(
-        <Grid>
+        <Grid fluid>
 
             <Row className="show-grid">
                 <Col xs={12} >
@@ -103,37 +101,6 @@ class TrackPage extends Component {
                 </Col>
                 <Col xs={12}>
                     <div className="margin-bottom-md"></div>
-                </Col>
-                <Col xs={12} >
-                    <Row className="show-grid">
-                        <Col xs={12} >
-
-                            <Table className="project-table" hover>
-                                <tbody>
-                                    <tr>
-                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> CTCI</Button></td>
-                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Study Track React</Button></td>
-                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Multiplayer AStar</Button></td>
-                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> Really really really really really really long name</Button></td>
-                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> SEAL PANGS</Button></td>
-                                        <td className="edit-btn-width"><Button className="edit-btn-width" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-                        </Col>
-                    </Row>
                 </Col>
             </Row>
 
