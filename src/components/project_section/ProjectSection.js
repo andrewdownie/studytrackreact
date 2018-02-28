@@ -9,7 +9,7 @@ class ProjectSection extends Component{
     render(){
         return(
             //TODO: should the title for the component go here? ...I'm thinking not, but this is something I'll come back to...
-            <Row className="show-grid">
+            <Row className="show-grid project-row">
                 <ProjectButtonsWrapper />
                 <ProjectList />
             </Row>

@@ -92,9 +92,7 @@ class TrackPage extends Component {
 
             <Row className="show-grid">
                 <Col xs={12} >
-                    <PageHeader>
-                            Projects
-                    </PageHeader>
+                    <PageHeader>Projects</PageHeader>
                     <ProjectSection />
                 </Col>
             </Row>
@@ -109,9 +107,6 @@ class TrackPage extends Component {
                 <Col xs={12} >
                    <PageHeader>Track</PageHeader>
                    <ChartSection todaysData={todaysData} currentWeeksData={currentWeeksData} lastWeeksData={lastWeeksData} twoWeeksAgoData={twoWeeksAgoData}/>
-                </Col>
-
-                <Col xs={12} >
                 </Col>
             </Row>
 

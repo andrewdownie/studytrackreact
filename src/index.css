@@ -22,23 +22,54 @@ body {
     width: 80px;
 }
 
+.chart-header{
+    padding-left: 5px;
+}
+
+.project-row{
+    display: flex;
+}
+
+.project-button-group{
+    flex-basis: 170px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-height: 120px;
+}
+
+.project-list{
+    flex-grow: 10;
+    flex-shrink: 10;
+}
+
 table.project-table tbody tr td{
     border: none;
     vertical-align: middle;
 }
 
 /* Make project name text smaller below screen width of 400px */
-@media(max-width: 400px){
+@media(max-width: 550px){
     .btn-responsive{
         font-size: 12px;
         font-weight: 300;
     }
-    .edit-project-btn{
+}
+@media(max-width: 450px){
+    .project-row{
+        flex-direction: column;
+    }
+    .btn-responsive{
+        font-size: 10px;
+        font-weight: 250;
+    }
+   /* .edit-project-btn{
         width: 50px;
         border: none;
-        margin: none;
-        padding: none;
-    }
+        margin: 4px 4px;
+        padding: 4px 4px;
+    }*/
 }
 
 /* Make the grid fluid for mobile devices, and centered for desktops (I don't actually know how to do this */
