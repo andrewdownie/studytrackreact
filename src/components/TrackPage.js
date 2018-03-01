@@ -67,6 +67,7 @@ class TrackPage extends Component {
         var wok = date_util.WeekOfYear();
         var doy = date_util.DayOfYear();
         var chartList = [];
+        var projectNames = [];
         var studyData = null;
 
         if(this.props.isSignedIn && this.state.loadedFromRemote === false){
@@ -75,20 +76,23 @@ class TrackPage extends Component {
 
         if(this.state.studyData != null){
             studyData = this.state.studyData;
-            var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 1);
-            var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 2);
-            var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, wok - 3);
+            var currentWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 1);
+            var lastWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 2);
+            var twoWeeksAgoRaw = sheetdata_util.WeekData_WOY(studyData, wok - 3);
 
-            var todaysData = chart_util.Day(currentWeeksJson, doy);
-            var currentWeeksData = chart_util.Week(currentWeeksJson);
-            var lastWeeksData = chart_util.Week(lastWeeksJson);
-            var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
+            var todaysChartData = chart_util.Day(currentWeeksRaw, doy);
+            var currentWeeksChartData = chart_util.Week(currentWeeksRaw);
+            var lastWeeksChartData = chart_util.Week(lastWeeksRaw);
+            var twoWeeksAgoChartData = chart_util.Week(twoWeeksAgoRaw);
 
             //TODO: maybe the title could be packaged in one of the above util functions?
-            chartList.push({title: "Today", data: todaysData});
-            chartList.push({title: "Current Week", data: currentWeeksData});
-            chartList.push({title: "Last Week", data: lastWeeksData});
-            chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoData});
+            chartList.push({title: "Today", data: todaysChartData});
+            chartList.push({title: "Current Week", data: currentWeeksChartData});
+            chartList.push({title: "Last Week", data: lastWeeksChartData});
+            chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoChartData});
+
+
+            projectNames = sheetdata_util.ProjectNames(currentWeeksRaw);
         }
 
         return(
@@ -97,7 +101,7 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                    <ProjectSection />
+                    <ProjectSection projectNames={projectNames} />
                 </Col>
             </Row>
 

@@ -56,6 +56,21 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 }
 
 
+const ProjectNames = (weeksDataRaw) => {
+    var goals = weeksDataRaw[0];
+    var projectNames = [];
+    
+
+    //TODO: this is super jank, might be able to improve this by removing the outer list in the sheet
+    for(var arrIndex in goals){
+        for(var projName in goals[arrIndex]){
+            projectNames.push(projName)
+        }
+    }
+
+    return projectNames;
+}
+
 const sheetdata_util = {
     WeekData_WOY,
     WeekData_DOY,
@@ -66,5 +81,6 @@ const sheetdata_util = {
     UpdateData_StudyTime,
     UpdateData_MinGoal,
     UpdateData_IdealGoal,
+    ProjectNames,
 }
 export default sheetdata_util;
