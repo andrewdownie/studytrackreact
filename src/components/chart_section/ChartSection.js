@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Grid, Row, Col, Button, PageHeader, Table} from 'react-bootstrap';
+import React from 'react';
+import {Row, Col} from 'react-bootstrap';
 import StudyChart from './StudyChart';
 
 

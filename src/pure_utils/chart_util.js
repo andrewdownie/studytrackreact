@@ -5,6 +5,7 @@ const Day = (weekInfo, dayOfYear) => {
     //TODO: this runs twice in a row when the trackpage print runs once, 
     // the first time its the correct number, then suddenly its undefined
 
+    var projName;
 
     if(weekInfo == null){
         return [];
@@ -19,7 +20,7 @@ const Day = (weekInfo, dayOfYear) => {
         return [];
     }
 
-    for(var projName in projectTotals){
+    for(projName in projectTotals){
         projectTotals[projName].idealGoal = projectTotals[projName].idealGoal / 7;
         projectTotals[projName].minGoal = projectTotals[projName].minGoal / 7;
     }
@@ -27,14 +28,14 @@ const Day = (weekInfo, dayOfYear) => {
     output.push(chart_data_header);
 
     for(var projSlot = 0; projSlot < weekInfo[todaysCellIndex].length; projSlot++){
-        for(var projName in weekInfo[todaysCellIndex][projSlot]){
+        for(projName in weekInfo[todaysCellIndex][projSlot]){
             projectTotals[projName].studied += weekInfo[todaysCellIndex][projSlot][projName].studied;
         }
     }
 
     //Adjust the min/ideal times using studied so they chart properly
     //TODO: this is already done in the sheet data util
-    for(var projName in projectTotals){
+    for(projName in projectTotals){
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
         var studied = projectTotals[projName].studied;
@@ -67,6 +68,7 @@ const Week = (weekInfo) => {
         returns a json object ready to be passed into the data parameter of a google chart object
     */
    //console.log(JSON.parse(weekInfoJson));
+   var projName;
     if(weekInfo == null){
         return [];
     }
@@ -86,7 +88,7 @@ const Week = (weekInfo) => {
     for(var i = 1; i < weekInfo.length; i++){
         //TODO: change the list into just an object, so you can direclty index over that
         for(var projSlot = 0; projSlot < weekInfo[i].length; projSlot++){
-            for(var projName in weekInfo[i][projSlot]){
+            for(projName in weekInfo[i][projSlot]){
                 projectTotals[projName].studied += weekInfo[i][projSlot][projName].studied;
             }
         }
@@ -94,7 +96,7 @@ const Week = (weekInfo) => {
 
     //Adjust the min/ideal times using studied so they chart properly
     //TODO: this is already done in the sheet data util
-    for(var projName in projectTotals){
+    for(projName in projectTotals){
         var idealRemaining = projectTotals[projName].idealGoal;
         var minRemaining = projectTotals[projName].minGoal;
         var studied = projectTotals[projName].studied;
@@ -117,7 +119,7 @@ const Week = (weekInfo) => {
         output.push([projName, studied, minRemaining, idealRemaining, ""]);
     }
 
-    /*for(var projName in projectTotals){
+    /*for(projName in projectTotals){
         output.push([projName, projectTotals[projName].studied, projectTotals[projName].minGoal, projectTotals[projName].idealGoal, ""]);
     }*/
 
@@ -127,6 +129,7 @@ const Week = (weekInfo) => {
 
 const _WeeksGoals = (weekInfo) => {
     var projectTotals = {};
+    var projName;
 
     if(weekInfo == null || weekInfo.length < 1){
         return null;
@@ -137,7 +140,7 @@ const _WeeksGoals = (weekInfo) => {
 
     //TODO: change the list into just an object, so you can direclty index over that
     for(var projSlot = 0; projSlot < goals.length; projSlot++){
-        for(var projName in goals[projSlot]){
+        for(projName in goals[projSlot]){
             projectTotals[projName] = {};
             projectTotals[projName].minGoal = goals[projSlot][projName].minGoal;
             projectTotals[projName].idealGoal = goals[projSlot][projName].idealGoal;

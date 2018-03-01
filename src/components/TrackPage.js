@@ -1,4 +1,4 @@
-import {Grid, Row, Col, Button, PageHeader, Table} from 'react-bootstrap';
+import {Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import React, { Component } from 'react';
 
 
@@ -63,6 +63,7 @@ class TrackPage extends Component {
 
 
     render(){
+        //TODO: move to util, package the four charts data into json {today: data, currentWeek: data, lastWeek: data, twoWeeksAgo: data}
         var studyData = null;
         if(this.state.studyData != null){
             studyData = this.state.studyData;
@@ -85,8 +86,6 @@ class TrackPage extends Component {
         var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
 
 
-        //TODO: split this into appropriate components based on seperation of concerns...
-        //TODO: oh sweet jebus there is a lot to seperate out here
         return(
         <Grid fluid>
 

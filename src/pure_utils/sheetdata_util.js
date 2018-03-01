@@ -20,8 +20,10 @@ const WeekData_WOY = (studyData, weekOfYear) => {
 const UpdateData_StudyTime = (projectName, dayOfYear) => {
 
 }
-
 const UpdateData_MinGoal = (projectName, dayOfYear) => {
+
+}
+const UpdateData_IdealGoal = (projectName, dayOfYear) => {
 
 }
 
@@ -59,5 +61,10 @@ const sheetdata_util = {
     WeekData_DOY,
     WeekGoals,
     CreateWeekData,
+    CreateProjectGoal,
+    CreateProjectStudyTime,
+    UpdateData_StudyTime,
+    UpdateData_MinGoal,
+    UpdateData_IdealGoal,
 }
 export default sheetdata_util;
