@@ -1,34 +1,35 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Row, Col} from 'react-bootstrap';
 import StudyChart from './StudyChart';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 
 
-const ChartSection = (props) => {
-    return(
-        <Row className="show-grid">
+class ChartSection extends Component {
+    render(){
+        /* Why is the data element of each chart in the chart list have a length of 0? */
+        if(this.props.chartList.length === 0){
+            /* How do I animate this? */
+            return(
+                <p><FaSpinner className="spin"/> Loading chart data...</p>
+            );
+        }
+
+        return(
             <Row className="show-grid">
-                <Col sm={6} >
-                    <h2 className="chart-header">Today</h2>
-                    <StudyChart graph_id="chart_today" studyData={props.todaysData} />
-                </Col>
-                <Col sm={6} >
-                    <h2 className="chart-header">Current Week</h2>
-                    <StudyChart graph_id="chart_1weekago" studyData={props.currentWeeksData} />
-                </Col>
+                {
+                    /* None of this gets added to the page... */
+                    this.props.chartList.map( (chart, i) => {
+                        return (
+                            <Col key={"chartcol" + i} sm={this.props.chartColSize} >
+                                <h2 className="chart-header">{chart.title}</h2>
+                                <StudyChart graph_id={"chart" + i} studyData={chart.data} />
+                            </Col>
+                        )
+                    })
+                }
             </Row>
-
-            <Row className="show-grid">
-                <Col sm={6} >
-                    <h2 className="chart-header">Last Week</h2>
-                    <StudyChart graph_id="chart_2weeksago" studyData={props.lastWeeksData} />
-                </Col>
-                <Col sm={6} >
-                    <h2 className="chart-header">Two Weeks Ago</h2>
-                    <StudyChart graph_id="chart_3weeksago" studyData={props.twoWeeksAgoData} />
-                </Col>
-            </Row>
-        </Row>
-    );
+        );
+    }
 }
 
 export default ChartSection;

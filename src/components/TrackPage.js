@@ -64,27 +64,32 @@ class TrackPage extends Component {
 
     render(){
         //TODO: move to util, package the four charts data into json {today: data, currentWeek: data, lastWeek: data, twoWeeksAgo: data}
+        var wok = date_util.WeekOfYear();
+        var doy = date_util.DayOfYear();
+        var chartList = [];
         var studyData = null;
-        if(this.state.studyData != null){
-            studyData = this.state.studyData;
-        }
 
         if(this.props.isSignedIn && this.state.loadedFromRemote === false){
             studyData = this._initializeAPIsAndGetStudyData();
         }
 
-        var wok = date_util.WeekOfYear();
-        var doy = date_util.DayOfYear();
+        if(this.state.studyData != null){
+            studyData = this.state.studyData;
+            var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 1);
+            var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 2);
+            var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, wok - 3);
 
-        var currentWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 1);
-        var lastWeeksJson = sheetdata_util.WeekData_WOY(studyData, wok - 2);
-        var twoWeeksAgoJson = sheetdata_util.WeekData_WOY(studyData, wok - 3);
+            var todaysData = chart_util.Day(currentWeeksJson, doy);
+            var currentWeeksData = chart_util.Week(currentWeeksJson);
+            var lastWeeksData = chart_util.Week(lastWeeksJson);
+            var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
 
-        var todaysData = chart_util.Day(currentWeeksJson, doy);
-        var currentWeeksData = chart_util.Week(currentWeeksJson);
-        var lastWeeksData = chart_util.Week(lastWeeksJson);
-        var twoWeeksAgoData = chart_util.Week(twoWeeksAgoJson);
-
+            //TODO: maybe the title could be packaged in one of the above util functions?
+            chartList.push({title: "Today", data: todaysData});
+            chartList.push({title: "Current Week", data: currentWeeksData});
+            chartList.push({title: "Last Week", data: lastWeeksData});
+            chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoData});
+        }
 
         return(
         <Grid fluid>
@@ -105,7 +110,7 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                    <PageHeader>Track</PageHeader>
-                   <ChartSection todaysData={todaysData} currentWeeksData={currentWeeksData} lastWeeksData={lastWeeksData} twoWeeksAgoData={twoWeeksAgoData}/>
+                   <ChartSection chartColSize={6} chartList={chartList}/>
                 </Col>
             </Row>
 

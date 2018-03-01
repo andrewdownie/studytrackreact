@@ -29,6 +29,15 @@ body {
 .project-row{
     display: flex;
 }
+.spin{
+    /* SOURCE: https://stackoverflow.com/questions/14793367/how-to-add-a-spinner-icon-to-button-when-its-in-the-loading-state*/
+    animation: spin 1s infinite linear;
+    /* TODO: do I also need the css for other browsers? */
+}
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
 
 .project-button-group{
     flex-basis: 170px;
