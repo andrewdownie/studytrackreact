@@ -6,31 +6,29 @@ import FaPlayCircle from 'react-icons/lib/fa/play-circle';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 
 
-class ProjectList extends Component{
+const ProjectList = (props) => {
 
-    render(){
-        if(this.props.projectNames.length === 0){
-            return(
-                <p><FaSpinner className="spin"/> Loading project list...</p>
-            );
-        }
-        
+    if(props.projectNames.length === 0){
         return(
-            <div className="project-list">
-                {
-                    this.props.projectNames.map( (projectName, i) => {
-                        return (
-                            <div className="project-row" key={"chartcol" + i}>
-                                <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
-                                <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
-                            </div>
-                        )
-                    })
-                }
-
-            </div>
+            <p><FaSpinner className="spin"/> Loading project list...</p>
         );
     }
+    
+    return(
+        <div className="project-list">
+            {
+                props.projectNames.map( (projectName, i) => {
+                    return (
+                        <div className="project-row" key={"chartcol" + i}>
+                            <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
+                            <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
+                        </div>
+                    )
+                })
+            }
+
+        </div>
+    );
 
 }
 

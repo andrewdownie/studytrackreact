@@ -80,16 +80,16 @@ class TrackPage extends Component {
             var lastWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 2);
             var twoWeeksAgoRaw = sheetdata_util.WeekData_WOY(studyData, wok - 3);
 
-            var todaysChartData = chart_util.Day(currentWeeksRaw, doy);
-            var currentWeeksChartData = chart_util.Week(currentWeeksRaw);
-            var lastWeeksChartData = chart_util.Week(lastWeeksRaw);
-            var twoWeeksAgoChartData = chart_util.Week(twoWeeksAgoRaw);
+            var todaysGChartData = chart_util.Day(currentWeeksRaw, doy);
+            var currentWeeksGChartData = chart_util.Week(currentWeeksRaw);
+            var lastWeeksGChartData = chart_util.Week(lastWeeksRaw);
+            var twoWeeksAgoGChartData = chart_util.Week(twoWeeksAgoRaw);
 
             //TODO: maybe the title could be packaged in one of the above util functions?
-            chartList.push({title: "Today", data: todaysChartData});
-            chartList.push({title: "Current Week", data: currentWeeksChartData});
-            chartList.push({title: "Last Week", data: lastWeeksChartData});
-            chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoChartData});
+            chartList.push({title: "Today", data: todaysGChartData});
+            chartList.push({title: "Current Week", data: currentWeeksGChartData});
+            chartList.push({title: "Last Week", data: lastWeeksGChartData});
+            chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
 
             projectNames = sheetdata_util.ProjectNames(currentWeeksRaw);
@@ -114,7 +114,7 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                    <PageHeader>Track</PageHeader>
-                   <ChartSection chartColSize={6} chartList={chartList}/>
+                   <ChartSection chartColSize={6} gChartList={chartList}/>
                 </Col>
             </Row>
 

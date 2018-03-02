@@ -32,7 +32,7 @@ const NavBar = (props) => {
 		<Navbar>
 			<Navbar.Header>
 				<Navbar.Brand>
-					<a href="#home">React-Bootstrap</a>
+					<a href="#home">StudyTrack (React)</a>
 				</Navbar.Brand>
 			</Navbar.Header>
 			<Nav>

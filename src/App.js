@@ -5,6 +5,7 @@ import './App.css';
 
 import TrackPage from './components/TrackPage';
 import NavBar from './components/NavBar';
+import InfoPage from './components/InfoPage';
 
 class App extends Component {
 
@@ -52,7 +53,7 @@ class App extends Component {
             pageBody = <TrackPage isSignedIn={_isSignedIn} gapi={_gapi} />
         }
         else{
-            pageBody = <p className="login-message"> Please sign into your Google account</p>;
+            pageBody = <InfoPage />
         }
 
 		return ( 
