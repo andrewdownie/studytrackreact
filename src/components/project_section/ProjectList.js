@@ -11,32 +11,26 @@ class ProjectList extends Component{
     render(){
         if(this.props.projectNames.length === 0){
             return(
-                <p><FaSpinner className="spin"/>Loading project list...</p>
+                <p><FaSpinner className="spin"/> Loading project list...</p>
             );
         }
         
         return(
-            <Row className="show-grid project-list">
-                <Col xs={12} >
+            <div className="project-list-container">
+                <div className="project-list">
+                    {
+                        this.props.projectNames.map( (projectName, i) => {
+                            return (
+                                <div className="project-row" key={"chartcol" + i}>
+                                    <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
+                                    <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
+                                </div>
+                            )
+                        })
+                    }
 
-                    <Table className="project-table" hover>
-                    {/*TODO: this will be generated at runtime (at some point) which means I'll need child components to go here.*/}
-                        <tbody>
-                            {
-                                this.props.projectNames.map( (projectName, i) => {
-                                    return (
-                                        <tr key={"chartcol" + i}>
-                                            <td><Button className="btn-responsive" bsStyle="link"><FaPlayCircle/> {projectName}</Button></td>
-                                            <td className="edit-btn-width"><Button className="edit-project-btn" bsSize="small" bsStyle="primary"><FaEdit/></Button></td>
-                                        </tr>
-                                    )
-                                })
-                            }
-
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
+                </div>
+            </div>
         );
     }
 

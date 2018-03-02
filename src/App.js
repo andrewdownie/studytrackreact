@@ -30,30 +30,36 @@ class App extends Component {
 				console.log('GAPI Initialized.');
 				gapi.auth2.getAuthInstance().isSignedIn.listen(this._signInStatusUpdated);
 
-				this.setState({gapi: gapi}, () => {
-					// TODO: so we're manually intializing the state, and then manually calling the callback that handles when the sign in state changes... neat
-					this._signInStatusUpdated(this.state.gapi.auth2.getAuthInstance().isSignedIn.get());
-				});
+                //TODO: why would do a async chain when I could do everything in one set state (set gapi, set signedIn)
+                this.setState({gapi: gapi, signedIn: gapi.auth2.getAuthInstance().isSignedIn.get()});
 
 			}.bind(this));
 		});
 	}
 
 	_signInStatusUpdated = (isSignedIn) => {
+        // This is a callback for the nav to call when the user clicks sign out
 		this.setState({signedIn: isSignedIn}); 
 	}
 
 
 	render() {
 		var _isSignedIn = this.state ? this.state.signedIn : false;
-		var _gapi = this.state ? this.state.gapi : null;
+        var _gapi = this.state ? this.state.gapi : null;
+        var pageBody;
+        
+        if(_isSignedIn){
+            pageBody = <TrackPage isSignedIn={_isSignedIn} gapi={_gapi} />
+        }
+        else{
+            pageBody = <p className="login-message"> Please sign into your Google account</p>;
+        }
 
 		return ( 
-			//TODO: what the hell am I supposed to wrap the elements in...? is a div fine?
 			//TODO: replace is signed in with ref-ing gapi directly
 			<div>
 				<NavBar isSignedIn={_isSignedIn} gapi={_gapi} />
-				<TrackPage isSignedIn={_isSignedIn} gapi={_gapi} />
+                {pageBody}
 			</div>
 		);
 	}

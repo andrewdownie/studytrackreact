@@ -7,10 +7,10 @@ import React from 'react';
 
 const ProjectSection = (props) => {
     return(
-        <Row className="show-grid project-row">
+        <div className="show-grid project-section">
             <ProjectButtonsWrapper />
             <ProjectList projectNames={props.projectNames} />
-        </Row>
+        </div>
     );
 }
 

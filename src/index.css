@@ -1,7 +1,36 @@
+/*      General Styles */
 body {
-  margin: 0;
-  padding: 0;
   font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.btn-spacing-sm {
+    margin-bottom: 10px;
+    margin-right: 4px;
+}
+
+.margin-bottom-md {
+    margin-bottom: 30px;
+}
+
+/*      App.js */
+.login-message {
+    font-family: sans-serif;
+    text-align: center;
+    font-weight: 100;
+    font-size: 16px;
+}
+
+/*      ChartSection.js */
+.chart-header{
+    padding-left: 5px;
+}
+
+/*      ProjectSection.js */
+.start-project-timer-btn{
+    flex-shrink: 1;
+    flex-grow: 1;
 }
 
 .btn-responsive {
@@ -10,80 +39,77 @@ body {
     text-align: left;
 }
 
-.btn-spacing-sm {
-    margin-right: 4px;
-    margin-bottom: 10px;
-}
-.margin-bottom-md {
-    margin-bottom: 30px;
-}
-
 .edit-project-btn{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    flex-basis: 80px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    max-height: 30px;
     width: 80px;
 }
 
-.chart-header{
-    padding-left: 5px;
+.project-section{
+    display: flex;
 }
 
 .project-row{
+    padding-bottom: 20px;
+    padding-top: 1;
     display: flex;
+    margin-top: 1;
 }
+
+.project-button-group{
+    padding-right: 10px;
+    padding-left: 10px;
+    max-height: 120px;
+    flex-basis: 170px;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.project-list{
+    /* empty style */
+}
+
+.project-list-container{
+    flex-shrink: 1;
+    flex-grow: 1;
+}
+
+/*      Media Queries */
+@media(max-width: 550px){
+    .btn-responsive{
+        font-weight: 300;
+        font-size: 12px;
+    }
+}
+
+@media(max-width: 450px){
+    .project-section{
+        flex-direction: column;
+    }
+    .btn-responsive{
+        font-weight: 275;
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 600px) {
+    .container-fluid{
+        max-width: 1000px;
+    }
+}
+
+/*      Loading icon animation */
 .spin{
     /* SOURCE: https://stackoverflow.com/questions/14793367/how-to-add-a-spinner-icon-to-button-when-its-in-the-loading-state*/
     animation: spin 1s infinite linear;
     /* TODO: do I also need the css for other browsers? */
 }
+
 @keyframes spin {
     from { transform: scale(1) rotate(0deg); }
     to { transform: scale(1) rotate(360deg); }
-}
-
-.project-button-group{
-    flex-basis: 170px;
-    flex-shrink: 0;
-    flex-grow: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-    max-height: 120px;
-}
-
-.project-list{
-    flex-grow: 10;
-    flex-shrink: 10;
-}
-
-table.project-table tbody tr td{
-    border: none;
-    vertical-align: middle;
-}
-
-/* Make project name text smaller below screen width of 400px */
-@media(max-width: 550px){
-    .btn-responsive{
-        font-size: 12px;
-        font-weight: 300;
-    }
-}
-@media(max-width: 450px){
-    .project-row{
-        flex-direction: column;
-    }
-    .btn-responsive{
-        font-size: 11px;
-        font-weight: 275;
-    }
-   /* .edit-project-btn{
-        width: 50px;
-        border: none;
-        margin: 4px 4px;
-        padding: 4px 4px;
-    }*/
-}
-
-/* Make the grid fluid for mobile devices, and centered for desktops (I don't actually know how to do this */
-@media (min-width: 600px) {
-    .container-fluid{
-        max-width: 1000px;
-    }
 }
