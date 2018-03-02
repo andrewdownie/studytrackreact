@@ -16,20 +16,18 @@ class ProjectList extends Component{
         }
         
         return(
-            <div className="project-list-container">
-                <div className="project-list">
-                    {
-                        this.props.projectNames.map( (projectName, i) => {
-                            return (
-                                <div className="project-row" key={"chartcol" + i}>
-                                    <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
-                                    <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
-                                </div>
-                            )
-                        })
-                    }
+            <div className="project-list">
+                {
+                    this.props.projectNames.map( (projectName, i) => {
+                        return (
+                            <div className="project-row" key={"chartcol" + i}>
+                                <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
+                                <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
+                            </div>
+                        )
+                    })
+                }
 
-                </div>
             </div>
         );
     }

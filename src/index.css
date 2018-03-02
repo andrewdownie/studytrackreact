@@ -69,11 +69,8 @@ body {
     flex-grow: 0;
 }
 
-.project-list{
-    /* empty style */
-}
 
-.project-list-container{
+.project-list{
     flex-shrink: 1;
     flex-grow: 1;
 }
