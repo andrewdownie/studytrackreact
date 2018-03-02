@@ -1,3 +1,29 @@
+const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
+    // The full promise chain to loading project data */
+
+    return new Promise((resolve, reject) => {
+        LoadAPIs(chaindata)
+        .then(CheckIfSSExists)
+        .then(CreateSSIfNotExists)
+        .then(CheckIfSheetExists)
+        .then(CreateSheetIfNotExists)
+        .then(FillSheetIfJustCreated)
+        .then(ReadStudyData)
+        .then((studyData) => {
+            resolve(studyData);
+        });
+    });
+}
+
+const QuickLoad_ReturnRelevantStudyData = (chaindata) => {
+    // After the full load is taken place, a local persitant varaible should be updated to reflect that all data has been loaded and cached locally
+    // If there is cached study data, we can assume the spreadsheet and the sheet exists, and load from the sheet directly using the cache spreadsheet id
+
+    //TODO: do I need to load apis or will they be saved locally?
+    //TODO: ReadStudyData by passing in the sheet id from local cache into the chaindata object and calling ReadStudyData
+}
+
+
 const ReadStudyData = (chaindata) => {
     return new Promise((resolve, reject) => {
         var gapi = chaindata.gapi;
@@ -225,13 +251,15 @@ const InitializeGAPIChainData = (gapi, studySheetName) => {
 
 
 const gapi_util = {
-    LoadAPIs,
+    FullLoad_LoadApisAndReturnAllStudyData,
+    QuickLoad_ReturnRelevantStudyData,
+    InitializeGAPIChainData,
+    FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
     CheckIfSheetExists,
     CheckIfSSExists,
     ReadStudyData,
-    InitializeGAPIChainData,
-    FillSheetIfJustCreated,
+    LoadAPIs,
 }
 export default gapi_util;

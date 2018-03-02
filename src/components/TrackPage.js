@@ -23,6 +23,7 @@ class TrackPage extends Component {
     }
 
 
+    //TODO: is this even used?
     _setupJsonProject(projectName){
         //TODO: move this to gapi_util?
         return{
@@ -31,24 +32,38 @@ class TrackPage extends Component {
         };
     }
 
+
+    _jsonifyStudyData(rawStudyData){
+        var studyData = [];
+        if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
+            for(var i = 0; i < rawStudyData.result.values.length; i++){
+                var rowData = [];
+                for(var j = 0; j < rawStudyData.result.values[i].length; j++){
+                    var jsonData = JSON.parse(rawStudyData.result.values[i][j]);
+                    rowData.push(jsonData);
+                }
+                studyData.push(rowData);
+            }
+        }
+
+        
+        this.setState({studyData: studyData, loadedFromRemote: true});
+    }
+
+    /*
     _initializeAPIsAndGetStudyData(){
-        //TODO: move this to gapi_util?
+
         var chaindata = gapi_util.InitializeGAPIChainData(this.props.gapi, date_util.Year());
-        gapi_util.LoadAPIs(chaindata)
-        .then(gapi_util.CheckIfSSExists)
-        .then(gapi_util.CreateSSIfNotExists)
-        .then(gapi_util.CheckIfSheetExists)
-        .then(gapi_util.CreateSheetIfNotExists)
-        .then(gapi_util.FillSheetIfJustCreated)
-        .then(gapi_util.ReadStudyData)
-        .then((response) => {
+
+        gapi_util.FullLoad_LoadApisAndReturnAllStudyData(chaindata)
+        .then((studyDataResponse) => {
 
             var studyData = [];
-            if(response.result.values != null && response.result.values.length > 0){
-                for(var i = 0; i < response.result.values.length; i++){
+            if(studyDataResponse.result.values != null && studyDataResponse.result.values.length > 0){
+                for(var i = 0; i < studyDataResponse.result.values.length; i++){
                     var rowData = [];
-                    for(var j = 0; j < response.result.values[i].length; j++){
-                        var jsonData = JSON.parse(response.result.values[i][j]);
+                    for(var j = 0; j < studyDataResponse.result.values[i].length; j++){
+                        var jsonData = JSON.parse(studyDataResponse.result.values[i][j]);
                         rowData.push(jsonData);
                     }
                     studyData.push(rowData);
@@ -60,6 +75,7 @@ class TrackPage extends Component {
             
         });
     }
+    */
 
 
     render(){
@@ -71,10 +87,30 @@ class TrackPage extends Component {
         var studyData = null;
 
         if(this.props.isSignedIn && this.state.loadedFromRemote === false){
-            studyData = this._initializeAPIsAndGetStudyData();
+            var chaindata = gapi_util.InitializeGAPIChainData(this.props.gapi, date_util.Year());
+
+            //TODO: check local cache to see if we know the id of the sheet already (and also have study data)
+            var local_data_cached = false;//TODO: note: this is just explaining what I want to do in the future using a simple code example
+
+            if(local_data_cached){
+                studyData = this.state.gapi.QuickLoad_LoadApisAndReturnAllStudyData(chaindata)
+                .then((rawStudyData) => {
+                    this._jsonifyStudyData(rawStudyData);
+                });
+            }
+            else{
+                studyData = gapi_util.FullLoad_LoadApisAndReturnAllStudyData(chaindata)
+                .then((rawStudyData) => {
+                    this._jsonifyStudyData(rawStudyData);
+                });
+            }
         }
 
         if(this.state.studyData != null){
+
+            //TODO: make chart util do all of this
+            //TODO: make chart util do all of this
+            //TODO: make chart util do all of this
             studyData = this.state.studyData;
             var currentWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 1);
             var lastWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 2);
