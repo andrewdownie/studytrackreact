@@ -10,6 +10,7 @@ const WeekData_DOY = (studyData, dayOfYear) => {
     return WeekData_WOY(weekOfYear);
 }
 
+//TODO: THESE DONT ACTUALLY DO ANYTHING JUST MOVE EM TO THE CHART UTIL
 const WeekData_WOY = (studyData, weekOfYear) => {
     if(!studyData){
         return null;
@@ -59,13 +60,9 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 const ProjectNames = (weeksDataRaw) => {
     var goals = weeksDataRaw[0];
     var projectNames = [];
-    
 
-    //TODO: this is super jank, might be able to improve this by removing the outer list in the sheet
-    for(var arrIndex in goals){
-        for(var projName in goals[arrIndex]){
-            projectNames.push(projName)
-        }
+    for(var projName in goals){
+        projectNames.push(projName)
     }
 
     return projectNames;

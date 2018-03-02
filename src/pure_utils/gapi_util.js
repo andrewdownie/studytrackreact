@@ -79,22 +79,29 @@ const CheckIfSSExists = (chaindata) => {
 const CheckIfSheetExists = (chaindata) => {
 
     return new Promise((resolve, reject) => {
-        var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
-            {spreadsheetId: chaindata.spreadsheet.id}
-        );
-
-        listSheets.execute((response) => {
+        if(chaindata.spreadsheet.justCreated){
             chaindata.studysheet.exists = false;
-
-            for(var i = 0; i < response.sheets.length; i++){
-                //console.log(this._year());
-                if(response.sheets[i].properties.title === chaindata.studysheet.title){
-                    chaindata.studysheet.exists = true;
-                    break;
-                }
-            }
             resolve(chaindata);
-        });
+        }
+        else{
+            var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
+                {spreadsheetId: chaindata.spreadsheet.id}
+            );
+
+            listSheets.execute((response) => {
+                chaindata.studysheet.exists = false;
+
+                for(var i = 0; i < response.sheets.length; i++){
+                    //console.log(this._year());
+                    if(response.sheets[i].properties.title === chaindata.studysheet.title){
+                        chaindata.studysheet.exists = true;
+                        break;
+                    }
+                }
+                resolve(chaindata);
+            });
+        }
+
     });
 }
 
@@ -200,6 +207,7 @@ const CreateSSIfNotExists = (chaindata) => {
             createRequest.execute((response) => {
                 chaindata.spreadsheet.id = response.id;
                 chaindata.spreadsheet.exists = true;
+                chaindata.spreadsheet.justCreated = true;
                 resolve(chaindata);
             });
 
@@ -238,6 +246,7 @@ const InitializeGAPIChainData = (gapi, studySheetName) => {
         gapi: gapi,
         spreadsheet: {
             exists: false,
+            justCreated: false,
             title: "StudyTrackUserData",
             id: null
         },

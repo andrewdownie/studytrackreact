@@ -28,10 +28,8 @@ const Day = (weekInfo, dayOfYear) => {
 
     output.push(chart_data_header);
 
-    for(var projSlot = 0; projSlot < weekInfo[todaysCellIndex].length; projSlot++){
-        for(projName in weekInfo[todaysCellIndex][projSlot]){
-            projectTotals[projName].studied += weekInfo[todaysCellIndex][projSlot][projName].studied;
-        }
+    for(projName in weekInfo[todaysCellIndex]){
+        projectTotals[projName].studied += weekInfo[todaysCellIndex][projName].studied;
     }
 
     //Adjust the min/ideal times using studied so they chart properly
@@ -88,11 +86,14 @@ const Week = (weekInfo) => {
     //Tally the amount of study time for each project
     for(var i = 1; i < weekInfo.length; i++){
         //TODO: change the list into just an object, so you can direclty index over that
-        for(var projSlot = 0; projSlot < weekInfo[i].length; projSlot++){
-            for(projName in weekInfo[i][projSlot]){
-                projectTotals[projName].studied += weekInfo[i][projSlot][projName].studied;
+        //TODO: I changed the list into just an object, how I parse now pls?
+
+        //for(var projSlot = 0; projSlot < weekInfo[i].length; projSlot++){
+            for(projName in weekInfo[i]){
+                projectTotals[projName].studied += weekInfo[i][projName].studied;
             }
-        }
+        //}
+
     }
 
     //Adjust the min/ideal times using studied so they chart properly
@@ -140,13 +141,11 @@ const _WeeksGoals = (weekInfo) => {
     var goals = weekInfo[0];
 
     //TODO: change the list into just an object, so you can direclty index over that
-    for(var projSlot = 0; projSlot < goals.length; projSlot++){
-        for(projName in goals[projSlot]){
-            projectTotals[projName] = {};
-            projectTotals[projName].minGoal = goals[projSlot][projName].minGoal;
-            projectTotals[projName].idealGoal = goals[projSlot][projName].idealGoal;
-            projectTotals[projName].studied = 0;
-        }
+    for(projName in goals){
+        projectTotals[projName] = {};
+        projectTotals[projName].minGoal = goals[projName].minGoal;
+        projectTotals[projName].idealGoal = goals[projName].idealGoal;
+        projectTotals[projName].studied = 0;
     }
     return projectTotals;
 }

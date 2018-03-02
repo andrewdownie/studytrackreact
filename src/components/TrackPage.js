@@ -33,17 +33,24 @@ class TrackPage extends Component {
     }
 
 
+    // TODO: make this more intuitivie to understand/read
     _jsonifyStudyData(rawStudyData){
         var studyData = [];
         if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
+
+            // Go through each row
             for(var i = 0; i < rawStudyData.result.values.length; i++){
                 var rowData = [];
+
+                //Go thorugh each cell in the current row, and jsonify it's contents
+                //TODO: this seems like a lot of work to do every page load? ..dunno, because even if they entire thing was one big json blob, it would all still need jsonifying
                 for(var j = 0; j < rawStudyData.result.values[i].length; j++){
                     var jsonData = JSON.parse(rawStudyData.result.values[i][j]);
                     rowData.push(jsonData);
                 }
                 studyData.push(rowData);
             }
+            
         }
 
         
