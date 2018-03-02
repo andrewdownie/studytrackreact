@@ -1,10 +1,7 @@
 import sheetdata_util from "./sheetdata_util";
 import date_util from "./date_util";
 
-//TODO: dayOfYear is becoming undefined even though when it's sent in it's a an int
 const Day = (weekInfo, dayOfYear) => {
-    //TODO: this runs twice in a row when the trackpage print runs once, 
-    // the first time its the correct number, then suddenly its undefined
 
     var projName;
 
@@ -32,29 +29,8 @@ const Day = (weekInfo, dayOfYear) => {
         projectTotals[projName].studied += weekInfo[todaysCellIndex][projName].studied;
     }
 
-    //Adjust the min/ideal times using studied so they chart properly
-    //TODO: this is already done in the sheet data util
     for(projName in projectTotals){
-        var idealRemaining = projectTotals[projName].idealGoal;
-        var minRemaining = projectTotals[projName].minGoal;
-        var studied = projectTotals[projName].studied;
-
-        if(studied > minRemaining){
-            minRemaining = 0;
-            idealRemaining = idealRemaining - studied;
-        }
-        else{
-            minRemaining = minRemaining - studied;
-        }
-
-        if(minRemaining < 0){
-            minRemaining = 0;
-        }
-        if(idealRemaining < 0){
-            idealRemaining = 0;
-        }
-
-        output.push([projName, studied, minRemaining, idealRemaining, ""]);
+        output.push(_ChartifySingleProject(projName, projectTotals[projName]));
     }
 
 
@@ -66,7 +42,6 @@ const Week = (weekInfo) => {
         Given a list of days(up to 7 rows in the sheet),
         returns a json object ready to be passed into the data parameter of a google chart object
     */
-   //console.log(JSON.parse(weekInfoJson));
    var projName;
     if(weekInfo == null){
         return [];
@@ -85,45 +60,16 @@ const Week = (weekInfo) => {
 
     //Tally the amount of study time for each project
     for(var i = 1; i < weekInfo.length; i++){
-        //TODO: change the list into just an object, so you can direclty index over that
-        //TODO: I changed the list into just an object, how I parse now pls?
 
-        //for(var projSlot = 0; projSlot < weekInfo[i].length; projSlot++){
-            for(projName in weekInfo[i]){
-                projectTotals[projName].studied += weekInfo[i][projName].studied;
-            }
-        //}
+        for(projName in weekInfo[i]){
+            projectTotals[projName].studied += weekInfo[i][projName].studied;
+        }
 
     }
 
-    //Adjust the min/ideal times using studied so they chart properly
-    //TODO: this is already done in the sheet data util
     for(projName in projectTotals){
-        var idealRemaining = projectTotals[projName].idealGoal;
-        var minRemaining = projectTotals[projName].minGoal;
-        var studied = projectTotals[projName].studied;
-
-        if(studied > minRemaining){
-            minRemaining = 0;
-            idealRemaining = idealRemaining - studied;
-        }
-        else{
-            minRemaining = minRemaining - studied;
-        }
-
-        if(minRemaining < 0){
-            minRemaining = 0;
-        }
-        if(idealRemaining < 0){
-            idealRemaining = 0;
-        }
-
-        output.push([projName, studied, minRemaining, idealRemaining, ""]);
+        output.push(_ChartifySingleProject(projName, projectTotals[projName]));
     }
-
-    /*for(projName in projectTotals){
-        output.push([projName, projectTotals[projName].studied, projectTotals[projName].minGoal, projectTotals[projName].idealGoal, ""]);
-    }*/
 
     return output;
 }
@@ -137,10 +83,8 @@ const _WeeksGoals = (weekInfo) => {
         return null;
     }
 
-    //-Get the names and goals of the projects
     var goals = weekInfo[0];
 
-    //TODO: change the list into just an object, so you can direclty index over that
     for(projName in goals){
         projectTotals[projName] = {};
         projectTotals[projName].minGoal = goals[projName].minGoal;
@@ -152,33 +96,33 @@ const _WeeksGoals = (weekInfo) => {
 
 
 ///
-/// ChartifyProject
+/// ChartifySingleProject
 ///
-//TODO: I don't think I'm using this atm...
-const Project = (projectInfo) => {
+const _ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     /*
-        Takes a single json project from the sheet, and repacks it to plug into google charts
-        (calculates the studied/min/ideal relative to each other so they will chart properly,
-        aka. converts the absolute values to relative chart values)
+        Calculates the studied/min/ideal relative to each other so they will chart properly,
     */
 
-    var title = projectInfo.title;
-    var studied = parseInt(projectInfo.studied, 10);
-    var min = projectInfo.min;
-    var ideal = projectInfo.ideal - min;
+    var idealRemaining = talliedProjectInfo.idealGoal;
+    var minRemaining = talliedProjectInfo.minGoal;
+    var studied = talliedProjectInfo.studied;
 
-    var outMin, outIdeal;
-
-    if(studied > min){
-        outMin = 0;
-        outIdeal = ideal - (studied - min);
+    if(studied > minRemaining){
+        minRemaining = 0;
     }
     else{
-        outMin = min - studied;
-        outIdeal = ideal;
+        minRemaining = minRemaining - studied;
+    }
+    idealRemaining = idealRemaining - minRemaining - studied;
+
+    if(minRemaining < 0){
+        minRemaining = 0;
+    }
+    if(idealRemaining < 0){
+        idealRemaining = 0;
     }
 
-    return [title, studied, outMin, outIdeal, ""];
+    return [projectTitle, studied, minRemaining, idealRemaining, ""];
 }
 
 const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
