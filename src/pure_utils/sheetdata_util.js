@@ -7,7 +7,7 @@ const WeekGoals = (studyData, weekOfYear) => {
 
 const WeekData_DOY = (studyData, dayOfYear) => {
     var weekOfYear = date_util.WeekOfYearFromDayOfYear(dayOfYear);
-    return WeekData_WOY(weekOfYear);
+    return WeekData_WOY(studyData, weekOfYear);
 }
 
 //TODO: THESE DONT ACTUALLY DO ANYTHING JUST MOVE EM TO THE CHART UTIL
@@ -57,7 +57,8 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 }
 
 
-const ProjectNames = (weeksDataRaw) => {
+const ProjectNames = (studyData, weekOfYear) => {
+    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);
     var goals = weeksDataRaw[0];
     var projectNames = [];
 

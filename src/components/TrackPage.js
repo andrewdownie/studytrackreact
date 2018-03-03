@@ -13,7 +13,6 @@ import gapi_util from '../pure_utils/gapi_util';
 
 //TODO: does this actually need to be a class?
 class TrackPage extends Component {
-
     constructor(props){
         super(props);
 
@@ -21,17 +20,6 @@ class TrackPage extends Component {
         //TODO: eventually studyData will be set to local cache contents right away
         this.state = {studyData: null, loadedFromRemote: false};
     }
-
-
-    //TODO: is this even used?
-    _setupJsonProject(projectName){
-        //TODO: move this to gapi_util?
-        return{
-            projectName: projectName,
-            studyTimeMS: 0
-        };
-    }
-
 
     // TODO: make this more intuitivie to understand/read
     _jsonifyStudyData(rawStudyData){
@@ -56,34 +44,6 @@ class TrackPage extends Component {
         
         this.setState({studyData: studyData, loadedFromRemote: true});
     }
-
-    /*
-    _initializeAPIsAndGetStudyData(){
-
-        var chaindata = gapi_util.InitializeGAPIChainData(this.props.gapi, date_util.Year());
-
-        gapi_util.FullLoad_LoadApisAndReturnAllStudyData(chaindata)
-        .then((studyDataResponse) => {
-
-            var studyData = [];
-            if(studyDataResponse.result.values != null && studyDataResponse.result.values.length > 0){
-                for(var i = 0; i < studyDataResponse.result.values.length; i++){
-                    var rowData = [];
-                    for(var j = 0; j < studyDataResponse.result.values[i].length; j++){
-                        var jsonData = JSON.parse(studyDataResponse.result.values[i][j]);
-                        rowData.push(jsonData);
-                    }
-                    studyData.push(rowData);
-                }
-            }
-
-            
-            this.setState({studyData: studyData, loadedFromRemote: true});
-            
-        });
-    }
-    */
-
 
     render(){
         //TODO: move to util, package the four charts data into json {today: data, currentWeek: data, lastWeek: data, twoWeeksAgo: data}
@@ -115,27 +75,22 @@ class TrackPage extends Component {
 
         if(this.state.studyData != null){
 
-            //TODO: make chart util do all of this
-            //TODO: make chart util do all of this
-            //TODO: make chart util do all of this
             studyData = this.state.studyData;
-            var currentWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 1);
-            var lastWeeksRaw = sheetdata_util.WeekData_WOY(studyData, wok - 2);
-            var twoWeeksAgoRaw = sheetdata_util.WeekData_WOY(studyData, wok - 3);
-
-            var todaysGChartData = chart_util.Day(currentWeeksRaw, doy);
-            var currentWeeksGChartData = chart_util.Week(currentWeeksRaw);
-            var lastWeeksGChartData = chart_util.Week(lastWeeksRaw);
-            var twoWeeksAgoGChartData = chart_util.Week(twoWeeksAgoRaw);
 
             //TODO: maybe the title could be packaged in one of the above util functions?
+            //TODO: If I move this to a util, how will the names be assigned to the charts?
+            var todaysGChartData = chart_util.Day(studyData, doy);
+            var currentWeeksGChartData = chart_util.Week(studyData, wok - 1);
+            var lastWeeksGChartData = chart_util.Week(studyData, wok - 2);
+            var twoWeeksAgoGChartData = chart_util.Week(studyData, wok - 3);
+
             chartList.push({title: "Today", data: todaysGChartData});
             chartList.push({title: "Current Week", data: currentWeeksGChartData});
             chartList.push({title: "Last Week", data: lastWeeksGChartData});
             chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
 
-            projectNames = sheetdata_util.ProjectNames(currentWeeksRaw);
+            projectNames = sheetdata_util.ProjectNames(studyData, wok - 1);
         }
 
         return(
