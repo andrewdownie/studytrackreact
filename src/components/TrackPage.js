@@ -39,7 +39,7 @@ class TrackPage extends Component {
         return {chartList, projectNames};
     }
 
-    _loadTrackPageData(studyData){
+    async _loadTrackPageData(studyData){
         //TODO: there is a lot that will be done here in the future, for now it's working code mixed with example code
         if(this.props.isSignedIn === false || this.state.loadedFromRemote){
             return;

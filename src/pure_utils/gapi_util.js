@@ -146,15 +146,15 @@ const CreateSheetIfNotExists = (chaindata) => {
             {
                 "requests": [
                     {
-                    "addSheet": {
-                        "properties": {
-                        "title": chaindata.studysheet.title,
-                        "gridProperties": {
-                            "columnCount": 8,
-                            "rowCount":53
+                        "addSheet": {
+                            "properties": {
+                                "title": chaindata.studysheet.title,
+                                "gridProperties": {
+                                    "columnCount": 8,
+                                    "rowCount":53
+                                }
+                            }
                         }
-                        }
-                    }
                     }
                 ]
                 }
@@ -170,7 +170,6 @@ const CreateSheetIfNotExists = (chaindata) => {
     });
 }
 
-//TODO: move this to sheetdata_util?
 const FillSheetIfJustCreated = (chaindata) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
@@ -198,7 +197,6 @@ const FillSheetIfJustCreated = (chaindata) => {
             {
                 "data": [
                     {
-                    //"values": [["meow"], ["meow2"]],
                     "values": rows,
                     "range": "2018!A1:H53"
                     }

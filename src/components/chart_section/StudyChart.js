@@ -1,5 +1,5 @@
-import React from 'react';
 import { Chart } from 'react-google-charts';
+import React from 'react';
 
 const StudyChart = (props) => {
     var chartData = [];
@@ -9,8 +9,7 @@ const StudyChart = (props) => {
     }
 
     return(
-        <div className={props.graph_id}>
-            <Chart
+        <Chart
             chartType="ColumnChart"
             data={chartData}
             options={{isStacked: true, legend: { position: 'none', maxLines: 0, textStyle: {color: 'black', fontSize: 16 } }}}
@@ -19,8 +18,6 @@ const StudyChart = (props) => {
             height="400px"
             legend_toggle
         />
-
-        </div>
     );
 }
 
