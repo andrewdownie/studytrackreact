@@ -9,7 +9,6 @@ import chart_util from '../pure_utils/chart_util';
 import date_util from '../pure_utils/date_util';
 import gapi_util from '../pure_utils/gapi_util';
 
-//TODO: create a week of year to row of sheet function?
 class TrackPage extends Component {
     constructor(props){
         super(props);

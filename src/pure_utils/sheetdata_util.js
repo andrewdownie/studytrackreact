@@ -1,4 +1,11 @@
+/* Helpers to help manipulate Google Sheet
+study data once it's been brought local*/
+
 import date_util from './date_util';
+
+const RowOfSheet_WOY = (weekOfYear) => {
+    return weekOfYear - 1;
+}
 
 const WeekGoals = (studyData, weekOfYear) => {
     //Each weeks goals are stored in the first cell of each row
@@ -10,7 +17,6 @@ const WeekData_DOY = (studyData, dayOfYear) => {
     return WeekData_WOY(studyData, weekOfYear);
 }
 
-//TODO: THESE DONT ACTUALLY DO ANYTHING JUST MOVE EM TO THE CHART UTIL
 const WeekData_WOY = (studyData, weekOfYear) => {
     if(!studyData){
         return null;
@@ -47,6 +53,7 @@ const CreateProjectGoal = (title, minGoal, idealGoal) => {
         }
     );
 }
+
 const CreateProjectStudyTime = (title, studyTime=0) => {
     return (
         {
@@ -55,7 +62,6 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
         }
     );
 }
-
 
 const ProjectNames = (studyData, weekOfYear) => {
     var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);
@@ -70,15 +76,17 @@ const ProjectNames = (studyData, weekOfYear) => {
 }
 
 const sheetdata_util = {
-    WeekData_WOY,
-    WeekData_DOY,
-    WeekGoals,
-    CreateWeekData,
-    CreateProjectGoal,
     CreateProjectStudyTime,
     UpdateData_StudyTime,
-    UpdateData_MinGoal,
     UpdateData_IdealGoal,
+    UpdateData_MinGoal,
+    CreateProjectGoal,
+    CreateWeekData,
+    RowOfSheet_WOY,
+    WeekData_WOY,
+    WeekData_DOY,
     ProjectNames,
+    WeekGoals,
 }
+
 export default sheetdata_util;

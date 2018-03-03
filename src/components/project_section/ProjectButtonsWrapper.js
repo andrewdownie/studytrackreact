@@ -2,8 +2,8 @@
 import {Button, ButtonGroup} from 'react-bootstrap';
 import React from 'react';
 
-import FaPlus from 'react-icons/lib/fa/plus';
 import MdSchedule from 'react-icons/lib/md/schedule';
+import FaPlus from 'react-icons/lib/fa/plus';
 
 
 const ProjectButtonsWrapper = () => {

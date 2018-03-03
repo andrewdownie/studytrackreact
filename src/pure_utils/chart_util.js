@@ -1,3 +1,6 @@
+/* Deals with taking info from the Google sheet and
+preparing it for being passed into a Google Chart */
+
 import sheetdata_util from "./sheetdata_util";
 import date_util from "./date_util";
 

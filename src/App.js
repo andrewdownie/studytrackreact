@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-//import logo from './logo.svg';
-import './App.css';
-
 import TrackPage from './components/TrackPage';
-import NavBar from './components/NavBar';
 import InfoPage from './components/InfoPage';
+import NavBar from './components/NavBar';
+
+import './App.css';
 
 class App extends Component {
 

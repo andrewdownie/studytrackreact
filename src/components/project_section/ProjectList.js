@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Row, Col, Button, Table} from 'react-bootstrap';
 
-import FaEdit from 'react-icons/lib/fa/edit';
 import FaPlayCircle from 'react-icons/lib/fa/play-circle';
 import FaSpinner from 'react-icons/lib/fa/spinner';
+import FaEdit from 'react-icons/lib/fa/edit';
 
 
 const ProjectList = (props) => {

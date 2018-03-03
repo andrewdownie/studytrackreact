@@ -1,3 +1,5 @@
+/* Interacts with Google APIs to get and send data */
+
 const JsonifyRawStudyData = (rawStudyData) => {
     return new Promise((resolve, reject) => {
         var studyData = [];
@@ -32,7 +34,7 @@ const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
         .then(CheckIfSheetExists)
         .then(CreateSheetIfNotExists)
         .then(FillSheetIfJustCreated)
-        .then(ReadStudyData)
+        .then(ReadSheetData)
         .then(JsonifyRawStudyData)
         .then((studyData) => {
             resolve(studyData);
@@ -49,8 +51,7 @@ const QuickLoad_ReturnRelevantStudyData = (chaindata) => {
     //TODO: ReadStudyData by passing in the sheet id from local cache into the chaindata object and calling ReadStudyData
 }
 
-
-const ReadStudyData = (chaindata) => {
+const ReadSheetData = (chaindata) => {
     return new Promise((resolve, reject) => {
         var gapi = chaindata.gapi;
 
@@ -294,7 +295,7 @@ const gapi_util = {
     JsonifyRawStudyData,
     CheckIfSheetExists,
     CheckIfSSExists,
-    ReadStudyData,
+    ReadSheetData,
     LoadAPIs,
 }
 
