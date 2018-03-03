@@ -1,3 +1,27 @@
+const JsonifyRawStudyData = (rawStudyData) => {
+    return new Promise((resolve, reject) => {
+        var studyData = [];
+        if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
+
+            // Go through each row of the sheet
+            for(var i = 0; i < rawStudyData.result.values.length; i++){
+                var rowData = [];
+
+                //Go thorugh each cell in the current row, and jsonify it's contents
+                for(var j = 0; j < rawStudyData.result.values[i].length; j++){
+                    var jsonData = JSON.parse(rawStudyData.result.values[i][j]);
+                    rowData.push(jsonData);
+                }
+                studyData.push(rowData);
+            }
+            
+        }
+
+        resolve(studyData);
+    });
+
+}
+
 const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
     // The full promise chain to loading project data */
 
@@ -9,9 +33,11 @@ const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
         .then(CreateSheetIfNotExists)
         .then(FillSheetIfJustCreated)
         .then(ReadStudyData)
+        .then(JsonifyRawStudyData)
         .then((studyData) => {
             resolve(studyData);
         });
+
     });
 }
 
@@ -258,7 +284,6 @@ const InitializeGAPIChainData = (gapi, studySheetName) => {
     };
 }
 
-
 const gapi_util = {
     FullLoad_LoadApisAndReturnAllStudyData,
     QuickLoad_ReturnRelevantStudyData,
@@ -266,9 +291,11 @@ const gapi_util = {
     FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
+    JsonifyRawStudyData,
     CheckIfSheetExists,
     CheckIfSSExists,
     ReadStudyData,
     LoadAPIs,
 }
+
 export default gapi_util;
