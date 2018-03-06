@@ -60,6 +60,7 @@ const Week = (studyData, weekOfYear) => {
     for(var i = 1; i < weekInfo.length; i++){
         for(projName in weekInfo[i]){
 
+            //TODO: check if this is undefined
             if(projectTotals[projName]){
                 projectTotals[projName].studied += weekInfo[i][projName].studied;
             }

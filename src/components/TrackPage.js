@@ -66,7 +66,7 @@ class TrackPage extends Component {
         }
     }
 
-    _setupThisWeek(){
+    _setupThisWeek(chaindata){
         //Fill the current week with empty objects?
         //gapi_util.SendData(this.state.chaindata, "A" + currentWeek, [["{}","{}","{}","{}","{}","{}","{}","{}"]]);
 
@@ -88,7 +88,11 @@ class TrackPage extends Component {
             //TODO: the keys count doesn't work, weekGoals always has values in it...
             var numberOfGoals = Object.keys(weekGoals).length;
             if(numberOfGoals > 0){
-                console.log("moar dan zeor");
+                //TODO: take this week and send it in for this weeks goals
+                
+                gapi_util.SendData(chaindata, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
+                console.log("sending and breaking");
+                break;
             }
             else{
                 console.log("zero");
@@ -101,7 +105,7 @@ class TrackPage extends Component {
         var preparedChartData = this._prepareChartData(this.state.studyData);
 
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
-            this._setupThisWeek();
+            this._setupThisWeek(this.state.chaindata);
             return(
                 <p>Creating this weeks data...</p>
             );
