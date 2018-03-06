@@ -7,6 +7,9 @@ import FaEdit from 'react-icons/lib/fa/edit';
 
 
 const ProjectList = (props) => {
+    if(props.projectNames === null){
+        //TODO: where do I check if this week has been setup yet?
+    }
 
     if(props.projectNames.length === 0){
         return(

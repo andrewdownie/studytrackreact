@@ -170,6 +170,36 @@ const CreateSheetIfNotExists = (chaindata) => {
     });
 }
 
+//TODO: create a method to send arbitrary data to the sheet (everything sent in parameters)
+//TODO: give the function / parameter a better name....
+//TODO: oh fuk it needs gapi /and/or chaindata
+const SendData = (chaindata, range, values) => {
+    return new Promise((resolve, reject) => {
+        console.log("This is SendData --- ");
+        console.log(chaindata);
+
+        var sendDataRequest = chaindata.gapi.client.sheets.spreadsheets.values.batchUpdate(
+        {
+            "spreadsheetId": chaindata.spreadsheet.id
+        },
+        {
+            "data": [
+                {
+                "values": values,
+                "range": chaindata.studysheet.title + "!" + range
+                }
+            ],
+            "valueInputOption": "RAW"
+            }
+        );
+
+        sendDataRequest.execute((response) => {
+            resolve(response);
+        });
+
+    });
+}
+
 const FillSheetIfJustCreated = (chaindata) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
@@ -183,7 +213,7 @@ const FillSheetIfJustCreated = (chaindata) => {
                 //curRow = sheetdata_util.CreateWeekData();
                 var curRow = [];
                 for(var j = 0; j < 8; j++){
-                    curRow.push("meow" + j);
+                    curRow.push("{}");
                 }
                 rows.push(curRow);
             }
@@ -295,6 +325,7 @@ const gapi_util = {
     CheckIfSSExists,
     ReadSheetData,
     LoadAPIs,
+    SendData,
 }
 
 export default gapi_util;

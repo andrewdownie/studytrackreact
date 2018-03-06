@@ -59,7 +59,11 @@ const Week = (studyData, weekOfYear) => {
     // Tally the amount of study time spent this week on each project
     for(var i = 1; i < weekInfo.length; i++){
         for(projName in weekInfo[i]){
-            projectTotals[projName].studied += weekInfo[i][projName].studied;
+
+            if(projectTotals[projName]){
+                projectTotals[projName].studied += weekInfo[i][projName].studied;
+            }
+
         }
     }
 

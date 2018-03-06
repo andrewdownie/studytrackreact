@@ -2,6 +2,7 @@
 study data once it's been brought local*/
 
 import date_util from './date_util';
+import gapi_util from './gapi_util';
 
 const RowOfSheet_WOY = (weekOfYear) => {
     return weekOfYear - 1;
@@ -9,7 +10,7 @@ const RowOfSheet_WOY = (weekOfYear) => {
 
 const WeekGoals = (studyData, weekOfYear) => {
     //Each weeks goals are stored in the first cell of each row
-    return JSON.parse(studyData[weekOfYear][0]);
+    return studyData[weekOfYear][0];
 }
 
 const WeekData_DOY = (studyData, dayOfYear) => {
@@ -65,6 +66,12 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 
 const ProjectNames = (studyData, weekOfYear) => {
     var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);
+
+    if(weeksDataRaw == null){
+        return null;
+    }
+
+
     var goals = weeksDataRaw[0];
     var projectNames = [];
 

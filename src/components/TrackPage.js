@@ -51,22 +51,61 @@ class TrackPage extends Component {
         var local_data_cached = false;//TODO: note: this is just explaining what I want to do in the future using a simple code example
 
         if(local_data_cached){
+            //Quick load will use the cached sheet name to do a single ajax request and grab the data
+            // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
             studyData = gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(chaindata)
             .then((studyData) => {
-                this.setState({studyData: studyData, loadedFromRemote: true});
+                this.setState({chaindata, studyData, loadedFromRemote: true});
             });
         }
         else{
             studyData = gapi_util.FullLoad_LoadApisAndReturnAllStudyData(chaindata)
             .then((studyData) => {
-                this.setState({studyData: studyData, loadedFromRemote: true});
+                this.setState({chaindata, studyData, loadedFromRemote: true});
             });
+        }
+    }
+
+    _setupThisWeek(){
+        //Fill the current week with empty objects?
+        //gapi_util.SendData(this.state.chaindata, "A" + currentWeek, [["{}","{}","{}","{}","{}","{}","{}","{}"]]);
+
+
+        //TODO: we have all the data up to date right? (are we going to do full sheet loads then, or?)
+        //TODO: if we load a previous week, then we never should need to load it again, in the cacheing, it needs to mark when it was loaded
+
+        //TODO: keep going back until we find a week with goals
+        var currentWeek = date_util.WeekOfYear() - 1;
+        while(currentWeek > 0){
+            currentWeek = currentWeek - 1;
+            console.log(currentWeek);
+
+            //TODO: why is WeekGoals() always returning goals, when I have some set to empty objects in the sheet...
+            var weekGoals = sheetdata_util.WeekGoals(this.state.studyData, currentWeek);
+            console.log(weekGoals);
+
+            //TODO: how do I tell if goals are present? Loop over the keys?
+            //TODO: the keys count doesn't work, weekGoals always has values in it...
+            var numberOfGoals = Object.keys(weekGoals).length;
+            if(numberOfGoals > 0){
+                console.log("moar dan zeor");
+            }
+            else{
+                console.log("zero");
+            }
         }
     }
 
     render(){
         this._loadTrackPageData(this.state.studyData);
         var preparedChartData = this._prepareChartData(this.state.studyData);
+
+        if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
+            this._setupThisWeek();
+            return(
+                <p>Creating this weeks data...</p>
+            );
+        }
 
         return(
         <Grid fluid>
