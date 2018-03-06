@@ -7,14 +7,22 @@ import FaEdit from 'react-icons/lib/fa/edit';
 
 
 const ProjectList = (props) => {
-    if(props.projectNames === null){
-        //TODO: where do I check if this week has been setup yet?
-    }
 
-    if(props.projectNames.length === 0){
-        return(
-            <p><FaSpinner className="spin"/> Loading project list...</p>
-        );
+    if(props.projectNames.length === 0 ){
+        if(props.loadedFromRemote === false){
+            return(
+                <div className="project-list">
+                    <p className="text-center"><FaSpinner className="spin"/> Loading project list</p>
+                </div>
+            );
+        }
+        else{
+            return(
+                <div className="project-list">
+                    <p className="text-center">You don't have any projects yet</p>
+                </div>
+            );
+        }
     }
     
     return(

@@ -12,6 +12,8 @@ const Day = (studyData, dayOfYear) => {
     var output = [];
     var projName;
 
+    output.push(chart_data_header);
+
     // Errs
     if(weekInfo == null){
         return [];
@@ -33,9 +35,12 @@ const Day = (studyData, dayOfYear) => {
     }
 
     // Chartify the data
-    output.push(chart_data_header);
     for(projName in projectTotals){
         output.push(_ChartifySingleProject(projName, projectTotals[projName]));
+    }
+
+    if(output.length === 1){
+        output.push(["No study data this period", 0, 0, 0, ""]);
     }
 
     return output;
@@ -47,6 +52,8 @@ const Week = (studyData, weekOfYear) => {
     var projectTotals = _WeeksGoals(weekInfo);
     var output = [];
     var projName;
+
+    output.push(chart_data_header);
 
     // Errs
     if(weekInfo == null){
@@ -60,7 +67,6 @@ const Week = (studyData, weekOfYear) => {
     for(var i = 1; i < weekInfo.length; i++){
         for(projName in weekInfo[i]){
 
-            //TODO: check if this is undefined
             if(projectTotals[projName]){
                 projectTotals[projName].studied += weekInfo[i][projName].studied;
             }
@@ -69,9 +75,12 @@ const Week = (studyData, weekOfYear) => {
     }
 
     // Chartify the data
-    output.push(chart_data_header);
     for(projName in projectTotals){
         output.push(_ChartifySingleProject(projName, projectTotals[projName]));
+    }
+
+    if(output.length === 1){
+        output.push(["No study data this period", 0, 0, 0, ""]);
     }
 
     return output;

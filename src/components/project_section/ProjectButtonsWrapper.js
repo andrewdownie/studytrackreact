@@ -6,11 +6,19 @@ import MdSchedule from 'react-icons/lib/md/schedule';
 import FaPlus from 'react-icons/lib/fa/plus';
 
 
-const ProjectButtonsWrapper = () => {
+const ProjectButtonsWrapper = (props) => {
+    console.log(props.highlightAddProjectButton);
+
+    var newProjectClasses = "btn-spacing-sm";
+
+    if(props.highlightAddProjectButton){
+        newProjectClasses += " highlight-add-project-button";
+    }
+
     return(
         <ButtonGroup vertical block className="project-button-group">
             <Button className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
-            <Button className="btn-spacing-sm" bsStyle="success"><FaPlus/> New Project</Button>
+            <Button className={newProjectClasses} bsStyle="success"><FaPlus/> New Project</Button>
         </ButtonGroup>
     );
 }

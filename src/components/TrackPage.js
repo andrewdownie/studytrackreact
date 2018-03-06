@@ -117,7 +117,7 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                    <ProjectSection projectNames={preparedChartData.projectNames} />
+                    <ProjectSection projectNames={preparedChartData.projectNames} loadedFromRemote={this.state.loadedFromRemote} />
                 </Col>
             </Row>
 
