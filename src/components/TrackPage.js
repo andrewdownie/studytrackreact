@@ -99,6 +99,10 @@ class TrackPage extends Component {
             }
         }
     }
+    
+    _addProject(projectData){
+        console.log("Add project now pls");
+    }
 
     render(){
         this._loadTrackPageData(this.state.studyData);
@@ -117,7 +121,7 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                    <ProjectSection projectNames={preparedChartData.projectNames} loadedFromRemote={this.state.loadedFromRemote} />
+                    <ProjectSection projectNames={preparedChartData.projectNames} addProject={this._addProject} loadedFromRemote={this.state.loadedFromRemote} />
                 </Col>
             </Row>
 

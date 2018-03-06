@@ -7,8 +7,6 @@ import FaPlus from 'react-icons/lib/fa/plus';
 
 
 const ProjectButtonsWrapper = (props) => {
-    console.log(props.highlightAddProjectButton);
-
     var newProjectClasses = "btn-spacing-sm";
 
     if(props.highlightAddProjectButton){

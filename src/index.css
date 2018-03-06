@@ -10,15 +10,15 @@ body {
     animation: highlight-add-project-button ease-in 2s infinite;
 }
 @-webkit-keyframes highlight-add-project-button-webkit{ 
-    0% { background-color:#4ca84c; }
-    50% { background-color:#7cd87c; }
-    100% { background-color:#4ca84c; } 
+    0% { background-color:#4ca84c; border-color: #4ca84c}
+    50% { background-color:#7cd87c; border-color: #7cd87c}
+    100% { background-color:#4ca84c; border-color: #4ca84c} 
 
 } 
 @keyframes highlight-add-project-button{ 
-    0% { background-color:#4ca84c; }
-    50% { background-color:#7cd87c; }
-    100% { background-color:#4ca84c; } 
+    0% { background-color:#4ca84c; border-color: #4ca84c}
+    50% { background-color:#7cd87c; border-color: #7cd87c}
+    100% { background-color:#4ca84c; border-color: #4ca84c} 
 }
 
 
