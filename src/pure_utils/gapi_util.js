@@ -66,7 +66,12 @@ const ReadSheetData = (gapiInfo) => {
             return "";
         }
 
-        gapi.client.sheets.spreadsheets.values.get({
+        Get(gapiInfo, "A1:H53")
+        .then((result) =>{
+            resolve(result);
+        });
+
+        /*gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: gapiInfo.spreadsheet.id,
             //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
             //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
@@ -76,30 +81,11 @@ const ReadSheetData = (gapiInfo) => {
         },//.bind(this),
         function (response) {
             console.log('Error: ' + response.result.error.message);
-        });
+        });*/
 
     });
 }
 
-const GetCellData = (gapiInfo, range) => {
-    return new Promise((resolve, reject) =>{
-
-        console.log("why is this being called, I just wrote it?");
-
-        gapiInfo.gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: gapiInfo.spreadsheet.id,
-            //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
-            //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-            range: gapiInfo.studysheet.title + '!' + range,
-        }).then(function(response){
-            resolve(response);
-        },//.bind(this),
-        function (response) {
-            console.log('Error: ' + response.result.error.message);
-        });
-
-    });
-}
 
 const GetWeeksGoals = (gapiInfo, weekOfYear) => {
     console.log("GetWeekGoals doesnt do anything yet");
@@ -158,6 +144,9 @@ const CheckIfSheetExists = (gapiInfo) => {
 
 const CreateSheetIfNotExists = (gapiInfo) => {
 
+    console.log("create sheet if not exists");
+    console.log(gapiInfo);
+
     return new Promise((resolve, reject) => {
         if(gapiInfo.studysheet.exists){
             resolve(gapiInfo);
@@ -194,14 +183,33 @@ const CreateSheetIfNotExists = (gapiInfo) => {
     });
 }
 
+
+const AddNewProject = (gapiInfo, newProjectData) => {
+    //Step 1: load the current projectData for the current week
+    //Step 2: just for duplicates
+    //Step 3: send the new project
+}
+
+const Get = (gapiInfo, range) => {
+    console.log("get");
+    return new Promise((resolve, reject) =>{
+        gapiInfo.gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: gapiInfo.spreadsheet.id,
+            range: gapiInfo.studysheet.title + '!' + range,
+        }).then(function(response){
+            resolve(response);
+        },//.bind(this),//TODO: what does this serve in this context?
+        function (response) {
+            console.log('Error: ' + response.result.error.message);
+        });
+    });
+}
+
 //TODO: create a method to send arbitrary data to the sheet (everything sent in parameters)
 //TODO: give the function / parameter a better name....
 //TODO: oh fuk it needs gapi /and/or gapiInfo
-const SendData = (gapiInfo, range, values) => {
+const Put = (gapiInfo, range, values) => {
     return new Promise((resolve, reject) => {
-        console.log("This is SendData --- ");
-        console.log(gapiInfo);
-
         var sendDataRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(
         {
             "spreadsheetId": gapiInfo.spreadsheet.id
@@ -225,6 +233,7 @@ const SendData = (gapiInfo, range, values) => {
 }
 
 const FillSheetIfJustCreated = (gapiInfo) => {
+    console.log("fill sheet if just created");
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
 
@@ -242,33 +251,8 @@ const FillSheetIfJustCreated = (gapiInfo) => {
                 rows.push(curRow);
             }
 
-            console.log(rows);
 
-            var updateRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(
-            {
-                "spreadsheetId": gapiInfo.spreadsheet.id
-            },
-            {
-                "data": [
-                    {
-                    "values": rows,
-                    "range": "2018!A1:H53"
-                    }
-                ],
-                "valueInputOption": "RAW"
-                }
-            );
-
-            updateRequest.execute((response) => {
-                //TODO: how do I check for success / failure
-                resolve(gapiInfo);
-                console.log("after request");
-            }, (reason) => {
-                console.log("filling new sheet with default values failed.");
-                console.log(reason);
-            }, (reason) => {
-                console.log(reason);
-            });
+            Put(gapiInfo, "A1:H53", rows);
 
         }
 
@@ -284,7 +268,8 @@ const CreateSSIfNotExists = (gapiInfo) => {
             );
 
             createRequest.execute((response) => {
-                gapiInfo.spreadsheet.id = response.id;
+                console.log(response);
+                gapiInfo.spreadsheet.id = response.spreadsheetId;
                 gapiInfo.spreadsheet.exists = true;
                 gapiInfo.spreadsheet.justCreated = true;
                 resolve(gapiInfo);
@@ -349,7 +334,8 @@ const gapi_util = {
     CheckIfSSExists,
     ReadSheetData,
     LoadAPIs,
-    SendData,
+    Put,
+    Get,
 }
 
 export default gapi_util;

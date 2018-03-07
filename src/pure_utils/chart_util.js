@@ -31,6 +31,7 @@ const Day = (studyData, dayOfYear) => {
 
     //Grab the amount of time studied today for each project
     for(projName in weekInfo[todaysCellIndex]){
+        console.log(projName);
         projectTotals[projName].studied = weekInfo[todaysCellIndex][projName].studied;
     }
 
