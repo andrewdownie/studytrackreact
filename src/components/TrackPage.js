@@ -102,6 +102,7 @@ class TrackPage extends Component {
     
     _addProject(projectData){
         console.log("Add project now pls");
+        console.log(projectData);
     }
 
     render(){
