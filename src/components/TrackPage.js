@@ -53,7 +53,7 @@ class TrackPage extends Component {
             return;
         }
 
-        var chaindata = gapi_util.InitializeGAPIChainData(this.props.gapi, date_util.Year());
+        var gapiInfo = gapi_util.InitializeGAPIInfo(this.props.gapi, date_util.Year());
 
         //TODO: check local cache to see if we know the id of the sheet already (and also have study data)
         var local_data_cached = false;//TODO: note: this is just explaining what I want to do in the future using a simple code example
@@ -61,22 +61,22 @@ class TrackPage extends Component {
         if(local_data_cached){
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
-            studyData = gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(chaindata)
+            studyData = gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
-                this.setState({chaindata, studyData, loadedFromRemote: true});
+                this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
         else{
-            studyData = gapi_util.FullLoad_LoadApisAndReturnAllStudyData(chaindata)
+            studyData = gapi_util.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
-                this.setState({chaindata, studyData, loadedFromRemote: true});
+                this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
     }
 
-    _setupThisWeek(chaindata){
+    _setupThisWeek(gapiInfo){
         //Fill the current week with empty objects?
-        //gapi_util.SendData(this.state.chaindata, "A" + currentWeek, [["{}","{}","{}","{}","{}","{}","{}","{}"]]);
+        //gapi_util.SendData(this.state.gapiInfo, "A" + currentWeek, [["{}","{}","{}","{}","{}","{}","{}","{}"]]);
 
 
         //TODO: we have all the data up to date right? (are we going to do full sheet loads then, or?)
@@ -98,7 +98,7 @@ class TrackPage extends Component {
             if(numberOfGoals > 0){
                 //TODO: take this week and send it in for this weeks goals
                 
-                gapi_util.SendData(chaindata, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
+                gapi_util.SendData(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
                 console.log("sending and breaking");
                 break;
             }
@@ -111,6 +111,11 @@ class TrackPage extends Component {
     _addProjectCallback(projectData){
         console.log("Add project now pls");
         console.log(projectData);
+
+        //TODO: get the most up to date project goals info for this week
+        //TODO: check if the new entry would be a duplicate
+        //TODO: if it wouldn't be a duplicate, pack the new project into the goals, and then update this weeks goals
+
     }
     _openAddProjectModalCallback(){
         console.log("open add project modal");
@@ -123,7 +128,7 @@ class TrackPage extends Component {
         var preparedChartData = this._prepareChartData(this.state.studyData);
 
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
-            this._setupThisWeek(this.state.chaindata);
+            this._setupThisWeek(this.state.gapiInfo);
             return(
                 <p>Creating this weeks data...</p>
             );

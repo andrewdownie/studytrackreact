@@ -22,8 +22,9 @@ class ProjectModals extends Component{
 
     }
 
+    //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
-        this.setState({showAddProject: nextProps.showAddProject});
+        this.setState({showAddProject: nextProps.showAddProject, addProjectCallback: nextProps.addProjectCallback});
     }
     closeAddProject(){
         this.setState({showAddProject: false});
@@ -34,7 +35,7 @@ class ProjectModals extends Component{
         console.log("This is add project");
         console.log(this.state.addProject_name);
 
-        this.state.addProject({
+        this.state.addProjectCallback({
             title: this.state.addProject_name,
             minGoal: this.state.addProject_minGoal,
             idealGoal: this.state.addProject_idealGoal,
@@ -48,21 +49,21 @@ class ProjectModals extends Component{
                     <Modal.Title>Add a project</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h4>Title</h4>
+                    <h5>Title</h5>
                     <input
                         type="text"
                         className="form-control"
                         value={this.state.addProject_name}
                         onChange={(event) => {this.setState({addProject_name: event.target.value})}}
                     />
-                    <h4>Minimum Weekly Goal (hours)</h4>
+                    <h5>Minimum Weekly Goal (hours)</h5>
                     <input
                         type="number"
                         className="form-control"
                         value={this.state.addProject_minGoal}
                         onChange={(event) => {this.setState({addProject_minGoal: event.target.value})}}
                     />
-                    <h4>Ideal Weekly Goal (hours)</h4>
+                    <h5>Ideal Weekly Goal (hours)</h5>
                     <input
                         type="number"
                         className="form-control"

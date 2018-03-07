@@ -24,11 +24,11 @@ const JsonifyRawStudyData = (rawStudyData) => {
 
 }
 
-const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
+const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
     // The full promise chain to loading project data */
 
     return new Promise((resolve, reject) => {
-        LoadAPIs(chaindata)
+        LoadAPIs(gapiInfo)
         .then(CheckIfSSExists)
         .then(CreateSSIfNotExists)
         .then(CheckIfSheetExists)
@@ -43,17 +43,17 @@ const FullLoad_LoadApisAndReturnAllStudyData = (chaindata) => {
     });
 }
 
-const QuickLoad_ReturnRelevantStudyData = (chaindata) => {
+const QuickLoad_ReturnRelevantStudyData = (gapiInfo) => {
     // After the full load is taken place, a local persitant varaible should be updated to reflect that all data has been loaded and cached locally
     // If there is cached study data, we can assume the spreadsheet and the sheet exists, and load from the sheet directly using the cache spreadsheet id
 
     //TODO: do I need to load apis or will they be saved locally?
-    //TODO: ReadStudyData by passing in the sheet id from local cache into the chaindata object and calling ReadStudyData
+    //TODO: ReadStudyData by passing in the sheet id from local cache into the gapiInfo object and calling ReadStudyData
 }
 
-const ReadSheetData = (chaindata) => {
+const ReadSheetData = (gapiInfo) => {
     return new Promise((resolve, reject) => {
-        var gapi = chaindata.gapi;
+        var gapi = gapiInfo.gapi;
 
         //TODO: do I still need these checks?
         if(!gapi){
@@ -67,10 +67,10 @@ const ReadSheetData = (chaindata) => {
         }
 
         gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: chaindata.spreadsheet.id,
+            spreadsheetId: gapiInfo.spreadsheet.id,
             //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
             //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-            range: chaindata.studysheet.title + '!A1:H53'
+            range: gapiInfo.studysheet.title + '!A1:H53'
         }).then(function(response){
             resolve(response);
         },//.bind(this),
@@ -81,74 +81,98 @@ const ReadSheetData = (chaindata) => {
     });
 }
 
-const CheckIfSSExists = (chaindata) => {
+const GetCellData = (gapiInfo, range) => {
+    return new Promise((resolve, reject) =>{
+
+        console.log("why is this being called, I just wrote it?");
+
+        gapiInfo.gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: gapiInfo.spreadsheet.id,
+            //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
+            //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
+            range: gapiInfo.studysheet.title + '!' + range,
+        }).then(function(response){
+            resolve(response);
+        },//.bind(this),
+        function (response) {
+            console.log('Error: ' + response.result.error.message);
+        });
+
+    });
+}
+
+const GetWeeksGoals = (gapiInfo, weekOfYear) => {
+    console.log("GetWeekGoals doesnt do anything yet");
+}
+
+const CheckIfSSExists = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
-        var listSheets = chaindata.gapi.client.drive.files.list();
+        var listSheets = gapiInfo.gapi.client.drive.files.list();
         
         listSheets.execute((response) => {
             var len = response.files.length;
             if(len > 0){
                 for(var i = 0; i < response.files.length; i++){
                     //console.log(response.files[i]);
-                    if(response.files[i].name === chaindata.spreadsheet.title){
-                        chaindata.spreadsheet.id = response.files[i].id;
-                        chaindata.spreadsheet.exists = true;
+                    if(response.files[i].name === gapiInfo.spreadsheet.title){
+                        gapiInfo.spreadsheet.id = response.files[i].id;
+                        gapiInfo.spreadsheet.exists = true;
                     }
                 }
             }
-            resolve(chaindata);
+            resolve(gapiInfo);
         });
 
     });
 }
 
-const CheckIfSheetExists = (chaindata) => {
+const CheckIfSheetExists = (gapiInfo) => {
 
     return new Promise((resolve, reject) => {
-        if(chaindata.spreadsheet.justCreated){
-            chaindata.studysheet.exists = false;
-            resolve(chaindata);
+        if(gapiInfo.spreadsheet.justCreated){
+            gapiInfo.studysheet.exists = false;
+            resolve(gapiInfo);
         }
         else{
-            var listSheets = chaindata.gapi.client.sheets.spreadsheets.get(
-                {spreadsheetId: chaindata.spreadsheet.id}
+            var listSheets = gapiInfo.gapi.client.sheets.spreadsheets.get(
+                {spreadsheetId: gapiInfo.spreadsheet.id}
             );
 
             listSheets.execute((response) => {
-                chaindata.studysheet.exists = false;
+                gapiInfo.studysheet.exists = false;
 
                 for(var i = 0; i < response.sheets.length; i++){
                     //console.log(this._year());
-                    if(response.sheets[i].properties.title === chaindata.studysheet.title){
-                        chaindata.studysheet.exists = true;
+                    if(response.sheets[i].properties.title === gapiInfo.studysheet.title){
+                        gapiInfo.studysheet.exists = true;
                         break;
                     }
                 }
-                resolve(chaindata);
+                resolve(gapiInfo);
             });
         }
 
     });
 }
 
-const CreateSheetIfNotExists = (chaindata) => {
+const CreateSheetIfNotExists = (gapiInfo) => {
 
     return new Promise((resolve, reject) => {
-        if(chaindata.studysheet.exists){
-            resolve(chaindata);
+        if(gapiInfo.studysheet.exists){
+            resolve(gapiInfo);
         }
         else{
-            var createSheet = chaindata.gapi.client.sheets.spreadsheets.batchUpdate(
+            var createSheet = gapiInfo.gapi.client.sheets.spreadsheets.batchUpdate(
             {
-                "spreadsheetId": chaindata.spreadsheet.id
+                "spreadsheetId": gapiInfo.spreadsheet.id
             },
             {
                 "requests": [
                     {
                         "addSheet": {
                             "properties": {
-                                "title": chaindata.studysheet.title,
+                                "title": gapiInfo.studysheet.title,
                                 "gridProperties": {
                                     "columnCount": 8,
                                     "rowCount":53
@@ -161,9 +185,9 @@ const CreateSheetIfNotExists = (chaindata) => {
             );
 
             createSheet.execute((response) => {
-                chaindata.studysheet.exists = true;
-                chaindata.studysheet.justCreated = true;
-                resolve(chaindata);
+                gapiInfo.studysheet.exists = true;
+                gapiInfo.studysheet.justCreated = true;
+                resolve(gapiInfo);
             });
 
         }
@@ -172,21 +196,21 @@ const CreateSheetIfNotExists = (chaindata) => {
 
 //TODO: create a method to send arbitrary data to the sheet (everything sent in parameters)
 //TODO: give the function / parameter a better name....
-//TODO: oh fuk it needs gapi /and/or chaindata
-const SendData = (chaindata, range, values) => {
+//TODO: oh fuk it needs gapi /and/or gapiInfo
+const SendData = (gapiInfo, range, values) => {
     return new Promise((resolve, reject) => {
         console.log("This is SendData --- ");
-        console.log(chaindata);
+        console.log(gapiInfo);
 
-        var sendDataRequest = chaindata.gapi.client.sheets.spreadsheets.values.batchUpdate(
+        var sendDataRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(
         {
-            "spreadsheetId": chaindata.spreadsheet.id
+            "spreadsheetId": gapiInfo.spreadsheet.id
         },
         {
             "data": [
                 {
                 "values": values,
-                "range": chaindata.studysheet.title + "!" + range
+                "range": gapiInfo.studysheet.title + "!" + range
                 }
             ],
             "valueInputOption": "RAW"
@@ -200,12 +224,12 @@ const SendData = (chaindata, range, values) => {
     });
 }
 
-const FillSheetIfJustCreated = (chaindata) => {
+const FillSheetIfJustCreated = (gapiInfo) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
 
-        if(chaindata.studysheet.justCreated === false){
-            resolve(chaindata);
+        if(gapiInfo.studysheet.justCreated === false){
+            resolve(gapiInfo);
         }
         else{
             var rows = [];
@@ -220,9 +244,9 @@ const FillSheetIfJustCreated = (chaindata) => {
 
             console.log(rows);
 
-            var updateRequest = chaindata.gapi.client.sheets.spreadsheets.values.batchUpdate(
+            var updateRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(
             {
-                "spreadsheetId": chaindata.spreadsheet.id
+                "spreadsheetId": gapiInfo.spreadsheet.id
             },
             {
                 "data": [
@@ -237,7 +261,7 @@ const FillSheetIfJustCreated = (chaindata) => {
 
             updateRequest.execute((response) => {
                 //TODO: how do I check for success / failure
-                resolve(chaindata);
+                resolve(gapiInfo);
                 console.log("after request");
             }, (reason) => {
                 console.log("filling new sheet with default values failed.");
@@ -251,52 +275,52 @@ const FillSheetIfJustCreated = (chaindata) => {
     });
 }
 
-const CreateSSIfNotExists = (chaindata) => {
+const CreateSSIfNotExists = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
-        if(chaindata.spreadsheet.exists === false){
-            var createRequest = chaindata.gapi.client.sheets.spreadsheets.create(
-                { "properties": { "title": chaindata.spreadsheet.title} },
+        if(gapiInfo.spreadsheet.exists === false){
+            var createRequest = gapiInfo.gapi.client.sheets.spreadsheets.create(
+                { "properties": { "title": gapiInfo.spreadsheet.title} },
             );
 
             createRequest.execute((response) => {
-                chaindata.spreadsheet.id = response.id;
-                chaindata.spreadsheet.exists = true;
-                chaindata.spreadsheet.justCreated = true;
-                resolve(chaindata);
+                gapiInfo.spreadsheet.id = response.id;
+                gapiInfo.spreadsheet.exists = true;
+                gapiInfo.spreadsheet.justCreated = true;
+                resolve(gapiInfo);
             });
 
         }
         else{
-            resolve(chaindata);
+            resolve(gapiInfo);
         }
     });
 }
 
 
-const LoadAPIs = (chaindata) => {
+const LoadAPIs = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
         var loadDriveAPI = new Promise((resolve, reject) => {
-            chaindata.gapi.client.load('drive', 'v2', () => {
+            gapiInfo.gapi.client.load('drive', 'v2', () => {
                 resolve();
             });
         });
 
         var loadSheetsAPI = new Promise((resolve, reject) => {
-            chaindata.gapi.client.load('sheets', 'v4', () => {
+            gapiInfo.gapi.client.load('sheets', 'v4', () => {
                 resolve();
             });
         });
 
         Promise.all([loadDriveAPI, loadSheetsAPI]).then(values => { 
-            resolve(chaindata);
+            resolve(gapiInfo);
         });
 
     });
 }
 
-const InitializeGAPIChainData = (gapi, studySheetName) => {
+const InitializeGAPIInfo = (gapi, studySheetName) => {
     return {
         gapi: gapi,
         spreadsheet: {
@@ -316,7 +340,7 @@ const InitializeGAPIChainData = (gapi, studySheetName) => {
 const gapi_util = {
     FullLoad_LoadApisAndReturnAllStudyData,
     QuickLoad_ReturnRelevantStudyData,
-    InitializeGAPIChainData,
+    InitializeGAPIInfo,
     FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
