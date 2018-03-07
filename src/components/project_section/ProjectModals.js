@@ -6,10 +6,12 @@ class ProjectModals extends Component{
     constructor(props){
         super(props);
 
+        console.log(props.showAddProject);
+
         this.state = {
             //show: props.showAddProject
-            show: true,
-            addProject: props.addProject,
+            showAddProject: props.showAddProject,
+            addProjectCallback: props.addProjectCallback,
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
@@ -20,9 +22,13 @@ class ProjectModals extends Component{
 
     }
 
-    closeAddProject(){
-        this.setState({show: false});
+    componentWillReceiveProps(nextProps){
+        this.setState({showAddProject: nextProps.showAddProject});
     }
+    closeAddProject(){
+        this.setState({showAddProject: false});
+    }
+
 
     addProject(){
         console.log("This is add project");
@@ -37,7 +43,7 @@ class ProjectModals extends Component{
 
     render(){
         return(
-            <Modal show={this.state.show}>
+            <Modal show={this.state.showAddProject}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add a project</Modal.Title>
                 </Modal.Header>

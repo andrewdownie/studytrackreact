@@ -9,11 +9,14 @@ import React from 'react';
 const ProjectSection = (props) => {
     var noProjectsFound = props.projectNames.length == 0 && props.loadedFromRemote;
 
+
+    console.log(props.showAddProject);
+
     return(
         <div className="show-grid project-section">
-            <ProjectButtonsWrapper highlightAddProjectButton={noProjectsFound} />
+            <ProjectButtonsWrapper openAddProjectModalCallback={props.openAddProjectModalCallback} highlightAddProjectButton={noProjectsFound} />
             <ProjectList projectNames={props.projectNames} loadedFromRemote={props.loadedFromRemote} />
-            <ProjectModals addProject={props.addProject} />
+            <ProjectModals showAddProject={props.showAddProject} addProjectCallback={props.addProjectCallback} />
         </div>
     );
 }

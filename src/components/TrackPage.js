@@ -12,7 +12,15 @@ import gapi_util from '../pure_utils/gapi_util';
 class TrackPage extends Component {
     constructor(props){
         super(props);
-        this.state = {studyData: null, loadedFromRemote: false};
+        this.state = {
+            studyData: null,
+            loadedFromRemote: false,
+            showAddProject: false,
+        };
+
+
+
+        this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -100,12 +108,17 @@ class TrackPage extends Component {
         }
     }
     
-    _addProject(projectData){
+    _addProjectCallback(projectData){
         console.log("Add project now pls");
         console.log(projectData);
     }
+    _openAddProjectModalCallback(){
+        console.log("open add project modal");
+        this.setState({showAddProject: true});
+    }
 
     render(){
+        console.log("render");
         this._loadTrackPageData(this.state.studyData);
         var preparedChartData = this._prepareChartData(this.state.studyData);
 
@@ -122,7 +135,14 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                    <ProjectSection projectNames={preparedChartData.projectNames} addProject={this._addProject} loadedFromRemote={this.state.loadedFromRemote} />
+                    <ProjectSection
+                        projectNames={preparedChartData.projectNames}
+                        addProjectCallback={this._addProjectCallback}
+                        openAddProjectModalCallback={this._openAddProjectModalCallback}
+                        loadedFromRemote={this.state.loadedFromRemote}
+                        showAddProject={this.state.showAddProject}
+
+                    />
                 </Col>
             </Row>
 
