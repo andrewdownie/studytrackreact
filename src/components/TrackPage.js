@@ -125,12 +125,8 @@ class TrackPage extends Component {
             studyData[wok - 1][0] = response;
             console.log(studyData);
             this.setState({studyData, showAddProject: false});
-            //TODO: set state here? ( how do I get this component to rerender?)
         });
 
-        //TODO: get the most up to date project goals info for this week
-        //TODO: check if the new entry would be a duplicate
-        //TODO: if it wouldn't be a duplicate, pack the new project into the goals, and then update this weeks goals
 
     }
     _openAddProjectModalCallback(){
@@ -162,7 +158,7 @@ class TrackPage extends Component {
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         loadedFromRemote={this.state.loadedFromRemote}
                         showAddProject={this.state.showAddProject}
-
+                        showEditProject={true}
                     />
                 </Col>
             </Row>

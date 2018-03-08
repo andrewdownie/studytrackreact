@@ -16,7 +16,7 @@ const ProjectSection = (props) => {
         <div className="show-grid project-section">
             <ProjectButtonsWrapper openAddProjectModalCallback={props.openAddProjectModalCallback} highlightAddProjectButton={noProjectsFound} />
             <ProjectList projectNames={props.projectNames} loadedFromRemote={props.loadedFromRemote} />
-            <ProjectModals showAddProject={props.showAddProject} addProjectCallback={props.addProjectCallback} />
+            <ProjectModals showEditProject={props.showEditProject} showAddProject={props.showAddProject} addProjectCallback={props.addProjectCallback} />
         </div>
     );
 }
