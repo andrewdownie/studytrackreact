@@ -113,7 +113,20 @@ class TrackPage extends Component {
         console.log("Add project now pls");
         console.log(newProjectData);
 
-        gapi_util.AddNewProject(this.state.gapiInfo, newProjectData);
+        var wok = date_util.WeekOfYear();
+
+        gapi_util.AddNewProject(this.state.gapiInfo, newProjectData)
+        .then((response) => {
+            console.log(response);
+            console.log(this.state.studyData);
+
+            //TODO: somehow the new project is already in here, even though I haven't set it yet?
+            var studyData = this.state.studyData;
+            studyData[wok - 1][0] = response;
+            console.log(studyData);
+            this.setState({studyData, showAddProject: false});
+            //TODO: set state here? ( how do I get this component to rerender?)
+        });
 
         //TODO: get the most up to date project goals info for this week
         //TODO: check if the new entry would be a duplicate

@@ -227,15 +227,9 @@ const AddNewProject = (gapiInfo, newProjectData) => {
                 curProjGoals[newProjectData.title].idealGoal = newProjectData.idealGoal;
 
                 var sheetInput = JSON.stringify(curProjGoals);
-                var row, rows;
-                row = [];
-                row.push(sheetInput);
-                rows=[];
-                rows.push(row);
-
-                Put(gapiInfo, "A10", rows)//TODO: how am I gonna un hard code this?
+                Put(gapiInfo, "A10", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
                 .then((response) => {
-                    console.log(response);
+                    resolve(curProjGoals);
                 });
             }
 
