@@ -1,6 +1,7 @@
 /* Interacts with Google APIs to get and send data */
 
 const JsonifyRawStudyData = (rawStudyData) => {
+    console.log("jsonify raw study data");
     return new Promise((resolve, reject) => {
         var studyData = [];
         if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
@@ -37,6 +38,7 @@ const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
         .then(ReadSheetData)
         .then(JsonifyRawStudyData)
         .then((studyData) => {
+            console.log("final resolve");
             resolve(studyData);
         });
 
@@ -52,6 +54,7 @@ const QuickLoad_ReturnRelevantStudyData = (gapiInfo) => {
 }
 
 const ReadSheetData = (gapiInfo) => {
+    console.log("read sheet data");
     return new Promise((resolve, reject) => {
         var gapi = gapiInfo.gapi;
 
@@ -68,6 +71,7 @@ const ReadSheetData = (gapiInfo) => {
 
         Get(gapiInfo, "A1:H53")
         .then((result) =>{
+            console.log(result);
             resolve(result);
         });
 
@@ -252,7 +256,10 @@ const FillSheetIfJustCreated = (gapiInfo) => {
             }
 
 
-            Put(gapiInfo, "A1:H53", rows);
+            Put(gapiInfo, "A1:H53", rows)
+            .then((result) => {
+                resolve(gapiInfo);
+            });
 
         }
 
