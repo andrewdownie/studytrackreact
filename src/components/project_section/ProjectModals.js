@@ -6,29 +6,37 @@ class ProjectModals extends Component{
     constructor(props){
         super(props);
 
-        console.log(props.showAddProject);
+        console.log(props.showEditProject);
 
-        this.state = {
+        this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
             showAddProject: props.showAddProject,
             showEditProject: props.showEditProject,
             addProjectCallback: props.addProjectCallback,
+            editProjectCallback: props.editProjectCallback,
+            deleteProjectCallback: props.deleteProjectCallback,
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
         };
 
+        this.closeEditProject = this.closeEditProject.bind(this);
         this.closeAddProject = this.closeAddProject.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
+        this.editProject = this.editProject.bind(this);
         this.addProject = this.addProject.bind(this);
 
     }
 
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
-        this.setState({showAddProject: nextProps.showAddProject, addProjectCallback: nextProps.addProjectCallback});
+        this.setState({showEditProject: nextProps.showEditProject, showAddProject: nextProps.showAddProject, addProjectCallback: nextProps.addProjectCallback});
     }
     closeAddProject(){
         this.setState({showAddProject: false});
+    }
+    closeEditProject() {
+        this.setState({showEditProject: false});
     }
 
 
@@ -42,8 +50,18 @@ class ProjectModals extends Component{
             idealGoal: this.state.addProject_idealGoal,
         });
     }
+    editProject(){
+        //TODO: when the user clicks the edit button, it needs to fill in the details for that project...
+        console.log("This is edit project");
+        this.state.editProjectCallback();
+    }
+    deleteProject(){
+        console.log("This is delete project");
+        this.state.deleteProjectCallback();
+    }
 
     render(){
+        console.log(this.state.showEditProject);
         return(
             <div>
                 <Modal show={this.state.showAddProject}>
@@ -107,8 +125,9 @@ class ProjectModals extends Component{
                         />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.closeAddProject}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.addProject}>Add Project</Button>
+                        <Button bsStyle="danger" onClick={this.deleteProject} className="pull-left">Delete</Button>
+                        <Button onClick={this.closeEditProject}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.editProject}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

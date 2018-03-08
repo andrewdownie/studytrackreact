@@ -16,12 +16,17 @@ class TrackPage extends Component {
             studyData: null,
             loadedFromRemote: false,
             showAddProject: false,
+            showEditProject: false,
         };
 
 
 
         this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
         this._addProjectCallback = this._addProjectCallback.bind(this);
+
+        this._openEditProjectModalCallback = this._openEditProjectModalCallback.bind(this);
+        this._editProjectCallback = this._editProjectCallback.bind(this);
+        this._deleteProjectCallback = this._deleteProjectCallback.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -133,6 +138,16 @@ class TrackPage extends Component {
         console.log("open add project modal");
         this.setState({showAddProject: true});
     }
+    _editProjectCallback(editProjectData){
+        console.log("edit project now pls");
+    }
+    _openEditProjectModalCallback(){
+        console.log("open edit project modal now pls");
+        this.setState({showEditProject: true});
+    }
+    _deleteProjectCallback(){
+        console.log("delete project now pls");
+    }
 
     render(){
         console.log("render");
@@ -156,9 +171,12 @@ class TrackPage extends Component {
                         projectNames={preparedChartData.projectNames}
                         addProjectCallback={this._addProjectCallback}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
+                        editProjectCallback={this._editProjectCallback}
+                        openEditProjectModalCallback={this._openEditProjectModalCallback}
+                        deleteProjectCallback={this._deleteProjectCallback}
                         loadedFromRemote={this.state.loadedFromRemote}
                         showAddProject={this.state.showAddProject}
-                        showEditProject={true}
+                        showEditProject={this.state.showEditProject}
                     />
                 </Col>
             </Row>

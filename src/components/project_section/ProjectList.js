@@ -24,6 +24,7 @@ const ProjectList = (props) => {
             );
         }
     }
+
     
     return(
         <div className="project-list">
@@ -32,7 +33,7 @@ const ProjectList = (props) => {
                     return (
                         <div className="project-row" key={"chartcol" + i}>
                             <Button className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
-                            <Button className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
+                            <Button projectname={projectName} onClick={props.openEditProjectModalCallback} className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
                         </div>
                     )
                 })
