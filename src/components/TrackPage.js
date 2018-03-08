@@ -21,6 +21,7 @@ class TrackPage extends Component {
 
 
         this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
+        this._addProjectCallback = this._addProjectCallback.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -108,9 +109,11 @@ class TrackPage extends Component {
         }
     }
     
-    _addProjectCallback(projectData){
+    _addProjectCallback(newProjectData){
         console.log("Add project now pls");
-        console.log(projectData);
+        console.log(newProjectData);
+
+        gapi_util.AddNewProject(this.state.gapiInfo, newProjectData);
 
         //TODO: get the most up to date project goals info for this week
         //TODO: check if the new entry would be a duplicate

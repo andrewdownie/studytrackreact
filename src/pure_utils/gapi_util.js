@@ -189,9 +189,61 @@ const CreateSheetIfNotExists = (gapiInfo) => {
 
 
 const AddNewProject = (gapiInfo, newProjectData) => {
-    //Step 1: load the current projectData for the current week
-    //Step 2: just for duplicates
-    //Step 3: send the new project
+    return new Promise((resolve, reject) => {
+
+        //Step 1: load the current project goals for the current week
+        var loadCurrentGoals = new Promise((resolve, reject) => {
+            Get(gapiInfo, "A10")//TODO: how am I gonna un-hard-code this?
+            .then((response)=>{
+                resolve(response);
+            });
+        });
+
+        //Step 2: check for duplicates
+        loadCurrentGoals.then((response) => {
+            var curProjGoals;
+            console.log(response.result.values[0]);
+            curProjGoals = JSON.parse(response.result.values[0]);
+
+            var duplicateProjName = false;
+            for(var projName in curProjGoals){
+                console.log(projName);
+                if(projName === newProjectData.title){
+                    duplicateProjName = true;
+                    break;
+                }
+            }
+
+            if(duplicateProjName){
+                console.log("There was a project with a duplicate name");
+                reject();//TODO: I don't know how to provide info about why promise was rejected...
+            }
+            else{
+                //Step 3: send the new project
+                console.log("Push the new project data to the sheet here.");
+                //curProjGoals.push(newProjectData);
+                curProjGoals[newProjectData.title] = {};
+                curProjGoals[newProjectData.title].minGoal = newProjectData.minGoal;
+                curProjGoals[newProjectData.title].idealGoal = newProjectData.idealGoal;
+
+                var sheetInput = JSON.stringify(curProjGoals);
+                var row, rows;
+                row = [];
+                row.push(sheetInput);
+                rows=[];
+                rows.push(row);
+
+                Put(gapiInfo, "A10", rows)//TODO: how am I gonna un hard code this?
+                .then((response) => {
+                    console.log(response);
+                });
+            }
+
+        });
+
+    });
+
+
 }
 
 const Get = (gapiInfo, range) => {
@@ -339,6 +391,7 @@ const gapi_util = {
     JsonifyRawStudyData,
     CheckIfSheetExists,
     CheckIfSSExists,
+    AddNewProject,
     ReadSheetData,
     LoadAPIs,
     Put,
