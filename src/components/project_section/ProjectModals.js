@@ -63,7 +63,10 @@ class ProjectModals extends Component{
         //TODO: when the user clicks the edit button, it needs to fill in the details for that project...
         
         console.log("This is edit project");
-        this.state.editProjectCallback();
+        var projectName = this.state.editProject_name;
+        var minGoal = this.state.editProject_minGoal;
+        var idealGoal = this.state.editProject_idealGoal;
+        this.state.editProjectCallback({projectName, minGoal, idealGoal});
     }
     deleteProject(){
         console.log("This is delete project");
@@ -116,21 +119,21 @@ class ProjectModals extends Component{
                             type="text"
                             className="form-control"
                             value={this.state.editProject_name}
-                            onChange={(event) => {this.setState({addProject_name: event.target.value})}}
+                            onChange={(event) => {this.setState({editProject_name: event.target.value})}}
                         />
                         <h5>Minimum Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
                             value={this.state.editProject_minGoal}
-                            onChange={(event) => {this.setState({addProject_minGoal: event.target.value})}}
+                            onChange={(event) => {this.setState({editProject_minGoal: event.target.value})}}
                         />
                         <h5>Ideal Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
                             value={this.state.editProject_idealGoal}
-                            onChange={(event) => {this.setState({addProject_idealGoal: event.target.value})}}
+                            onChange={(event) => {this.setState({editProject_idealGoal: event.target.value})}}
                         />
                     </Modal.Body>
                     <Modal.Footer>

@@ -143,6 +143,9 @@ class TrackPage extends Component {
     }
     _editProjectCallback(editProjectData){
         console.log("edit project now pls");
+        console.log(editProjectData);
+        //TODO: create arrow func in gapi_util
+        gapi_util.UpdateProject(this.state.gapiInfo, editProjectData);
     }
     _openEditProjectModalCallback(projectName){
         var wok = date_util.WeekOfYear();

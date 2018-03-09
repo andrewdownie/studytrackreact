@@ -187,6 +187,10 @@ const CreateSheetIfNotExists = (gapiInfo) => {
     });
 }
 
+const UpdateProject = (gapiInfo, editProjectData) => {
+    console.log("this is update project");
+}
+
 
 const AddNewProject = (gapiInfo, newProjectData) => {
     return new Promise((resolve, reject) => {
@@ -387,6 +391,7 @@ const gapi_util = {
     CheckIfSSExists,
     AddNewProject,
     ReadSheetData,
+    UpdateProject,
     LoadAPIs,
     Put,
     Get,
