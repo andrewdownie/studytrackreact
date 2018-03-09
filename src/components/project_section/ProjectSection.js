@@ -10,7 +10,6 @@ const ProjectSection = (props) => {
     var noProjectsFound = props.projectNames.length == 0 && props.loadedFromRemote;
 
 
-    console.log(props.showEditProject);
 
     return(
         <div className="show-grid project-section">
@@ -29,6 +28,9 @@ const ProjectSection = (props) => {
                 addProjectCallback={props.addProjectCallback}
                 editProjectCallback={props.editProjectCallback}
                 deleteProjectCallback={props.deleteProjectCallback}
+                editProject_name={props.editProject_name}
+                editProject_minGoal={props.editProject_minGoal}
+                editProject_idealGoal={props.editProject_idealGoal}
             />
         </div>
     );

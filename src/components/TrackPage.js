@@ -17,6 +17,9 @@ class TrackPage extends Component {
             loadedFromRemote: false,
             showAddProject: false,
             showEditProject: false,
+            editProject_name: "",
+            editProject_minGoal: 0,
+            editProject_idealGoal: 0,
         };
 
 
@@ -105,7 +108,7 @@ class TrackPage extends Component {
                 //TODO: take this week and send it in for this weeks goals
                 
                 gapi_util.SendData(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
-                console.log("sending and breaking");
+                console.log("sending and breaking out");
                 break;
             }
             else{
@@ -141,9 +144,14 @@ class TrackPage extends Component {
     _editProjectCallback(editProjectData){
         console.log("edit project now pls");
     }
-    _openEditProjectModalCallback(){
-        console.log("open edit project modal now pls");
-        this.setState({showEditProject: true});
+    _openEditProjectModalCallback(projectName){
+        var wok = date_util.WeekOfYear();
+        var projectGoals = this.state.studyData[wok - 1][0][projectName];
+        var minGoal, idealGoal;
+        minGoal = projectGoals.minGoal;
+        idealGoal = projectGoals.idealGoal;
+        console.log(projectGoals);
+        this.setState({showEditProject: true, editProject_name: projectName, editProject_minGoal: minGoal, editProject_idealGoal: idealGoal});
     }
     _deleteProjectCallback(){
         console.log("delete project now pls");
@@ -177,6 +185,9 @@ class TrackPage extends Component {
                         loadedFromRemote={this.state.loadedFromRemote}
                         showAddProject={this.state.showAddProject}
                         showEditProject={this.state.showEditProject}
+                        editProject_name={this.state.editProject_name}
+                        editProject_minGoal={this.state.editProject_minGoal}
+                        editProject_idealGoal={this.state.editProject_idealGoal}
                     />
                 </Col>
             </Row>

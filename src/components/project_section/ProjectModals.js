@@ -6,18 +6,20 @@ class ProjectModals extends Component{
     constructor(props){
         super(props);
 
-        console.log(props.showEditProject);
 
         this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
             showAddProject: props.showAddProject,
-            showEditProject: props.showEditProject,
+            editProjectInfo: props.showEditProject,
             addProjectCallback: props.addProjectCallback,
             editProjectCallback: props.editProjectCallback,
             deleteProjectCallback: props.deleteProjectCallback,
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
+            editProject_name: "",
+            editProject_minGoal: 2,
+            editProject_idealGoal: 5,
         };
 
         this.closeEditProject = this.closeEditProject.bind(this);
@@ -30,7 +32,14 @@ class ProjectModals extends Component{
 
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
-        this.setState({showEditProject: nextProps.showEditProject, showAddProject: nextProps.showAddProject, addProjectCallback: nextProps.addProjectCallback});
+        this.setState({
+            showEditProject: nextProps.showEditProject,
+            showAddProject: nextProps.showAddProject,
+            addProjectCallback: nextProps.addProjectCallback,
+            editProject_name: nextProps.editProject_name,
+            editProject_minGoal: nextProps.editProject_minGoal,
+            editProject_idealGoal: nextProps.editProject_idealGoal,
+        });
     }
     closeAddProject(){
         this.setState({showAddProject: false});
@@ -52,6 +61,7 @@ class ProjectModals extends Component{
     }
     editProject(){
         //TODO: when the user clicks the edit button, it needs to fill in the details for that project...
+        
         console.log("This is edit project");
         this.state.editProjectCallback();
     }
@@ -61,7 +71,6 @@ class ProjectModals extends Component{
     }
 
     render(){
-        console.log(this.state.showEditProject);
         return(
             <div>
                 <Modal show={this.state.showAddProject}>
@@ -106,21 +115,21 @@ class ProjectModals extends Component{
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.addProject_name}
+                            value={this.state.editProject_name}
                             onChange={(event) => {this.setState({addProject_name: event.target.value})}}
                         />
                         <h5>Minimum Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
-                            value={this.state.addProject_minGoal}
+                            value={this.state.editProject_minGoal}
                             onChange={(event) => {this.setState({addProject_minGoal: event.target.value})}}
                         />
                         <h5>Ideal Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
-                            value={this.state.addProject_idealGoal}
+                            value={this.state.editProject_idealGoal}
                             onChange={(event) => {this.setState({addProject_idealGoal: event.target.value})}}
                         />
                     </Modal.Body>
