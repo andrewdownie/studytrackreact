@@ -10,7 +10,7 @@ class ProjectModals extends Component{
         this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
             showAddProject: props.showAddProject,
-            editProjectInfo: props.showEditProject,
+            showEditProject: props.showEditProject,
             addProjectCallback: props.addProjectCallback,
             editProjectCallback: props.editProjectCallback,
             deleteProjectCallback: props.deleteProjectCallback,
@@ -18,6 +18,7 @@ class ProjectModals extends Component{
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
             editProject_name: "",
+            editProject_originalName: "",
             editProject_minGoal: 2,
             editProject_idealGoal: 5,
         };
@@ -37,6 +38,7 @@ class ProjectModals extends Component{
             showAddProject: nextProps.showAddProject,
             addProjectCallback: nextProps.addProjectCallback,
             editProject_name: nextProps.editProject_name,
+            editProject_originalName: nextProps.editProject_name,
             editProject_minGoal: nextProps.editProject_minGoal,
             editProject_idealGoal: nextProps.editProject_idealGoal,
         });
@@ -63,10 +65,11 @@ class ProjectModals extends Component{
         //TODO: when the user clicks the edit button, it needs to fill in the details for that project...
         
         console.log("This is edit project");
-        var projectName = this.state.editProject_name;
+        var newName = this.state.editProject_name;
+        var originalName = this.state.editProject_originalName;
         var minGoal = this.state.editProject_minGoal;
         var idealGoal = this.state.editProject_idealGoal;
-        this.state.editProjectCallback({projectName, minGoal, idealGoal});
+        this.state.editProjectCallback({newName, originalName, minGoal, idealGoal});
     }
     deleteProject(){
         console.log("This is delete project");

@@ -189,6 +189,86 @@ const CreateSheetIfNotExists = (gapiInfo) => {
 
 const UpdateProject = (gapiInfo, editProjectData) => {
     console.log("this is update project");
+    //TODO: get most recent version of project goals
+    //TODO: check to make sure that the project that is to be edited actually exists
+    //TODO: update the project that is to be edited
+    //TODO: send the update
+
+    return new Promise((resolve, reject) => {
+
+        //Step 1: load the current project goals for the current week
+        var loadCurrentWeek = new Promise((resolve, reject) => {
+            Get(gapiInfo, "A10:H10")//TODO: how am I gonna un-hard-code this?
+            .then((response)=>{
+                resolve(response);
+            });
+        });
+
+        loadCurrentWeek.then((response) => {
+            console.log(response.result.values[0][0]);
+            var weekData = [];
+            for(var i = 0; i < 8; i++){
+                weekData.push(JSON.parse(response.result.values[0][i]));
+            }
+            var curProjGoals = weekData[0];
+            console.log(weekData);
+            console.log(curProjGoals);
+
+            var projName;
+
+            //Step 2: make sure the project we are going to update actually exists
+            var targetProjectExists = false;
+            var newProjectNameExists = false;
+            for(projName in curProjGoals){
+                console.log(projName);
+                console.log(editProjectData.originalName);
+                console.log(editProjectData.newName);
+                if(projName === editProjectData.originalName){
+                    targetProjectExists = true;
+                    break;
+                }
+                if(projName === editProjectData.newName){
+                    newProjectNameExists = true;
+                    break;
+                }
+            }
+
+            if(targetProjectExists){
+                //Step 3: update the week data
+                //Step 3.1: Update the project goals
+
+                var minGoal = curProjGoals[editProjectData.originalName].minGoal;
+                var idealGoal = curProjGoals[editProjectData.originalName].idealGoal;
+                delete curProjGoals[editProjectData.originalName];
+                curProjGoals[editProjectData.newName] = {};
+                curProjGoals[editProjectData.newName].minGoal = editProjectData.minGoal;
+                curProjGoals[editProjectData.newName].idealGoal = editProjectData.idealGoal;
+                console.log(weekData);
+
+
+                // Step 3.2: Update the project name for each day of the week
+
+                //Step 4: send the new project
+                console.log("Push the new project data to the sheet here.");
+                //curProjGoals.push(newProjectData);
+                /*curProjGoals[editProjectData.title] = {};
+                curProjGoals[editProjectData.title].minGoal = editProjectData.minGoal;
+                curProjGoals[editProjectData.title].idealGoal = editProjectData.idealGoal;*/
+
+                var sheetInput = JSON.stringify(curProjGoals);
+                Put(gapiInfo, "A10", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
+                .then((response) => {
+                    resolve(weekData);
+                });
+            }
+            else{
+                reject("We couldn't find the project you wanted to up date. Was your goals modified by another connection? Refresh and try again.");//TODO: I don't know how to provide info about why promise was rejected...
+            }
+
+        });
+
+    });
+
 }
 
 

@@ -56,7 +56,7 @@ class TrackPage extends Component {
         return {chartList, projectNames};
     }
 
-    async _loadTrackPageData(studyData){
+    async _loadTrackPageData(){
         //TODO: there is a lot that will be done here in the future, for now it's working code mixed with example code
         if(this.props.isSignedIn === false || this.state.loadedFromRemote){
             return;
@@ -70,13 +70,13 @@ class TrackPage extends Component {
         if(local_data_cached){
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
-            studyData = gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
+            gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
         else{
-            studyData = gapi_util.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
+            gapi_util.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
@@ -145,7 +145,14 @@ class TrackPage extends Component {
         console.log("edit project now pls");
         console.log(editProjectData);
         //TODO: create arrow func in gapi_util
-        gapi_util.UpdateProject(this.state.gapiInfo, editProjectData);
+        gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
+        .then((response) => {
+            console.log(response);
+            var wok = date_util.WeekOfYear();
+            var studyData = this.state.studyData;
+            studyData[wok] = response
+            this.setState(studyData);
+        });
     }
     _openEditProjectModalCallback(projectName){
         var wok = date_util.WeekOfYear();
@@ -162,7 +169,7 @@ class TrackPage extends Component {
 
     render(){
         console.log("render");
-        this._loadTrackPageData(this.state.studyData);
+        this._loadTrackPageData();
         var preparedChartData = this._prepareChartData(this.state.studyData);
 
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
