@@ -7,7 +7,14 @@ import React from 'react';
 
 
 const ProjectSection = (props) => {
-    var noProjectsFound = props.projectNames.length == 0 && props.loadedFromRemote;
+    var noProjectsFound;
+
+    if(props.projectNames){
+        noProjectsFound = props.projectNames.length == 0 && props.loadedFromRemote;
+    }
+    else{
+        noProjectsFound = true;
+    }
 
 
 
@@ -19,6 +26,7 @@ const ProjectSection = (props) => {
             />
             <ProjectList
                 projectNames={props.projectNames}
+                noProjectsFound={props.noProjectsFound}
                 loadedFromRemote={props.loadedFromRemote}
                 openEditProjectModalCallback={props.openEditProjectModalCallback}
             />

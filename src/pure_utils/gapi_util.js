@@ -256,7 +256,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
                 curProjGoals[editProjectData.title].idealGoal = editProjectData.idealGoal;*/
 
                 var sheetInput = JSON.stringify(curProjGoals);
-                Put(gapiInfo, "A10", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
+                Put(gapiInfo, "A11", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
                 .then((response) => {
                     resolve(weekData);
                 });
@@ -277,7 +277,7 @@ const AddNewProject = (gapiInfo, newProjectData) => {
 
         //Step 1: load the current project goals for the current week
         var loadCurrentGoals = new Promise((resolve, reject) => {
-            Get(gapiInfo, "A10")//TODO: how am I gonna un-hard-code this?
+            Get(gapiInfo, "A11")//TODO: how am I gonna un-hard-code this?
             .then((response)=>{
                 resolve(response);
             });
@@ -311,7 +311,7 @@ const AddNewProject = (gapiInfo, newProjectData) => {
                 curProjGoals[newProjectData.title].idealGoal = newProjectData.idealGoal;
 
                 var sheetInput = JSON.stringify(curProjGoals);
-                Put(gapiInfo, "A10", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
+                Put(gapiInfo, "A11", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
                 .then((response) => {
                     resolve(curProjGoals);
                 });

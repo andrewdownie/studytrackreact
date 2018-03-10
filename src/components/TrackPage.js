@@ -52,7 +52,7 @@ class TrackPage extends Component {
         chartList.push({title: "Last Week",     data: lastWeeksGChartData});
         chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
-        var projectNames = sheetdata_util.ProjectNames(studyData, wok - 1);
+        var projectNames = sheetdata_util.ProjectNames(studyData, wok);//TODO: this had -1 before???
         console.log(projectNames);
 
         return {chartList, projectNames};
@@ -109,7 +109,7 @@ class TrackPage extends Component {
             if(numberOfGoals > 0){
                 //TODO: take this week and send it in for this weeks goals
                 
-                gapi_util.SendData(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
+                gapi_util.Put(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
                 console.log("sending and breaking out");
                 break;
             }
@@ -153,7 +153,9 @@ class TrackPage extends Component {
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok] = response
-            this.setState({studyData, showEditProject: false});
+            this.setState({studyData, showEditProject: false}, ()=>{
+                console.log("set state callback");
+            });
         });
     }
     _openEditProjectModalCallback(projectName){
@@ -163,7 +165,12 @@ class TrackPage extends Component {
         minGoal = projectGoals.minGoal;
         idealGoal = projectGoals.idealGoal;
         console.log(projectGoals);
-        this.setState({showEditProject: true, editProject_name: projectName, editProject_minGoal: minGoal, editProject_idealGoal: idealGoal});
+        this.setState({
+            showEditProject: true,
+            editProject_name: projectName,
+            editProject_minGoal: minGoal,
+            editProject_idealGoal: idealGoal
+        });
     }
     _deleteProjectCallback(){
         console.log("delete project now pls");
@@ -180,12 +187,14 @@ class TrackPage extends Component {
         //TODO: the incorrect project names come out?
         console.log(preparedChartData);
 
+        /* TODO: this isnt working correctly...
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
             this._setupThisWeek(this.state.gapiInfo);
             return(
                 <p>Creating this weeks data...</p>
             );
         }
+        */
 
         return(
         <Grid fluid>

@@ -26,7 +26,7 @@ class ProjectList extends Component {
     }
 
     render(){
-        if(this.state.projectNames.length === 0 ){
+        if(this.state.projectNames == null || this.state.projectNames.length === 0 ){
             if(this.state.loadedFromRemote === false){
                 return(
                     <div className="project-list">

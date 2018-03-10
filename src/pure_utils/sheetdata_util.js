@@ -65,11 +65,12 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 }
 
 const ProjectNames = (studyData, weekOfYear) => {
+    console.log("--- project names start ---");
     console.log(studyData);
     //TODO: study data goes in correct
     var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);//TODO: there's a problem here
     //TODO: weeksDataRaw comes out with old name???
-    console.log(weeksDataRaw);
+    console.log(studyData[weekOfYear]);
 
     if(weeksDataRaw == null){
         return null;
@@ -80,6 +81,7 @@ const ProjectNames = (studyData, weekOfYear) => {
     var projectNames = [];
 
     for(var projName in goals){
+        console.log(projName);
         projectNames.push(projName)
     }
 
