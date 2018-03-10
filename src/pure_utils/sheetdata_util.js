@@ -65,7 +65,11 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 }
 
 const ProjectNames = (studyData, weekOfYear) => {
-    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);
+    console.log(studyData);
+    //TODO: study data goes in correct
+    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);//TODO: there's a problem here
+    //TODO: weeksDataRaw comes out with old name???
+    console.log(weeksDataRaw);
 
     if(weeksDataRaw == null){
         return null;
@@ -79,6 +83,7 @@ const ProjectNames = (studyData, weekOfYear) => {
         projectNames.push(projName)
     }
 
+    console.log(projectNames);
     return projectNames;
 }
 

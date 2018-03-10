@@ -33,6 +33,7 @@ class TrackPage extends Component {
     }
 
     _prepareChartData(studyData){
+        console.log(studyData);
         if(studyData == null){
             return {chartList: [], projectNames: []};
         }
@@ -52,6 +53,7 @@ class TrackPage extends Component {
         chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
         var projectNames = sheetdata_util.ProjectNames(studyData, wok - 1);
+        console.log(projectNames);
 
         return {chartList, projectNames};
     }
@@ -151,7 +153,7 @@ class TrackPage extends Component {
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok] = response
-            this.setState(studyData);
+            this.setState({studyData, showEditProject: false});
         });
     }
     _openEditProjectModalCallback(projectName){
@@ -169,8 +171,14 @@ class TrackPage extends Component {
 
     render(){
         console.log("render");
+        console.log(this.state.studyData);
         this._loadTrackPageData();
+
+
+        //TODO: the correct study data goes in
         var preparedChartData = this._prepareChartData(this.state.studyData);
+        //TODO: the incorrect project names come out?
+        console.log(preparedChartData);
 
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
             this._setupThisWeek(this.state.gapiInfo);
