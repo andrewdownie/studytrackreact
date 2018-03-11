@@ -159,9 +159,21 @@ class TrackPage extends Component {
         });
     }
     _openEditProjectModalCallback(projectName){
+        //TODO: WAIT SO THE ERROR HAPPENS ON OPENING THE EDIT PROJECT MODAL AFTER EDITING A PROJECT? wat does mean this?
+        console.log("--- openEditProjectModalCallback start ---");
+        console.log("projectName is: " + projectName);
+
         var wok = date_util.WeekOfYear();
-        var projectGoals = this.state.studyData[wok - 1][0][projectName];
+        console.log(this.state.studyData);
+        console.log(this.state.studyData[wok]);
+        console.log("Week of year is: " + wok);
+
+        var projectGoals = this.state.studyData[wok][0][projectName];
+
+        console.log(projectGoals);
+
         var minGoal, idealGoal;
+        //TODO: the error is that project goals is undefined...
         minGoal = projectGoals.minGoal;
         idealGoal = projectGoals.idealGoal;
         console.log(projectGoals);
