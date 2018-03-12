@@ -1,3 +1,5 @@
+import date_util from "./date_util";
+
 /* Interacts with Google APIs to get and send data */
 
 const JsonifyRawStudyData = (rawStudyData) => {
@@ -195,10 +197,11 @@ const UpdateProject = (gapiInfo, editProjectData) => {
     //TODO: send the update
 
     return new Promise((resolve, reject) => {
+        var wok = date_util.WeekOfYear();
 
         //Step 1: load the current project goals for the current week
         var loadCurrentWeek = new Promise((resolve, reject) => {
-            Get(gapiInfo, "A10:H10")//TODO: how am I gonna un-hard-code this?
+            Get(gapiInfo, "A" + wok + ":H" + wok)//TODO: how am I gonna un-hard-code this?
             .then((response)=>{
                 resolve(response);
             });

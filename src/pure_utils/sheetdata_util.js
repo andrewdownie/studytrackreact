@@ -67,10 +67,12 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
 const ProjectNames = (studyData, weekOfYear) => {
     console.log("--- project names start ---");
     console.log(studyData);
+    console.log(weekOfYear);
     //TODO: study data goes in correct
-    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear);//TODO: there's a problem here
+    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear - 1);//TODO: there's a problem here
     //TODO: weeksDataRaw comes out with old name???
     console.log(studyData[weekOfYear]);
+    console.log(weeksDataRaw);
 
     if(weeksDataRaw == null){
         return null;

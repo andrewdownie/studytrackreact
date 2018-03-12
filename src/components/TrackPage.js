@@ -168,7 +168,7 @@ class TrackPage extends Component {
         console.log(this.state.studyData[wok]);
         console.log("Week of year is: " + wok);
 
-        var projectGoals = this.state.studyData[wok][0][projectName];
+        var projectGoals = this.state.studyData[wok - 1][0][projectName];
 
         console.log(projectGoals);
 
