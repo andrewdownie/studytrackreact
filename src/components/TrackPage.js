@@ -134,13 +134,18 @@ class TrackPage extends Component {
         this.setState({showAddProject: true});
     }
     _editProjectCallback(editProjectData){
+        console.log(editProjectData);
+
         //TODO: create arrow func in gapi_util
         gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
+            console.log(response);
+
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
-            studyData[wok] = response
+            studyData[wok - 1] = response
             this.setState({studyData: studyData, showEditProject: false}, ()=>{
+                console.log(this.state.studyData);
             });
         });
     }
@@ -191,9 +196,10 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                        {/* I think this needs to get props, can't just be an arrow func? */}
+                        {/* TODO: make the projectsection into an arrow func once you fix the sheet index issue? */}
                     <ProjectSection
                         projectNames={sheetdata_util.ProjectNames(this.state.studyData, date_util.WeekOfYear())}
+                        studyData={this.state.studyData}
                         addProjectCallback={this._addProjectCallback}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         editProjectCallback={this._editProjectCallback}

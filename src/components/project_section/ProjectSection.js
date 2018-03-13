@@ -3,6 +3,8 @@ import ProjectModals from './ProjectModals';
 import ProjectList from './ProjectList';
 import {Row} from 'react-bootstrap';
 import React, {Component} from 'react';
+import sheetdata_util from '../../pure_utils/sheetdata_util';
+import date_util from '../../pure_utils/date_util';
 
 
 
@@ -12,7 +14,7 @@ class ProjectSection extends Component {
 
 
         this.state = {
-            projectNames:props.projectNames,
+            projectNames:sheetdata_util.ProjectNames(props.studyData, date_util.WeekOfYear()),
             addProjectCallback:props.addProjectCallback,
             openAddProjectModalCallback:props.openAddProjectModalCallback,
             editProjectCallback:props.editProjectCallback,
@@ -28,8 +30,17 @@ class ProjectSection extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        console.log("project sec new props");
+        console.log(nextProps.projectNames);
+        console.log(nextProps.studyData);
+
+        //TODO: nextProps.studyData has the correct value
+        //TODO: ProjectNames returns the old value...
+        var projectNames = sheetdata_util.ProjectNames(nextProps.studyData, date_util.WeekOfYear());
+        console.log(projectNames);
+
         this.setState({
-            projectNames:nextProps.projectNames,
+            projectNames:sheetdata_util.ProjectNames(nextProps.studyData, date_util.WeekOfYear()),
             addProjectCallback:nextProps.addProjectCallback,
             openAddProjectModalCallback:nextProps.openAddProjectModalCallback,
             editProjectCallback:nextProps.editProjectCallback,

@@ -64,14 +64,18 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
     );
 }
 
-const ProjectNames = (studyData) => {
+const ProjectNames = (studyData, weekOfYear) => {
+
     if(studyData == null){
         return [];
     }
-    var wok = date_util.WeekOfYear();
+    console.log(studyData[11]);
+
     //TODO: this has the correct data
     //TODO: study data goes in correct
-    var weeksDataRaw = WeekData_WOY(studyData, wok - 1);//TODO: there's a problem here
+    console.log(weekOfYear - 1);
+    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear - 1);//TODO: there's a problem here
+    console.log(weeksDataRaw);
     //TODO: weeksDataRaw comes out with old name???
     //console.log(studyData[weekOfYear - 1]);
 

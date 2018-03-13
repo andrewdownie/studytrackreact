@@ -2,29 +2,6 @@ import date_util from "./date_util";
 
 /* Interacts with Google APIs to get and send data */
 
-const JsonifyRawStudyData = (rawStudyData) => {
-    return new Promise((resolve, reject) => {
-        var studyData = [];
-        if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
-
-            // Go through each row of the sheet
-            for(var i = 0; i < rawStudyData.result.values.length; i++){
-                var rowData = [];
-
-                //Go thorugh each cell in the current row, and jsonify it's contents
-                for(var j = 0; j < rawStudyData.result.values[i].length; j++){
-                    var jsonData = JSON.parse(rawStudyData.result.values[i][j]);
-                    rowData.push(jsonData);
-                }
-                studyData.push(rowData);
-            }
-            
-        }
-
-        resolve(studyData);
-    });
-
-}
 
 const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
     // The full promise chain to loading project data */
@@ -51,6 +28,30 @@ const QuickLoad_ReturnRelevantStudyData = (gapiInfo) => {
 
     //TODO: do I need to load apis or will they be saved locally?
     //TODO: ReadStudyData by passing in the sheet id from local cache into the gapiInfo object and calling ReadStudyData
+}
+
+const JsonifyRawStudyData = (rawStudyData) => {
+    return new Promise((resolve, reject) => {
+        var studyData = [];
+        if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
+
+            // Go through each row of the sheet
+            for(var i = 0; i < rawStudyData.result.values.length; i++){
+                var rowData = [];
+
+                //Go thorugh each cell in the current row, and jsonify it's contents
+                for(var j = 0; j < rawStudyData.result.values[i].length; j++){
+                    var jsonData = JSON.parse(rawStudyData.result.values[i][j]);
+                    rowData.push(jsonData);
+                }
+                studyData.push(rowData);
+            }
+            
+        }
+
+        resolve(studyData);
+    });
+
 }
 
 const ReadSheetData = (gapiInfo) => {
