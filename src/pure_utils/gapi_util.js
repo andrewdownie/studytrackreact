@@ -3,7 +3,6 @@ import date_util from "./date_util";
 /* Interacts with Google APIs to get and send data */
 
 const JsonifyRawStudyData = (rawStudyData) => {
-    console.log("jsonify raw study data");
     return new Promise((resolve, reject) => {
         var studyData = [];
         if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
@@ -40,7 +39,6 @@ const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
         .then(ReadSheetData)
         .then(JsonifyRawStudyData)
         .then((studyData) => {
-            console.log("final resolve");
             resolve(studyData);
         });
 
@@ -56,7 +54,6 @@ const QuickLoad_ReturnRelevantStudyData = (gapiInfo) => {
 }
 
 const ReadSheetData = (gapiInfo) => {
-    console.log("read sheet data");
     return new Promise((resolve, reject) => {
         var gapi = gapiInfo.gapi;
 
@@ -73,7 +70,6 @@ const ReadSheetData = (gapiInfo) => {
 
         Get(gapiInfo, "A1:H53")
         .then((result) =>{
-            console.log(result);
             resolve(result);
         });
 
@@ -150,9 +146,6 @@ const CheckIfSheetExists = (gapiInfo) => {
 
 const CreateSheetIfNotExists = (gapiInfo) => {
 
-    console.log("create sheet if not exists");
-    console.log(gapiInfo);
-
     return new Promise((resolve, reject) => {
         if(gapiInfo.studysheet.exists){
             resolve(gapiInfo);
@@ -190,7 +183,6 @@ const CreateSheetIfNotExists = (gapiInfo) => {
 }
 
 const UpdateProject = (gapiInfo, editProjectData) => {
-    console.log("this is update project");
     //TODO: get most recent version of project goals
     //TODO: check to make sure that the project that is to be edited actually exists
     //TODO: update the project that is to be edited
@@ -208,14 +200,11 @@ const UpdateProject = (gapiInfo, editProjectData) => {
         });
 
         loadCurrentWeek.then((response) => {
-            console.log(response.result.values[0][0]);
             var weekData = [];
             for(var i = 0; i < 8; i++){
                 weekData.push(JSON.parse(response.result.values[0][i]));
             }
             var curProjGoals = weekData[0];
-            console.log(weekData);
-            console.log(curProjGoals);
 
             var projName;
 
@@ -223,9 +212,6 @@ const UpdateProject = (gapiInfo, editProjectData) => {
             var targetProjectExists = false;
             var newProjectNameExists = false;
             for(projName in curProjGoals){
-                console.log(projName);
-                console.log(editProjectData.originalName);
-                console.log(editProjectData.newName);
                 if(projName === editProjectData.originalName){
                     targetProjectExists = true;
                     break;
@@ -246,13 +232,11 @@ const UpdateProject = (gapiInfo, editProjectData) => {
                 curProjGoals[editProjectData.newName] = {};
                 curProjGoals[editProjectData.newName].minGoal = editProjectData.minGoal;
                 curProjGoals[editProjectData.newName].idealGoal = editProjectData.idealGoal;
-                console.log(weekData);
 
 
                 // Step 3.2: Update the project name for each day of the week
 
                 //Step 4: send the new project
-                console.log("Push the new project data to the sheet here.");
                 //curProjGoals.push(newProjectData);
                 /*curProjGoals[editProjectData.title] = {};
                 curProjGoals[editProjectData.title].minGoal = editProjectData.minGoal;
@@ -289,12 +273,10 @@ const AddNewProject = (gapiInfo, newProjectData) => {
         //Step 2: check for duplicates
         loadCurrentGoals.then((response) => {
             var curProjGoals;
-            console.log(response.result.values[0]);
             curProjGoals = JSON.parse(response.result.values[0]);
 
             var duplicateProjName = false;
             for(var projName in curProjGoals){
-                console.log(projName);
                 if(projName === newProjectData.title){
                     duplicateProjName = true;
                     break;
@@ -302,12 +284,10 @@ const AddNewProject = (gapiInfo, newProjectData) => {
             }
 
             if(duplicateProjName){
-                console.log("There was a project with a duplicate name");
                 reject();//TODO: I don't know how to provide info about why promise was rejected...
             }
             else{
                 //Step 3: send the new project
-                console.log("Push the new project data to the sheet here.");
                 //curProjGoals.push(newProjectData);
                 curProjGoals[newProjectData.title] = {};
                 curProjGoals[newProjectData.title].minGoal = newProjectData.minGoal;
@@ -328,7 +308,6 @@ const AddNewProject = (gapiInfo, newProjectData) => {
 }
 
 const Get = (gapiInfo, range) => {
-    console.log("get");
     return new Promise((resolve, reject) =>{
         gapiInfo.gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: gapiInfo.spreadsheet.id,
@@ -370,7 +349,6 @@ const Put = (gapiInfo, range, values) => {
 }
 
 const FillSheetIfJustCreated = (gapiInfo) => {
-    console.log("fill sheet if just created");
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
 
@@ -408,7 +386,6 @@ const CreateSSIfNotExists = (gapiInfo) => {
             );
 
             createRequest.execute((response) => {
-                console.log(response);
                 gapiInfo.spreadsheet.id = response.spreadsheetId;
                 gapiInfo.spreadsheet.exists = true;
                 gapiInfo.spreadsheet.justCreated = true;

@@ -52,9 +52,6 @@ class ProjectModals extends Component{
 
 
     addProject(){
-        console.log("This is add project");
-        console.log(this.state.addProject_name);
-
         this.state.addProjectCallback({
             title: this.state.addProject_name,
             minGoal: this.state.addProject_minGoal,
@@ -64,7 +61,6 @@ class ProjectModals extends Component{
     editProject(){
         //TODO: when the user clicks the edit button, it needs to fill in the details for that project...
         
-        console.log("This is edit project");
         var newName = this.state.editProject_name;
         var originalName = this.state.editProject_originalName;
         var minGoal = this.state.editProject_minGoal;
@@ -72,7 +68,6 @@ class ProjectModals extends Component{
         this.state.editProjectCallback({newName, originalName, minGoal, idealGoal});
     }
     deleteProject(){
-        console.log("This is delete project");
         this.state.deleteProjectCallback();
     }
 

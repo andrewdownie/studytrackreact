@@ -64,15 +64,18 @@ const CreateProjectStudyTime = (title, studyTime=0) => {
     );
 }
 
-const ProjectNames = (studyData, weekOfYear) => {
-    console.log("--- project names start ---");
-    console.log(studyData);
-    console.log(weekOfYear);
+const ProjectNames = (studyData) => {
+    if(studyData == null){
+        return [];
+    }
+    var wok = date_util.WeekOfYear();
+    //TODO: this has the correct data
     //TODO: study data goes in correct
-    var weeksDataRaw = WeekData_WOY(studyData, weekOfYear - 1);//TODO: there's a problem here
+    var weeksDataRaw = WeekData_WOY(studyData, wok - 1);//TODO: there's a problem here
     //TODO: weeksDataRaw comes out with old name???
-    console.log(studyData[weekOfYear]);
-    console.log(weeksDataRaw);
+    //console.log(studyData[weekOfYear - 1]);
+
+    //TODO: THIS HAS THE WRONG DATA
 
     if(weeksDataRaw == null){
         return null;
@@ -83,11 +86,9 @@ const ProjectNames = (studyData, weekOfYear) => {
     var projectNames = [];
 
     for(var projName in goals){
-        console.log(projName);
         projectNames.push(projName)
     }
 
-    console.log(projectNames);
     return projectNames;
 }
 

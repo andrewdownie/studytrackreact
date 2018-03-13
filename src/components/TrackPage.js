@@ -33,7 +33,6 @@ class TrackPage extends Component {
     }
 
     _prepareChartData(studyData){
-        console.log(studyData);
         if(studyData == null){
             return {chartList: [], projectNames: []};
         }
@@ -53,7 +52,6 @@ class TrackPage extends Component {
         chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
         var projectNames = sheetdata_util.ProjectNames(studyData, wok);//TODO: this had -1 before???
-        console.log(projectNames);
 
         return {chartList, projectNames};
     }
@@ -97,11 +95,9 @@ class TrackPage extends Component {
         var currentWeek = date_util.WeekOfYear() - 1;
         while(currentWeek > 0){
             currentWeek = currentWeek - 1;
-            console.log(currentWeek);
 
             //TODO: why is WeekGoals() always returning goals, when I have some set to empty objects in the sheet...
             var weekGoals = sheetdata_util.WeekGoals(this.state.studyData, currentWeek);
-            console.log(weekGoals);
 
             //TODO: how do I tell if goals are present? Loop over the keys?
             //TODO: the keys count doesn't work, weekGoals always has values in it...
@@ -110,7 +106,6 @@ class TrackPage extends Component {
                 //TODO: take this week and send it in for this weeks goals
                 
                 gapi_util.Put(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
-                console.log("sending and breaking out");
                 break;
             }
             else{
@@ -120,63 +115,48 @@ class TrackPage extends Component {
     }
     
     _addProjectCallback(newProjectData){
-        console.log("Add project now pls");
-        console.log(newProjectData);
 
         var wok = date_util.WeekOfYear();
 
         gapi_util.AddNewProject(this.state.gapiInfo, newProjectData)
         .then((response) => {
-            console.log(response);
-            console.log(this.state.studyData);
 
             //TODO: somehow the new project is already in here, even though I haven't set it yet?
             var studyData = this.state.studyData;
             studyData[wok - 1][0] = response;
-            console.log(studyData);
             this.setState({studyData, showAddProject: false});
         });
 
 
     }
     _openAddProjectModalCallback(){
-        console.log("open add project modal");
+        console.log("open add project modal callback");
         this.setState({showAddProject: true});
     }
     _editProjectCallback(editProjectData){
-        console.log("edit project now pls");
-        console.log(editProjectData);
         //TODO: create arrow func in gapi_util
         gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
-            console.log(response);
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok] = response
-            this.setState({studyData, showEditProject: false}, ()=>{
-                console.log("set state callback");
+            this.setState({studyData: studyData, showEditProject: false}, ()=>{
             });
         });
     }
     _openEditProjectModalCallback(projectName){
+        console.log("open edit project modal callback");
         //TODO: WAIT SO THE ERROR HAPPENS ON OPENING THE EDIT PROJECT MODAL AFTER EDITING A PROJECT? wat does mean this?
-        console.log("--- openEditProjectModalCallback start ---");
-        console.log("projectName is: " + projectName);
 
         var wok = date_util.WeekOfYear();
-        console.log(this.state.studyData);
-        console.log(this.state.studyData[wok]);
-        console.log("Week of year is: " + wok);
 
         var projectGoals = this.state.studyData[wok - 1][0][projectName];
 
-        console.log(projectGoals);
 
         var minGoal, idealGoal;
         //TODO: the error is that project goals is undefined...
         minGoal = projectGoals.minGoal;
         idealGoal = projectGoals.idealGoal;
-        console.log(projectGoals);
         this.setState({
             showEditProject: true,
             editProject_name: projectName,
@@ -189,15 +169,12 @@ class TrackPage extends Component {
     }
 
     render(){
-        console.log("render");
-        console.log(this.state.studyData);
         this._loadTrackPageData();
 
 
         //TODO: the correct study data goes in
         var preparedChartData = this._prepareChartData(this.state.studyData);
         //TODO: the incorrect project names come out?
-        console.log(preparedChartData);
 
         /* TODO: this isnt working correctly...
         if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
@@ -214,8 +191,9 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
+                        {/* I think this needs to get props, can't just be an arrow func? */}
                     <ProjectSection
-                        projectNames={preparedChartData.projectNames}
+                        projectNames={sheetdata_util.ProjectNames(this.state.studyData, date_util.WeekOfYear())}
                         addProjectCallback={this._addProjectCallback}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         editProjectCallback={this._editProjectCallback}
