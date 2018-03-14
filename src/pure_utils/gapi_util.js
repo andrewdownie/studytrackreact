@@ -201,6 +201,8 @@ const UpdateProject = (gapiInfo, editProjectData) => {
         });
 
         loadCurrentWeek.then((response) => {
+            var wok = date_util.WeekOfYear();
+
             var weekData = [];
             for(var i = 0; i < 8; i++){
                 weekData.push(JSON.parse(response.result.values[0][i]));
@@ -225,26 +227,40 @@ const UpdateProject = (gapiInfo, editProjectData) => {
 
             if(targetProjectExists){
                 //Step 3: update the week data
-                //Step 3.1: Update the project goals
-
+                //3.1: Update the project goals
                 var minGoal = curProjGoals[editProjectData.originalName].minGoal;
                 var idealGoal = curProjGoals[editProjectData.originalName].idealGoal;
                 delete curProjGoals[editProjectData.originalName];
                 curProjGoals[editProjectData.newName] = {};
                 curProjGoals[editProjectData.newName].minGoal = editProjectData.minGoal;
                 curProjGoals[editProjectData.newName].idealGoal = editProjectData.idealGoal;
+                weekData[0] = curProjGoals;
+
+                //3.2: Update the project name for each day of the week
+                for(var i = 1; i < 8; i++){
+                    var dayData = weekData[i];
+                    for(projName in dayData){
+                        if(projName == editProjectData.originalName){
+
+                            var studyTime = dayData[projName].studied;
+                            delete dayData[projName];
+                            dayData[editProjectData.newName] = {};
+                            dayData[editProjectData.newName].studied = studyTime;
+                            weekData[i] = dayData;
+                            break;
+                        }
+                    }
+                }
 
 
-                // Step 3.2: Update the project name for each day of the week
+                //Step 4: jsonify the contents
+                var sheetInput = [];
+                for(i = 0; i < 8; i++){
+                    sheetInput[i] = JSON.stringify(weekData[i]);
+                }
 
-                //Step 4: send the new project
-                //curProjGoals.push(newProjectData);
-                /*curProjGoals[editProjectData.title] = {};
-                curProjGoals[editProjectData.title].minGoal = editProjectData.minGoal;
-                curProjGoals[editProjectData.title].idealGoal = editProjectData.idealGoal;*/
-
-                var sheetInput = JSON.stringify(curProjGoals);
-                Put(gapiInfo, "A11", [[sheetInput]])//TODO: how am I gonna un hard code this? could just pass the date in?
+                //Step 5: send the new project
+                Put(gapiInfo, "A" + wok, [sheetInput])//TODO: how am I gonna un hard code this? could just pass the date in?
                 .then((response) => {
                     resolve(weekData);
                 });
@@ -322,9 +338,6 @@ const Get = (gapiInfo, range) => {
     });
 }
 
-//TODO: create a method to send arbitrary data to the sheet (everything sent in parameters)
-//TODO: give the function / parameter a better name....
-//TODO: oh fuk it needs gapi /and/or gapiInfo
 const Put = (gapiInfo, range, values) => {
     return new Promise((resolve, reject) => {
         var sendDataRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(

@@ -141,8 +141,8 @@ class TrackPage extends Component {
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
-            this.setState({studyData: studyData, showEditProject: false}, ()=>{
-            });
+            this.setState({studyData: studyData, showEditProject: false});
+
         });
     }
     _openEditProjectModalCallback(projectName){
