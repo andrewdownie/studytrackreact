@@ -130,27 +130,22 @@ class TrackPage extends Component {
 
     }
     _openAddProjectModalCallback(){
-        console.log("open add project modal callback");
         this.setState({showAddProject: true});
     }
     _editProjectCallback(editProjectData){
-        console.log(editProjectData);
 
         //TODO: create arrow func in gapi_util
         gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
-            console.log(response);
 
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
             this.setState({studyData: studyData, showEditProject: false}, ()=>{
-                console.log(this.state.studyData);
             });
         });
     }
     _openEditProjectModalCallback(projectName){
-        console.log("open edit project modal callback");
         //TODO: WAIT SO THE ERROR HAPPENS ON OPENING THE EDIT PROJECT MODAL AFTER EDITING A PROJECT? wat does mean this?
 
         var wok = date_util.WeekOfYear();
