@@ -183,6 +183,75 @@ const CreateSheetIfNotExists = (gapiInfo) => {
     });
 }
 
+const DeleteProject = (gapiInfo, deleteProjectData) => {
+    return new Promise((resolve, reject) => {
+        var wok = date_util.WeekOfYear();
+        var projName;
+
+        //Step 1: get the lastest data from the sheet (for this week)
+        var loadCurrentWeek = new Promise((resolve, reject) => {
+            Get(gapiInfo, "A" + wok + ":H" + wok)
+            .then((response)=>{
+                resolve(response);
+            });
+        });
+
+        loadCurrentWeek.then((response) => {
+            //Step 1.1: unpack the data
+            var wok = date_util.WeekOfYear();
+
+            var weekData = [];
+            for(var i = 0; i < 8; i++){
+                weekData.push(JSON.parse(response.result.values[0][i]));
+            }
+            var curProjGoals = weekData[0];
+
+            //Step 2: make sure the project we are going to update actually exists
+            var targetProjectExists = false;
+            for(projName in curProjGoals){
+                if(projName === deleteProjectData.targetName){
+                    targetProjectExists = true;
+                    break;
+                }
+            }
+
+            if(targetProjectExists){
+                //Step 3: update the week data
+                //3.1: delete the project from project goals
+                delete curProjGoals[deleteProjectData.targetName];
+                weekData[0] = curProjGoals;
+
+                //3.2: delete the project from each day of the week
+                for(var i = 1; i < 8; i++){
+                    var dayData = weekData[i];
+                    for(projName in dayData){
+                        if(projName == deleteProjectData.targetName){
+                            delete dayData[projName];
+                            weekData[i] = dayData;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            //Step 4: jsonify the contents
+            var sheetInput = [];
+            for(i = 0; i < 8; i++){
+                sheetInput[i] = JSON.stringify(weekData[i]);
+            }
+
+            //Step 5: send the new project
+            Put(gapiInfo, "A" + wok, [sheetInput])
+            .then((response) => {
+                resolve(weekData);
+            });
+
+        });
+
+
+    });
+}
+
 const UpdateProject = (gapiInfo, editProjectData) => {
     //TODO: get most recent version of project goals
     //TODO: check to make sure that the project that is to be edited actually exists
@@ -194,7 +263,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
 
         //Step 1: load the current project goals for the current week
         var loadCurrentWeek = new Promise((resolve, reject) => {
-            Get(gapiInfo, "A" + wok + ":H" + wok)//TODO: how am I gonna un-hard-code this?
+            Get(gapiInfo, "A" + wok + ":H" + wok)
             .then((response)=>{
                 resolve(response);
             });
@@ -464,6 +533,7 @@ const gapi_util = {
     CheckIfSheetExists,
     CheckIfSSExists,
     AddNewProject,
+    DeleteProject,
     ReadSheetData,
     UpdateProject,
     LoadAPIs,

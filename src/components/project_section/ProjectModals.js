@@ -68,7 +68,9 @@ class ProjectModals extends Component{
         this.state.editProjectCallback({newName, originalName, minGoal, idealGoal});
     }
     deleteProject(){
-        this.state.deleteProjectCallback();
+        var deleteProjectData = {};
+        deleteProjectData.targetName = this.state.editProject_name;
+        this.state.deleteProjectCallback(deleteProjectData);
     }
 
     render(){

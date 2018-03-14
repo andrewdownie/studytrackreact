@@ -120,8 +120,6 @@ class TrackPage extends Component {
 
         gapi_util.AddNewProject(this.state.gapiInfo, newProjectData)
         .then((response) => {
-
-            //TODO: somehow the new project is already in here, even though I haven't set it yet?
             var studyData = this.state.studyData;
             studyData[wok - 1][0] = response;
             this.setState({studyData, showAddProject: false});
@@ -132,9 +130,26 @@ class TrackPage extends Component {
     _openAddProjectModalCallback(){
         this.setState({showAddProject: true});
     }
+    _openEditProjectModalCallback(projectName){
+
+        var wok = date_util.WeekOfYear();
+
+        var projectGoals = this.state.studyData[wok - 1][0][projectName];
+
+
+        var minGoal, idealGoal;
+        minGoal = projectGoals.minGoal;
+        idealGoal = projectGoals.idealGoal;
+        this.setState({
+            showEditProject: true,
+            editProject_name: projectName,
+            editProject_minGoal: minGoal,
+            editProject_idealGoal: idealGoal
+        });
+    }
+
     _editProjectCallback(editProjectData){
 
-        //TODO: create arrow func in gapi_util
         gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
 
@@ -145,45 +160,21 @@ class TrackPage extends Component {
 
         });
     }
-    _openEditProjectModalCallback(projectName){
-        //TODO: WAIT SO THE ERROR HAPPENS ON OPENING THE EDIT PROJECT MODAL AFTER EDITING A PROJECT? wat does mean this?
 
-        var wok = date_util.WeekOfYear();
-
-        var projectGoals = this.state.studyData[wok - 1][0][projectName];
-
-
-        var minGoal, idealGoal;
-        //TODO: the error is that project goals is undefined...
-        minGoal = projectGoals.minGoal;
-        idealGoal = projectGoals.idealGoal;
-        this.setState({
-            showEditProject: true,
-            editProject_name: projectName,
-            editProject_minGoal: minGoal,
-            editProject_idealGoal: idealGoal
+    _deleteProjectCallback(deleteProjectData){
+        gapi_util.DeleteProject(this.state.gapiInfo, deleteProjectData)
+        .then((response) => {
+            var wok = date_util.WeekOfYear();
+            var studyData = this.state.studyData;
+            studyData[wok - 1] = response
+            this.setState({studyData: studyData, showEditProject: false});
         });
-    }
-    _deleteProjectCallback(){
-        console.log("delete project now pls");
     }
 
     render(){
         this._loadTrackPageData();
 
-
-        //TODO: the correct study data goes in
         var preparedChartData = this._prepareChartData(this.state.studyData);
-        //TODO: the incorrect project names come out?
-
-        /* TODO: this isnt working correctly...
-        if(preparedChartData.projectNames === null && this.state.loadedFromRemote === true){
-            this._setupThisWeek(this.state.gapiInfo);
-            return(
-                <p>Creating this weeks data...</p>
-            );
-        }
-        */
 
         return(
         <Grid fluid>
