@@ -5,6 +5,17 @@ body {
   margin: 0;
 }
 
+.loading-modal-container{
+    height: 100%;
+    position: relative;
+}
+
+.loading-modal {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .highlight-add-project-button{
     -webkit-animation: highlight-add-project-button-webkit ease-in 2s infinite;
     animation: highlight-add-project-button ease-in 2s infinite;

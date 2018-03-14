@@ -1,4 +1,5 @@
 import {Modal, Button, OverlayTrigger} from 'react-bootstrap';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import React, {Component} from 'react';
 
 
@@ -76,6 +77,7 @@ class ProjectModals extends Component{
     render(){
         return(
             <div>
+                {/* ADD PROJECT MODAL */}
                 <Modal show={this.state.showAddProject}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add a project</Modal.Title>
@@ -109,6 +111,7 @@ class ProjectModals extends Component{
                     </Modal.Footer>
                 </Modal>
 
+                {/* EDIT PROJECT MODAL */}
                 <Modal show={this.state.showEditProject}>
                     <Modal.Header closeButton>
                         <Modal.Title>Edit project</Modal.Title>
@@ -142,6 +145,16 @@ class ProjectModals extends Component{
                         <Button bsStyle="primary" onClick={this.editProject}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
+
+                {/* LOADING MODAL */}
+                <div className="loading-modal-container">
+                    <Modal show={true} className="loading-modal">
+                        <Modal.Body>
+                            <FaSpinner className="spin"/> Updating Project...
+                        </Modal.Body>
+                    </Modal>
+                </div>
+
             </div>
         );
     }

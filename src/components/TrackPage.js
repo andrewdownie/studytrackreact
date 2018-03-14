@@ -182,7 +182,9 @@ class TrackPage extends Component {
             <Row className="show-grid">
                 <Col xs={12} >
                     <PageHeader>Projects</PageHeader>
-                        {/* TODO: make the projectsection into an arrow func once you fix the sheet index issue? */}
+                    {/* There are way too many props being passed around here... is this a bad thing? */}
+                    {/* Maybe put them all into an object, and save that object to this.state? then it can
+                    be passed directly with any un/re-packing*/}
                     <ProjectSection
                         projectNames={sheetdata_util.ProjectNames(this.state.studyData, date_util.WeekOfYear())}
                         studyData={this.state.studyData}
