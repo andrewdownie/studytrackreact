@@ -17,12 +17,14 @@ class TrackPage extends Component {
             loadedFromRemote: false,
             showAddProject: false,
             showEditProject: false,
+            showLoadingModal: false,
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
         };
 
 
+        this._openLoadingModalCallback = this._openLoadingModalCallback.bind(this);
 
         this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
         this._addProjectCallback = this._addProjectCallback.bind(this);
@@ -115,6 +117,7 @@ class TrackPage extends Component {
     }
     
     _addProjectCallback(newProjectData){
+        this._openLoadingModalCallback("Creating new project: " + newProjectData.title + "...");
 
         var wok = date_util.WeekOfYear();
 
@@ -122,7 +125,7 @@ class TrackPage extends Component {
         .then((response) => {
             var studyData = this.state.studyData;
             studyData[wok - 1][0] = response;
-            this.setState({studyData, showAddProject: false});
+            this.setState({studyData, showLoadingModal: false});
         });
 
 
@@ -149,6 +152,7 @@ class TrackPage extends Component {
     }
 
     _editProjectCallback(editProjectData){
+        this._openLoadingModalCallback("Making changes to project: " + editProjectData.originalName + "...");
 
         gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
@@ -156,18 +160,30 @@ class TrackPage extends Component {
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
-            this.setState({studyData: studyData, showEditProject: false});
+            this.setState({studyData: studyData, showLoadingModal: false});
 
         });
     }
 
     _deleteProjectCallback(deleteProjectData){
+        this._openLoadingModalCallback("Deleting project: " + deleteProjectData.targetName + "...");
+
         gapi_util.DeleteProject(this.state.gapiInfo, deleteProjectData)
         .then((response) => {
             var wok = date_util.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
-            this.setState({studyData: studyData, showEditProject: false});
+            this.setState({studyData: studyData, showLoadingModal: false});
+        });
+    }
+
+    //TODO: uhhhh is this even a callback?
+    _openLoadingModalCallback(loadingData){
+        this.setState({
+            showEditProject: false,
+            showAddProject: false,
+            showLoadingModal: true,
+            loadingModalMessage: loadingData
         });
     }
 
@@ -196,6 +212,8 @@ class TrackPage extends Component {
                         loadedFromRemote={this.state.loadedFromRemote}
                         showAddProject={this.state.showAddProject}
                         showEditProject={this.state.showEditProject}
+                        showLoadingModal={this.state.showLoadingModal}
+                        loadingModalMessage={this.state.loadingModalMessage}
                         editProject_name={this.state.editProject_name}
                         editProject_minGoal={this.state.editProject_minGoal}
                         editProject_idealGoal={this.state.editProject_idealGoal}

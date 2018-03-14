@@ -34,6 +34,8 @@ const ProjectSection = (props) => {
             <ProjectModals
                 showEditProject={props.showEditProject}
                 showAddProject={props.showAddProject}
+                showLoadingModal={props.showLoadingModal}
+                loadingModalMessage={props.loadingModalMessage}
                 addProjectCallback={props.addProjectCallback}
                 editProjectCallback={props.editProjectCallback}
                 deleteProjectCallback={props.deleteProjectCallback}

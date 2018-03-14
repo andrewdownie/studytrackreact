@@ -12,7 +12,9 @@ class ProjectModals extends Component{
             //show: props.showAddProject
             showAddProject: props.showAddProject,
             showEditProject: props.showEditProject,
+            showLoadingModal: props.showLoadingModal,
             addProjectCallback: props.addProjectCallback,
+            loadingModalMessage: props.loadingModalMessage,
             editProjectCallback: props.editProjectCallback,
             deleteProjectCallback: props.deleteProjectCallback,
             addProject_name: "",
@@ -34,8 +36,11 @@ class ProjectModals extends Component{
 
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
+        console.log(nextProps.loadingModalMessage);
         this.setState({
+            loadingModalMessage: nextProps.loadingModalMessage,
             showEditProject: nextProps.showEditProject,
+            showLoadingModal: nextProps.showLoadingModal,
             showAddProject: nextProps.showAddProject,
             addProjectCallback: nextProps.addProjectCallback,
             editProject_name: nextProps.editProject_name,
@@ -148,9 +153,9 @@ class ProjectModals extends Component{
 
                 {/* LOADING MODAL */}
                 <div className="loading-modal-container">
-                    <Modal show={true} className="loading-modal">
+                    <Modal show={this.state.showLoadingModal} className="loading-modal">
                         <Modal.Body>
-                            <FaSpinner className="spin"/> Updating Project...
+                            <FaSpinner className="spin"/> {this.state.loadingModalMessage}
                         </Modal.Body>
                     </Modal>
                 </div>
