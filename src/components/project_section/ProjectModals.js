@@ -10,6 +10,7 @@ class ProjectModals extends Component{
 
         this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
+            selectedStudySession: "Loading projects...",
             showAddProject: props.showAddProject,
             showEditProject: props.showEditProject,
             showLoadingModal: props.showLoadingModal,
@@ -24,7 +25,7 @@ class ProjectModals extends Component{
             editProject_originalName: "",
             editProject_minGoal: 2,
             editProject_idealGoal: 5,
-            projectNames: props.projectNames,
+            projectNames: [],
         };
 
         this.closeEditProject = this.closeEditProject.bind(this);
@@ -38,6 +39,11 @@ class ProjectModals extends Component{
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
         console.log(nextProps.loadingModalMessage);
+
+        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.selectedStudySession == "Loading projects..."){
+            this.state.selectedStudySession = nextProps.projectNames[0];
+        }
+
         this.setState({
             loadingModalMessage: nextProps.loadingModalMessage,
             showEditProject: nextProps.showEditProject,
@@ -79,6 +85,11 @@ class ProjectModals extends Component{
         var deleteProjectData = {};
         deleteProjectData.targetName = this.state.editProject_name;
         this.state.deleteProjectCallback(deleteProjectData);
+    }
+
+    changeSelectedStudySessionProject(projectTitle){
+        console.log(projectTitle);
+        this.setState({selectedStudySession: projectTitle});
     }
 
     render(){
@@ -161,14 +172,14 @@ class ProjectModals extends Component{
                     <Modal.Body>
                         <h4>Project</h4>
                         <DropdownButton
-                            title={this.state.projectNames.length > 0 ? this.state.projectNames[0] : "Loading projects..."}
+                            title={this.state.selectedStudySession}
                             key={1}
                             id={`dropdown-basic-${1}`}
                         >
                             {
                                 this.state.projectNames.map( (projectName, i) => {
                                     return (
-                                        <MenuItem key={i} eventKey={i}>{projectName}</MenuItem>
+                                        <MenuItem key={i} onClick={this.changeSelectedStudySessionProject.bind(this, projectName)} eventKey={i}>{projectName}</MenuItem>
                                     )
                                 })
                             }
