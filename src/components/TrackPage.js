@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import ProjectSection from '../components/project_section/ProjectSection';
 import ChartSection from './chart_section/ChartSection';
 
-import sheetdata_util from '../pure_utils/sheetdata_util';
-import chart_util from '../pure_utils/chart_util';
-import date_util from '../pure_utils/date_util';
-import gapi_util from '../pure_utils/gapi_util';
+import SheetUtil from '../utils/SheetUtil';
+import ChartUtil from '../utils/ChartUtil';
+import DateUtil from '../utils/DateUtil';
+import GapiUtil from '../utils/GapiUtil';
 
 class TrackPage extends Component {
     constructor(props){
@@ -39,21 +39,21 @@ class TrackPage extends Component {
             return {chartList: [], projectNames: []};
         }
 
-        var wok = date_util.WeekOfYear();
-        var doy = date_util.DayOfYear();
+        var wok = DateUtil.WeekOfYear();
+        var doy = DateUtil.DayOfYear();
         var chartList = [];
 
-        var todaysGChartData = chart_util.Day(studyData, doy);
-        var currentWeeksGChartData = chart_util.Week(studyData, wok - 1);
-        var lastWeeksGChartData = chart_util.Week(studyData, wok - 2);
-        var twoWeeksAgoGChartData = chart_util.Week(studyData, wok - 3);
+        var todaysGChartData = ChartUtil.Day(studyData, doy);
+        var currentWeeksGChartData = ChartUtil.Week(studyData, wok - 1);
+        var lastWeeksGChartData = ChartUtil.Week(studyData, wok - 2);
+        var twoWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 3);
 
         chartList.push({title: "Today",         data: todaysGChartData});
         chartList.push({title: "Current Week",  data: currentWeeksGChartData});
         chartList.push({title: "Last Week",     data: lastWeeksGChartData});
         chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
 
-        var projectNames = sheetdata_util.ProjectNames(studyData, wok);//TODO: this had -1 before???
+        var projectNames = SheetUtil.ProjectNames(studyData, wok);//TODO: this had -1 before???
 
         return {chartList, projectNames};
     }
@@ -64,7 +64,7 @@ class TrackPage extends Component {
             return;
         }
 
-        var gapiInfo = gapi_util.InitializeGAPIInfo(this.props.gapi, date_util.Year());
+        var gapiInfo = GapiUtil.InitializeGAPIInfo(this.props.gapi, DateUtil.Year());
 
         //TODO: check local cache to see if we know the id of the sheet already (and also have study data)
         var local_data_cached = false;//TODO: note: this is just explaining what I want to do in the future using a simple code example
@@ -72,13 +72,13 @@ class TrackPage extends Component {
         if(local_data_cached){
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
-            gapi_util.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
+            GapiUtil.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
         else{
-            gapi_util.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
+            GapiUtil.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
@@ -94,12 +94,12 @@ class TrackPage extends Component {
         //TODO: if we load a previous week, then we never should need to load it again, in the cacheing, it needs to mark when it was loaded
 
         //TODO: keep going back until we find a week with goals
-        var currentWeek = date_util.WeekOfYear() - 1;
+        var currentWeek = DateUtil.WeekOfYear() - 1;
         while(currentWeek > 0){
             currentWeek = currentWeek - 1;
 
             //TODO: why is WeekGoals() always returning goals, when I have some set to empty objects in the sheet...
-            var weekGoals = sheetdata_util.WeekGoals(this.state.studyData, currentWeek);
+            var weekGoals = SheetUtil.WeekGoals(this.state.studyData, currentWeek);
 
             //TODO: how do I tell if goals are present? Loop over the keys?
             //TODO: the keys count doesn't work, weekGoals always has values in it...
@@ -107,7 +107,7 @@ class TrackPage extends Component {
             if(numberOfGoals > 0){
                 //TODO: take this week and send it in for this weeks goals
                 
-                gapi_util.Put(gapiInfo, "A" + (date_util.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
+                GapiUtil.Put(gapiInfo, "A" + (DateUtil.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
                 break;
             }
             else{
@@ -119,9 +119,9 @@ class TrackPage extends Component {
     _addProjectCallback(newProjectData){
         this._openLoadingModalCallback("Creating new project: " + newProjectData.title + "...");
 
-        var wok = date_util.WeekOfYear();
+        var wok = DateUtil.WeekOfYear();
 
-        gapi_util.AddNewProject(this.state.gapiInfo, newProjectData)
+        GapiUtil.AddNewProject(this.state.gapiInfo, newProjectData)
         .then((response) => {
             var studyData = this.state.studyData;
             studyData[wok - 1][0] = response;
@@ -135,7 +135,7 @@ class TrackPage extends Component {
     }
     _openEditProjectModalCallback(projectName){
 
-        var wok = date_util.WeekOfYear();
+        var wok = DateUtil.WeekOfYear();
 
         var projectGoals = this.state.studyData[wok - 1][0][projectName];
 
@@ -154,10 +154,10 @@ class TrackPage extends Component {
     _editProjectCallback(editProjectData){
         this._openLoadingModalCallback("Making changes to project: " + editProjectData.originalName + "...");
 
-        gapi_util.UpdateProject(this.state.gapiInfo, editProjectData)
+        GapiUtil.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
 
-            var wok = date_util.WeekOfYear();
+            var wok = DateUtil.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
             this.setState({studyData: studyData, showLoadingModal: false});
@@ -168,9 +168,9 @@ class TrackPage extends Component {
     _deleteProjectCallback(deleteProjectData){
         this._openLoadingModalCallback("Deleting project: " + deleteProjectData.targetName + "...");
 
-        gapi_util.DeleteProject(this.state.gapiInfo, deleteProjectData)
+        GapiUtil.DeleteProject(this.state.gapiInfo, deleteProjectData)
         .then((response) => {
-            var wok = date_util.WeekOfYear();
+            var wok = DateUtil.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
             this.setState({studyData: studyData, showLoadingModal: false});
@@ -202,7 +202,7 @@ class TrackPage extends Component {
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
                     <ProjectSection
-                        projectNames={sheetdata_util.ProjectNames(this.state.studyData, date_util.WeekOfYear())}
+                        projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         studyData={this.state.studyData}
                         addProjectCallback={this._addProjectCallback}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}

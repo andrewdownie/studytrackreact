@@ -1,13 +1,13 @@
 /* Deals with taking info from the Google sheet and
 preparing it for being passed into a Google Chart */
 
-import sheetdata_util from "./sheetdata_util";
-import date_util from "./date_util";
+import SheetUtil from "./SheetUtil";
+import DateUtil from "./DateUtil";
 
 const Day = (studyData, dayOfYear) => {
     // Vars
-    var weekInfo = sheetdata_util.WeekData_DOY(studyData, dayOfYear);
-    var todaysCellIndex = date_util.CellFromDayOfYear(dayOfYear);
+    var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
+    var todaysCellIndex = DateUtil.CellFromDayOfYear(dayOfYear);
     var projectTotals = _WeeksGoals(weekInfo);
     var output = [];
     var projName;
@@ -50,7 +50,7 @@ const Day = (studyData, dayOfYear) => {
 
 const Week = (studyData, weekOfYear) => {
     // Vars
-    var weekInfo = sheetdata_util.WeekData_WOY(studyData, weekOfYear);
+    var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
     var projectTotals = _WeeksGoals(weekInfo);
     var output = [];
     var projName;
@@ -138,9 +138,9 @@ const _ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
 
 const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
 
-const chart_util = {
+const ChartUtil = {
     Week,
     Day
 }
 
-export default chart_util;
+export default ChartUtil;

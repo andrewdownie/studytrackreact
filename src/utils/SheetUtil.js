@@ -1,8 +1,8 @@
 /* Helpers to help manipulate Google Sheet
 study data once it's been brought local*/
 
-import date_util from './date_util';
-import gapi_util from './gapi_util';
+import DateUtil from './DateUtil';
+import GapiUtil from './GapiUtil';
 
 const RowOfSheet_WOY = (weekOfYear) => {
     return weekOfYear - 1;
@@ -14,7 +14,7 @@ const WeekGoals = (studyData, weekOfYear) => {
 }
 
 const WeekData_DOY = (studyData, dayOfYear) => {
-    var weekOfYear = date_util.WeekOfYearFromDayOfYear(dayOfYear);
+    var weekOfYear = DateUtil.WeekOfYearFromDayOfYear(dayOfYear);
     return WeekData_WOY(studyData, weekOfYear);
 }
 
@@ -93,7 +93,7 @@ const ProjectNames = (studyData, weekOfYear) => {
     return projectNames;
 }
 
-const sheetdata_util = {
+const SheetUtil = {
     CreateProjectStudyTime,
     UpdateData_StudyTime,
     UpdateData_IdealGoal,
@@ -107,4 +107,4 @@ const sheetdata_util = {
     WeekGoals,
 }
 
-export default sheetdata_util;
+export default SheetUtil;

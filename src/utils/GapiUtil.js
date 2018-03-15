@@ -1,4 +1,4 @@
-import date_util from "./date_util";
+import DateUtil from "./DateUtil";
 
 /* Interacts with Google APIs to get and send data */
 
@@ -185,7 +185,7 @@ const CreateSheetIfNotExists = (gapiInfo) => {
 
 const DeleteProject = (gapiInfo, deleteProjectData) => {
     return new Promise((resolve, reject) => {
-        var wok = date_util.WeekOfYear();
+        var wok = DateUtil.WeekOfYear();
         var projName;
 
         //Step 1: get the lastest data from the sheet (for this week)
@@ -198,7 +198,7 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
 
         loadCurrentWeek.then((response) => {
             //Step 1.1: unpack the data
-            var wok = date_util.WeekOfYear();
+            var wok = DateUtil.WeekOfYear();
 
             var weekData = [];
             for(var i = 0; i < 8; i++){
@@ -259,7 +259,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
     //TODO: send the update
 
     return new Promise((resolve, reject) => {
-        var wok = date_util.WeekOfYear();
+        var wok = DateUtil.WeekOfYear();
 
         //Step 1: load the current project goals for the current week
         var loadCurrentWeek = new Promise((resolve, reject) => {
@@ -270,7 +270,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
         });
 
         loadCurrentWeek.then((response) => {
-            var wok = date_util.WeekOfYear();
+            var wok = DateUtil.WeekOfYear();
 
             var weekData = [];
             for(var i = 0; i < 8; i++){
@@ -522,7 +522,7 @@ const InitializeGAPIInfo = (gapi, studySheetName) => {
     };
 }
 
-const gapi_util = {
+const GapiUtil = {
     FullLoad_LoadApisAndReturnAllStudyData,
     QuickLoad_ReturnRelevantStudyData,
     InitializeGAPIInfo,
@@ -541,4 +541,4 @@ const gapi_util = {
     Get,
 }
 
-export default gapi_util;
+export default GapiUtil;

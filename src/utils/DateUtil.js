@@ -36,7 +36,7 @@ const CellFromDayOfYear = (dayOfYear) => {
     return DayOfWeekFromDayOfYear(dayOfYear) + 1;
 }
 
-const date_util = {
+const DateUtil = {
     WeekOfYearFromDayOfYear,
     DayOfWeekFromDayOfYear,
     CellFromDayOfYear,
@@ -45,4 +45,4 @@ const date_util = {
     DayOfYear,
     Year,
 }
-export default date_util;
+export default DateUtil;
