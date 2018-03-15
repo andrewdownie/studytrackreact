@@ -192,6 +192,11 @@ class TrackPage extends Component {
         });
     }
 
+    _startStudySession(studySessionData){
+        console.log(studySessionData)
+        console.log("start the study session here pls");
+    }
+
     render(){
         this._loadTrackPageData();
 
@@ -207,6 +212,7 @@ class TrackPage extends Component {
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
                     <ProjectSection
+                        startStudySession={this._startStudySession}
                         projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         studyData={this.state.studyData}
                         addProjectCallback={this._addProjectCallback}

@@ -13,6 +13,7 @@ class ProjectModals extends Component{
             selectedStudySession: "Loading projects...",
             studySession_minutes: 30,
             studySession_hours: 0,
+            startStudySession: props.startStudySession,
             showAddProject: props.showAddProject,
             showEditProject: props.showEditProject,
             showStudyModal: props.showStudyModal,
@@ -34,6 +35,7 @@ class ProjectModals extends Component{
         this.closeStudySession = this.closeStudySession.bind(this);
         this.closeEditProject = this.closeEditProject.bind(this);
         this.closeAddProject = this.closeAddProject.bind(this);
+        this.startStudySession = this.startStudySession.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.editProject = this.editProject.bind(this);
         this.addProject = this.addProject.bind(this);
@@ -61,6 +63,7 @@ class ProjectModals extends Component{
             editProject_minGoal: nextProps.editProject_minGoal,
             editProject_idealGoal: nextProps.editProject_idealGoal,
             projectNames: nextProps.projectNames,
+            startStudySession: nextProps.startStudySession,
         });
     }
     closeAddProject(){
@@ -103,7 +106,12 @@ class ProjectModals extends Component{
 
 
     startStudySession(){
-        console.log("start study session now pls");
+        var studySessionData = {
+            projectName: this.state.selectedStudySession,
+            hours: this.state.studySession_hours,
+            minutes: this.state.studySession_minutes,
+        };
+        this.state.startStudySession(studySessionData);
     }
 
     render(){

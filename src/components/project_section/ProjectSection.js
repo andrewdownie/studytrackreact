@@ -33,6 +33,7 @@ const ProjectSection = (props) => {
                 openEditProjectModalCallback={props.openEditProjectModalCallback}
             />
             <ProjectModals
+                startStudySession={props.startStudySession}
                 showEditProject={props.showEditProject}
                 showAddProject={props.showAddProject}
                 showLoadingModal={props.showLoadingModal}
