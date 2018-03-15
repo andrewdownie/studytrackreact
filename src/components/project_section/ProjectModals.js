@@ -24,6 +24,7 @@ class ProjectModals extends Component{
             editProject_originalName: "",
             editProject_minGoal: 2,
             editProject_idealGoal: 5,
+            projectNames: props.projectNames,
         };
 
         this.closeEditProject = this.closeEditProject.bind(this);
@@ -47,6 +48,7 @@ class ProjectModals extends Component{
             editProject_originalName: nextProps.editProject_name,
             editProject_minGoal: nextProps.editProject_minGoal,
             editProject_idealGoal: nextProps.editProject_idealGoal,
+            projectNames: nextProps.projectNames,
         });
     }
     closeAddProject(){
@@ -158,19 +160,18 @@ class ProjectModals extends Component{
                     </Modal.Header>
                     <Modal.Body>
                         <h4>Project</h4>
-                        {/* TODO: how to make a drop down? */}
                         <DropdownButton
-                            title={"meow"}
+                            title={this.state.projectNames.length > 0 ? this.state.projectNames[0] : "Loading projects..."}
                             key={1}
                             id={`dropdown-basic-${1}`}
                         >
-                            <MenuItem eventKey="1">Action</MenuItem>
-                            <MenuItem eventKey="2">Another action</MenuItem>
-                            <MenuItem eventKey="3" active>
-                                Active Item
-                            </MenuItem>
-                            <MenuItem divider />
-                            <MenuItem eventKey="4">Separated link</MenuItem>
+                            {
+                                this.state.projectNames.map( (projectName, i) => {
+                                    return (
+                                        <MenuItem key={i} eventKey={i}>{projectName}</MenuItem>
+                                    )
+                                })
+                            }
                         </DropdownButton>
                         <h4>Duration</h4>
                         <div>

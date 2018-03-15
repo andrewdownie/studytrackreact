@@ -42,6 +42,7 @@ const ProjectSection = (props) => {
                 editProject_name={props.editProject_name}
                 editProject_minGoal={props.editProject_minGoal}
                 editProject_idealGoal={props.editProject_idealGoal}
+                projectNames={props.projectNames}
             />
         </div>
     );
