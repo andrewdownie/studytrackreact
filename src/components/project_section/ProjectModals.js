@@ -1,4 +1,4 @@
-import {Modal, Button, OverlayTrigger} from 'react-bootstrap';
+import {Modal, Button, OverlayTrigger, DropdownButton, MenuItem} from 'react-bootstrap';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import React, {Component} from 'react';
 
@@ -148,6 +148,49 @@ class ProjectModals extends Component{
                         <Button bsStyle="danger" onClick={this.deleteProject} className="pull-left">Delete</Button>
                         <Button onClick={this.closeEditProject}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.editProject}>Save Changes</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {/* STUDY SESSION MODAL */}
+                <Modal show={true}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Start a Study Session</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h4>Project</h4>
+                        {/* TODO: how to make a drop down? */}
+                        <DropdownButton
+                            title={"meow"}
+                            key={1}
+                            id={`dropdown-basic-${1}`}
+                        >
+                            <MenuItem eventKey="1">Action</MenuItem>
+                            <MenuItem eventKey="2">Another action</MenuItem>
+                            <MenuItem eventKey="3" active>
+                                Active Item
+                            </MenuItem>
+                            <MenuItem divider />
+                            <MenuItem eventKey="4">Separated link</MenuItem>
+                        </DropdownButton>
+                        <h4>Duration</h4>
+                        <div>
+                            <p>Hours</p>
+                            <input
+                                type="number"
+                                className="form-control"
+                            />
+                        </div>
+                        <div>
+                            <p>Minutes</p>
+                            <input
+                                type="number"
+                                className="form-control"
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.closeEditProject}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.editProject}>Start</Button>
                     </Modal.Footer>
                 </Modal>
 
