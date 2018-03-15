@@ -18,6 +18,7 @@ class TrackPage extends Component {
             showAddProject: false,
             showEditProject: false,
             showLoadingModal: false,
+            showStudyModal: false,
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
@@ -25,6 +26,7 @@ class TrackPage extends Component {
 
 
         this._openLoadingModalCallback = this._openLoadingModalCallback.bind(this);
+        this._openStudySessionModalCallback = this._openStudySessionModalCallback.bind(this);
 
         this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
         this._addProjectCallback = this._addProjectCallback.bind(this);
@@ -177,7 +179,10 @@ class TrackPage extends Component {
         });
     }
 
-    //TODO: uhhhh is this even a callback?
+    _openStudySessionModalCallback(){
+        this.setState({showStudyModal: true});
+    }
+
     _openLoadingModalCallback(loadingData){
         this.setState({
             showEditProject: false,
@@ -208,11 +213,13 @@ class TrackPage extends Component {
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         editProjectCallback={this._editProjectCallback}
                         openEditProjectModalCallback={this._openEditProjectModalCallback}
+                        openStudySessionModalCallback={this._openStudySessionModalCallback}
                         deleteProjectCallback={this._deleteProjectCallback}
                         loadedFromRemote={this.state.loadedFromRemote}
                         showAddProject={this.state.showAddProject}
                         showEditProject={this.state.showEditProject}
                         showLoadingModal={this.state.showLoadingModal}
+                        showStudyModal={this.state.showStudyModal}
                         loadingModalMessage={this.state.loadingModalMessage}
                         editProject_name={this.state.editProject_name}
                         editProject_minGoal={this.state.editProject_minGoal}

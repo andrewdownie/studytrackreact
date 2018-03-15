@@ -11,8 +11,11 @@ class ProjectModals extends Component{
         this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
             selectedStudySession: "Loading projects...",
+            studySession_minutes: 30,
+            studySession_hours: 0,
             showAddProject: props.showAddProject,
             showEditProject: props.showEditProject,
+            showStudyModal: props.showStudyModal,
             showLoadingModal: props.showLoadingModal,
             addProjectCallback: props.addProjectCallback,
             loadingModalMessage: props.loadingModalMessage,
@@ -28,6 +31,7 @@ class ProjectModals extends Component{
             projectNames: [],
         };
 
+        this.closeStudySession = this.closeStudySession.bind(this);
         this.closeEditProject = this.closeEditProject.bind(this);
         this.closeAddProject = this.closeAddProject.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
@@ -44,11 +48,13 @@ class ProjectModals extends Component{
             this.state.selectedStudySession = nextProps.projectNames[0];
         }
 
+        //TODO: do I need to set get the studySession minutes/hours? I don't think so, it's gonna be two way bound, and then shipped when the user presses the final enter button
         this.setState({
             loadingModalMessage: nextProps.loadingModalMessage,
             showEditProject: nextProps.showEditProject,
             showLoadingModal: nextProps.showLoadingModal,
             showAddProject: nextProps.showAddProject,
+            showStudyModal: nextProps.showStudyModal,
             addProjectCallback: nextProps.addProjectCallback,
             editProject_name: nextProps.editProject_name,
             editProject_originalName: nextProps.editProject_name,
@@ -88,8 +94,16 @@ class ProjectModals extends Component{
     }
 
     changeSelectedStudySessionProject(projectTitle){
-        console.log(projectTitle);
         this.setState({selectedStudySession: projectTitle});
+    }
+
+    closeStudySession(){
+        this.setState({showStudyModal: false});
+    }
+
+
+    startStudySession(){
+        console.log("start study session now pls");
     }
 
     render(){
@@ -165,7 +179,7 @@ class ProjectModals extends Component{
                 </Modal>
 
                 {/* STUDY SESSION MODAL */}
-                <Modal show={true}>
+                <Modal show={this.state.showStudyModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Start a Study Session</Modal.Title>
                     </Modal.Header>
@@ -190,6 +204,8 @@ class ProjectModals extends Component{
                             <input
                                 type="number"
                                 className="form-control"
+                                value={this.state.studySession_hours}
+                                onChange={(event) => {this.setState({studySession_hours: event.target.value})}}
                             />
                         </div>
                         <div>
@@ -197,12 +213,14 @@ class ProjectModals extends Component{
                             <input
                                 type="number"
                                 className="form-control"
+                                value={this.state.studySession_minutes}
+                                onChange={(event) => {this.setState({studySession_minutes: event.target.value})}}
                             />
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.closeEditProject}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.editProject}>Start</Button>
+                        <Button onClick={this.closeStudySession}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
                     </Modal.Footer>
                 </Modal>
 

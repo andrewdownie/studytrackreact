@@ -24,6 +24,7 @@ const ProjectSection = (props) => {
             <ProjectButtonsWrapper
                 openAddProjectModalCallback={props.openAddProjectModalCallback}
                 highlightAddProjectButton={noProjectsFound}
+                openStudySessionModalCallback={props.openStudySessionModalCallback}
             />
             <ProjectList
                 projectNames={props.projectNames}
@@ -35,6 +36,7 @@ const ProjectSection = (props) => {
                 showEditProject={props.showEditProject}
                 showAddProject={props.showAddProject}
                 showLoadingModal={props.showLoadingModal}
+                showStudyModal={props.showStudyModal}
                 loadingModalMessage={props.loadingModalMessage}
                 addProjectCallback={props.addProjectCallback}
                 editProjectCallback={props.editProjectCallback}
