@@ -1,25 +1,26 @@
-import {Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
 import React from 'react';
+import FaCog from 'react-icons/lib/fa/cog';
+import FaStop from 'react-icons/lib/fa/stop';
 
 
-const Timer = () => {
+const Timer = (props) => {
     return (
-        <Navbar fixedBottom>
-            <Nav>
-                <NavItem eventKey={1} href="#">
-                    Link
-                </NavItem>
-                <NavItem eventKey={2} href="#">
-                    Link
-                </NavItem>
-                <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                    <MenuItem eventKey={3.1}>Action</MenuItem>
-                    <MenuItem eventKey={3.2}>Another action</MenuItem>
-                    <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                    <MenuItem divider />
-                    <MenuItem eventKey={3.4}>Separated link</MenuItem>
-                </NavDropdown>
-            </Nav>
+        <Navbar fixedBottom className="timer-container">
+            <div className="timer-buttons">
+                <Button className="timer-stop" bsStyle="danger" onClick={this.editProject}><FaStop/></Button>
+                <br/>
+                <Button className="timer-settings" bsStyle="default" onClick={this.editProject}><FaCog /></Button>
+            </div>
+            <div className="timer-labels">
+                <div className="timer-project">
+                    Project Name go hur
+                </div>
+                <h1 className="timer-time">
+                    00:00
+                </h1>
+            </div>
+
         </Navbar>
     );
 }
