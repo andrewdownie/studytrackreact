@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 import ProjectSection from '../components/project_section/ProjectSection';
 import ChartSection from './chart_section/ChartSection';
+import Timer from './Timer';
 
 import SheetUtil from '../utils/SheetUtil';
 import ChartUtil from '../utils/ChartUtil';
@@ -22,6 +23,10 @@ class TrackPage extends Component {
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
+            timerTitle:'no timer started',
+            timerDirection:'down',
+            timerRunning:false,
+            timerTime:0,
         };
 
 
@@ -34,6 +39,8 @@ class TrackPage extends Component {
         this._openEditProjectModalCallback = this._openEditProjectModalCallback.bind(this);
         this._editProjectCallback = this._editProjectCallback.bind(this);
         this._deleteProjectCallback = this._deleteProjectCallback.bind(this);
+
+        this._startStudySession = this._startStudySession.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -119,7 +126,7 @@ class TrackPage extends Component {
     }
     
     _addProjectCallback(newProjectData){
-        this._openLoadingModalCallback("Creating new project: " + newProjectData.title + "...");
+        this._openLoadingModalCallback("Creating: " + newProjectData.title + "...");
 
         var wok = DateUtil.WeekOfYear();
 
@@ -154,7 +161,7 @@ class TrackPage extends Component {
     }
 
     _editProjectCallback(editProjectData){
-        this._openLoadingModalCallback("Making changes to project: " + editProjectData.originalName + "...");
+        this._openLoadingModalCallback("Editing: " + editProjectData.originalName + "...");
 
         GapiUtil.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
@@ -168,7 +175,7 @@ class TrackPage extends Component {
     }
 
     _deleteProjectCallback(deleteProjectData){
-        this._openLoadingModalCallback("Deleting project: " + deleteProjectData.targetName + "...");
+        this._openLoadingModalCallback("Deleting: " + deleteProjectData.targetName + "...");
 
         GapiUtil.DeleteProject(this.state.gapiInfo, deleteProjectData)
         .then((response) => {
@@ -195,6 +202,12 @@ class TrackPage extends Component {
     _startStudySession(studySessionData){
         console.log(studySessionData)
         console.log("start the study session here pls");
+        this.setState({
+            timerDirection: studySessionData.timerDirection,
+            timerRunning: studySessionData.timerRunning,
+            timerTitle: studySessionData.timerTitle,
+            timerTime: studySessionData.timerTime,
+        });
     }
 
     render(){
@@ -251,6 +264,17 @@ class TrackPage extends Component {
                 <Col xs={12}>
                     <div className="large-space">
                     </div>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col xs={12}>
+                    <Timer
+                    timerDirection={'down'}
+                    timerRunning={true}
+                    timerTitle={'meow meow'}
+                    timerTime={1}
+                    />
                 </Col>
             </Row>
 

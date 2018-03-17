@@ -10,7 +10,7 @@ class ProjectModals extends Component{
 
         this.state = { //NOTE: be sure to update componentWillRecieveProps as well
             //show: props.showAddProject
-            selectedStudySession: "Loading projects...",
+            studySession_selectedProject: "Loading projects...",
             studySession_minutes: 30,
             studySession_hours: 0,
             startStudySession: props.startStudySession,
@@ -46,8 +46,8 @@ class ProjectModals extends Component{
     componentWillReceiveProps(nextProps){
         console.log(nextProps.loadingModalMessage);
 
-        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.selectedStudySession == "Loading projects..."){
-            this.state.selectedStudySession = nextProps.projectNames[0];
+        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject == "Loading projects..."){
+            this.state.studySession_selectedProject = nextProps.projectNames[0];
         }
 
         //TODO: do I need to set get the studySession minutes/hours? I don't think so, it's gonna be two way bound, and then shipped when the user presses the final enter button
@@ -107,9 +107,10 @@ class ProjectModals extends Component{
 
     startStudySession(){
         var studySessionData = {
-            projectName: this.state.selectedStudySession,
-            hours: this.state.studySession_hours,
-            minutes: this.state.studySession_minutes,
+            timerDirection: 'down',
+            timerRunning: true,
+            timerTitle: this.state.studySession_selectedProject,
+            timerTime: this.state.studySession_hours * 3600 + this.state.studySession_minutes * 60,
         };
         this.state.startStudySession(studySessionData);
     }
@@ -194,7 +195,7 @@ class ProjectModals extends Component{
                     <Modal.Body>
                         <h4>Project</h4>
                         <DropdownButton
-                            title={this.state.selectedStudySession}
+                            title={this.state.studySession_selectedProject}
                             key={1}
                             id={`dropdown-basic-${1}`}
                         >

@@ -5,7 +5,6 @@ import {Row} from 'react-bootstrap';
 import React from 'react';
 import SheetUtil from '../../utils/SheetUtil';
 import DateUtil from '../../utils/DateUtil';
-import Timer from '../Timer';
 
 
 
@@ -48,7 +47,6 @@ const ProjectSection = (props) => {
                 editProject_idealGoal={props.editProject_idealGoal}
                 projectNames={props.projectNames}
             />
-            <Timer />
         </div>
     );
 }
