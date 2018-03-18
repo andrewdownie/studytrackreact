@@ -73,7 +73,6 @@ class Timer extends Component{
             }
 
             setTimeout(function() {
-                console.log("tick");
                 this.runTimer();
                 this.setState({timerTime: this.state.timerTime + dir});
             }.bind(this),

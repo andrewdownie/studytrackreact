@@ -43,6 +43,9 @@ class TrackPage extends Component {
         this._startStudySession = this._startStudySession.bind(this);
 
         this._stopTimerCallback = this._stopTimerCallback.bind(this);
+
+
+        this._quickStartStudyCallback = this._quickStartStudyCallback.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -228,6 +231,18 @@ class TrackPage extends Component {
         });
     }
 
+    _quickStartStudyCallback(projectName){
+        console.log(projectName);
+        //TODO: set timer stuff here
+        this.setState({
+            showStudyModal: false,
+            timerDirection: 'up',
+            timerRunning: true,
+            timerTitle: projectName,
+            timerTime: 0,
+        });
+    }
+
     render(){
         this._loadTrackPageData();
 
@@ -261,6 +276,7 @@ class TrackPage extends Component {
                         editProject_name={this.state.editProject_name}
                         editProject_minGoal={this.state.editProject_minGoal}
                         editProject_idealGoal={this.state.editProject_idealGoal}
+                        quickStartStudyCallback={this._quickStartStudyCallback}
                     />
                 </Col>
             </Row>

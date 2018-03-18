@@ -31,6 +31,7 @@ const ProjectSection = (props) => {
                 noProjectsFound={props.noProjectsFound}
                 loadedFromRemote={props.loadedFromRemote}
                 openEditProjectModalCallback={props.openEditProjectModalCallback}
+                quickStartStudyCallback={props.quickStartStudyCallback}
             />
             <ProjectModals
                 startStudySession={props.startStudySession}
