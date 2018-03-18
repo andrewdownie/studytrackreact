@@ -18,6 +18,7 @@ class Timer extends Component{
 
 
         this.timerStop = this.timerStop.bind(this);
+        this.formatTimer = this.formatTimer.bind(this);
 
     }
 
@@ -80,6 +81,36 @@ class Timer extends Component{
         }
     }
 
+    formatTimer(seconds){
+        console.log(seconds);
+
+        //TODO: this could be made cleaner
+        var remaining = seconds;
+        var outputHours, outputMinutes, outputSeconds;
+        var hours, minutes, seconnds;
+        hours = Math.floor(seconds / 3600);
+        remaining = remaining - (hours * 3600);
+        minutes = Math.floor(seconds / 60);
+        remaining = remaining - (minutes * 60);
+        seconds = remaining;
+
+        outputHours = hours;
+        outputMinutes = minutes;
+        outputSeconds = seconds;
+
+        if(hours < 10){
+            outputHours = "0" + hours;
+        }
+        if(minutes < 10){
+            outputMinutes = "0" + minutes;
+        }
+        if(seconds < 10){
+            outputSeconds = "0" + seconds;
+        }
+
+        return outputHours + ":" + outputMinutes + ":" + outputSeconds;
+    }
+
     render(){
         if(!this.state.timerRunning){
             return <div></div>;
@@ -96,7 +127,7 @@ class Timer extends Component{
                         {this.state.timerTitle}
                     </div>
                     <h1 className="timer-time">
-                        {this.state.timerTime}
+                        {this.formatTimer(this.state.timerTime)}
                     </h1>
                 </div>
 
