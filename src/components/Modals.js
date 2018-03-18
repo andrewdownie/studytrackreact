@@ -18,6 +18,7 @@ class ProjectModals extends Component{
             showEditProject: props.showEditProject,
             showStudyModal: props.showStudyModal,
             showLoadingModal: props.showLoadingModal,
+            showWarningModal: props.showWarningModal,
             addProjectCallback: props.addProjectCallback,
             loadingModalMessage: props.loadingModalMessage,
             editProjectCallback: props.editProjectCallback,
@@ -57,6 +58,7 @@ class ProjectModals extends Component{
             showLoadingModal: nextProps.showLoadingModal,
             showAddProject: nextProps.showAddProject,
             showStudyModal: nextProps.showStudyModal,
+            showWarningModal: nextProps.showWarningModal,
             addProjectCallback: nextProps.addProjectCallback,
             editProject_name: nextProps.editProject_name,
             editProject_originalName: nextProps.editProject_name,
@@ -234,6 +236,22 @@ class ProjectModals extends Component{
                     <Modal.Footer>
                         <Button onClick={this.closeStudySession}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {/* 10 MINUTE WARNING MODAL*/}
+                <Modal show={this.state.showWarningModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Warning!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>
+                            You have studied for less than 10 minutes this quick study session. If you cancel now zero time will be recorded.
+                        </p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button bsStyle="danger">Cancel Anyway</Button>
+                        <Button>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>
 

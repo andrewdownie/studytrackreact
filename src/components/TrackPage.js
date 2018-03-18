@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 import ProjectSection from '../components/project_section/ProjectSection';
 import ChartSection from './chart_section/ChartSection';
+import ProjectModals from './Modals';
 import Timer from './Timer';
 
 import SheetUtil from '../utils/SheetUtil';
@@ -20,6 +21,7 @@ class TrackPage extends Component {
             showEditProject: false,
             showLoadingModal: false,
             showStudyModal: false,
+            showWarningModal: false,
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
@@ -226,6 +228,14 @@ class TrackPage extends Component {
 
     _stopTimerCallback(stopTimerInfo){
         console.log(stopTimerInfo);//TODO: use this info to figure out what to add to the sheet / what to show the user
+
+        if(stopTimerInfo.timerDirection === 'up'){
+            if(stopTimerInfo.timerTime < 10 * 60){
+                //TODO: show confimation modal to stop timer if less than 10 minutes
+                //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
+                this.setState({showWarningModal: true});
+            }
+        }
         this.setState({
             timerRunning: false,
         });
@@ -258,24 +268,12 @@ class TrackPage extends Component {
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
                     <ProjectSection
-                        startStudySession={this._startStudySession}
                         projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         studyData={this.state.studyData}
-                        addProjectCallback={this._addProjectCallback}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
-                        editProjectCallback={this._editProjectCallback}
                         openEditProjectModalCallback={this._openEditProjectModalCallback}
                         openStudySessionModalCallback={this._openStudySessionModalCallback}
-                        deleteProjectCallback={this._deleteProjectCallback}
                         loadedFromRemote={this.state.loadedFromRemote}
-                        showAddProject={this.state.showAddProject}
-                        showEditProject={this.state.showEditProject}
-                        showLoadingModal={this.state.showLoadingModal}
-                        showStudyModal={this.state.showStudyModal}
-                        loadingModalMessage={this.state.loadingModalMessage}
-                        editProject_name={this.state.editProject_name}
-                        editProject_minGoal={this.state.editProject_minGoal}
-                        editProject_idealGoal={this.state.editProject_idealGoal}
                         quickStartStudyCallback={this._quickStartStudyCallback}
                     />
                 </Col>
@@ -313,6 +311,23 @@ class TrackPage extends Component {
                 </Col>
             </Row>
 
+            
+            <ProjectModals
+                startStudySession={this._startStudySession}
+                showAddProject={this.state.showAddProject}
+                showEditProject={this.state.showEditProject}
+                showLoadingModal={this.state.showLoadingModal}
+                showStudyModal={this.state.showStudyModal}
+                showWarningModal={this.state.showWarningModal}
+                loadingModalMessage={this.state.loadingModalMessage}
+                addProjectCallback={this._addProjectCallback}
+                editProjectCallback={this._editProjectCallback}
+                deleteProjectCallback={this._deleteProjectCallback}
+                editProject_name={this.state.editProject_name}
+                editProject_minGoal={this.state.editProject_minGoal}
+                editProject_idealGoal={this.state.editProject_idealGoal}
+                projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
+            />
         </Grid>
         );
     }

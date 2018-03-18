@@ -82,8 +82,6 @@ class Timer extends Component{
     }
 
     formatTimer(seconds){
-        console.log(seconds);
-
         //TODO: this could be made cleaner
         var remaining = seconds;
         var outputHours, outputMinutes, outputSeconds;

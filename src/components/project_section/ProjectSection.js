@@ -1,5 +1,4 @@
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
-import ProjectModals from './ProjectModals';
 import ProjectList from './ProjectList';
 import {Row} from 'react-bootstrap';
 import React from 'react';
@@ -32,21 +31,6 @@ const ProjectSection = (props) => {
                 loadedFromRemote={props.loadedFromRemote}
                 openEditProjectModalCallback={props.openEditProjectModalCallback}
                 quickStartStudyCallback={props.quickStartStudyCallback}
-            />
-            <ProjectModals
-                startStudySession={props.startStudySession}
-                showEditProject={props.showEditProject}
-                showAddProject={props.showAddProject}
-                showLoadingModal={props.showLoadingModal}
-                showStudyModal={props.showStudyModal}
-                loadingModalMessage={props.loadingModalMessage}
-                addProjectCallback={props.addProjectCallback}
-                editProjectCallback={props.editProjectCallback}
-                deleteProjectCallback={props.deleteProjectCallback}
-                editProject_name={props.editProject_name}
-                editProject_minGoal={props.editProject_minGoal}
-                editProject_idealGoal={props.editProject_idealGoal}
-                projectNames={props.projectNames}
             />
         </div>
     );
