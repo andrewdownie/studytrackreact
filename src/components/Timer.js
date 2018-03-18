@@ -13,7 +13,10 @@ class Timer extends Component{
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
             timerTime: props.timerTime,
+            stopTimerCallback: props.stopTimerCallback,
         }
+
+        this.timerStop = this.timerStop.bind(this);
 
     }
 
@@ -29,10 +32,22 @@ class Timer extends Component{
 
 
     timerStop(){
-        console.log("this is timer stop");
+        //TODO: will I need a piece of state to describe the fact that a timer has ended and user interaction (may or may not) be required?
+        var timerDirection = this.state.timerDirection;
+        var timerTime = this.state.timerTime;
+        var timerTitle = this.state.timerTitle;
+
+        var timerStopInfo = {
+            timerDirection,
+            timerTitle,
+            timerTime,
+        }
+
+        this.state.stopTimerCallback(timerStopInfo);
     }
     timerSettings(){
         console.log("this is timer settings");
+        //TODO: show a modal here...
     }
 
     render(){

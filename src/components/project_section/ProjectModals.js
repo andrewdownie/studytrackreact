@@ -95,17 +95,16 @@ class ProjectModals extends Component{
         deleteProjectData.targetName = this.state.editProject_name;
         this.state.deleteProjectCallback(deleteProjectData);
     }
-
     changeSelectedStudySessionProject(projectTitle){
-        this.setState({selectedStudySession: projectTitle});
+        this.setState({studySession_selectedProject: projectTitle});
     }
-
     closeStudySession(){
         this.setState({showStudyModal: false});
     }
 
 
     startStudySession(){
+        console.log(this.state.studySession_selectedProject);
         var studySessionData = {
             timerDirection: 'down',
             timerRunning: true,
@@ -114,6 +113,7 @@ class ProjectModals extends Component{
         };
         this.state.startStudySession(studySessionData);
     }
+    
 
     render(){
         return(
@@ -215,6 +215,8 @@ class ProjectModals extends Component{
                                 className="form-control"
                                 value={this.state.studySession_hours}
                                 onChange={(event) => {this.setState({studySession_hours: event.target.value})}}
+                                min="0"
+                                max="12"
                             />
                         </div>
                         <div>
@@ -224,6 +226,8 @@ class ProjectModals extends Component{
                                 className="form-control"
                                 value={this.state.studySession_minutes}
                                 onChange={(event) => {this.setState({studySession_minutes: event.target.value})}}
+                                min="0"
+                                max="59"
                             />
                         </div>
                     </Modal.Body>
@@ -237,7 +241,7 @@ class ProjectModals extends Component{
                 <div className="loading-modal-container">
                     <Modal show={this.state.showLoadingModal} className="loading-modal">
                         <Modal.Body>
-                            <FaSpinner className="spin"/> {this.state.loadingModalMessage}
+                            <h2><FaSpinner className="spin"/> {this.state.loadingModalMessage}</h2>
                         </Modal.Body>
                     </Modal>
                 </div>

@@ -41,6 +41,8 @@ class TrackPage extends Component {
         this._deleteProjectCallback = this._deleteProjectCallback.bind(this);
 
         this._startStudySession = this._startStudySession.bind(this);
+
+        this._stopTimerCallback = this._stopTimerCallback.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -143,7 +145,12 @@ class TrackPage extends Component {
 
     }
     _openAddProjectModalCallback(){
-        this.setState({showAddProject: true});
+        this.setState({
+            showAddProject: true,
+            showStudyModal: false,
+            showEditModal: false,
+            showLoadingModal: false,
+        });
     }
     _openEditProjectModalCallback(projectName){
 
@@ -190,7 +197,7 @@ class TrackPage extends Component {
     }
 
     _openStudySessionModalCallback(){
-        this.setState({showStudyModal: true});
+        this.setState({showStudyModal: true, showAddModal: false});
     }
 
     _openLoadingModalCallback(loadingData){
@@ -206,10 +213,18 @@ class TrackPage extends Component {
         console.log(studySessionData)
         console.log("start the study session here pls");
         this.setState({
+            showStudyModal: false,
             timerDirection: studySessionData.timerDirection,
             timerRunning: studySessionData.timerRunning,
             timerTitle: studySessionData.timerTitle,
             timerTime: studySessionData.timerTime,
+        });
+    }
+
+    _stopTimerCallback(stopTimerInfo){
+        console.log(stopTimerInfo);//TODO: use this info to figure out what to add to the sheet / what to show the user
+        this.setState({
+            timerRunning: false,
         });
     }
 
@@ -273,10 +288,11 @@ class TrackPage extends Component {
             <Row>
                 <Col xs={12}>
                     <Timer
-                    timerDirection={'down'}
-                    timerRunning={true}
-                    timerTitle={'meow meow'}
-                    timerTime={1}
+                    timerDirection={this.state.timerDirection}
+                    timerRunning={this.state.timerRunning}
+                    timerTitle={this.state.timerTitle}
+                    timerTime={this.state.timerTime}
+                    stopTimerCallback={this._stopTimerCallback}
                     />
                 </Col>
             </Row>
