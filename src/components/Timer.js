@@ -16,17 +16,31 @@ class Timer extends Component{
             stopTimerCallback: props.stopTimerCallback,
         }
 
+
         this.timerStop = this.timerStop.bind(this);
 
     }
 
 
     componentWillReceiveProps(nextProps){
+        //Start the timer this update
+        var startTimerNow = false;
+        if(this.state.timerRunning === false){
+            if(nextProps.timerRunning === true){
+                startTimerNow = true;
+            }
+        }
+
         this.setState({
             timerDirection: nextProps.timerDirection,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
             timerTime: nextProps.timerTime,
+        }, () => {
+
+            if(startTimerNow){
+                this.runTimer();
+            }
         });
     }
 
@@ -48,6 +62,23 @@ class Timer extends Component{
     timerSettings(){
         console.log("this is timer settings");
         //TODO: show a modal here...
+    }
+
+    runTimer(){
+        //TODO: this wont get set right away. The first thing this will see is false, and then it wont even run once
+        if(this.state.timerRunning){
+            var dir = 1;
+            if(this.state.timerDirection === 'down'){
+                dir = -1;
+            }
+
+            setTimeout(function() {
+                console.log("tick");
+                this.runTimer();
+                this.setState({timerTime: this.state.timerTime + dir});
+            }.bind(this),
+            1000);
+        }
     }
 
     render(){
