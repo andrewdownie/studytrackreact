@@ -29,7 +29,7 @@ class TrackPage extends Component {
             timerTime:0,
         };
 
-
+        // Method bindings
         this._openLoadingModalCallback = this._openLoadingModalCallback.bind(this);
         this._openStudySessionModalCallback = this._openStudySessionModalCallback.bind(this);
 
@@ -56,6 +56,9 @@ class TrackPage extends Component {
         var currentWeeksGChartData = ChartUtil.Week(studyData, wok - 1);
         var lastWeeksGChartData = ChartUtil.Week(studyData, wok - 2);
         var twoWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 3);
+
+
+        console.log(todaysGChartData);
 
         chartList.push({title: "Today",         data: todaysGChartData});
         chartList.push({title: "Current Week",  data: currentWeeksGChartData});

@@ -15,7 +15,8 @@ const WeekGoals = (studyData, weekOfYear) => {
 
 const WeekData_DOY = (studyData, dayOfYear) => {
     var weekOfYear = DateUtil.WeekOfYearFromDayOfYear(dayOfYear);
-    return WeekData_WOY(studyData, weekOfYear);
+    var sheetRow = weekOfYear - 1
+    return WeekData_WOY(studyData, sheetRow);
 }
 
 const WeekData_WOY = (studyData, weekOfYear) => {
