@@ -24,6 +24,7 @@ class ProjectModals extends Component{
             editProjectCallback: props.editProjectCallback,
             deleteProjectCallback: props.deleteProjectCallback,
             cancelStudySession: props.cancelStudySession,
+            closeModals: props.closeModals,
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
@@ -34,9 +35,6 @@ class ProjectModals extends Component{
             projectNames: [],
         };
 
-        this.closeStudySession = this.closeStudySession.bind(this);
-        this.closeEditProject = this.closeEditProject.bind(this);
-        this.closeAddProject = this.closeAddProject.bind(this);
         this.startStudySession = this.startStudySession.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.editProject = this.editProject.bind(this);
@@ -73,12 +71,6 @@ class ProjectModals extends Component{
             startStudySession: nextProps.startStudySession,
         });
     }
-    closeAddProject(){
-        this.setState({showAddProject: false});
-    }
-    closeEditProject() {
-        this.setState({showEditProject: false});
-    }
 
 
     addProject(){
@@ -105,10 +97,6 @@ class ProjectModals extends Component{
     changeSelectedStudySessionProject(projectTitle){
         this.setState({studySession_selectedProject: projectTitle});
     }
-    closeStudySession(){
-        this.setState({showStudyModal: false});
-    }
-
 
     startStudySession(){
         console.log(this.state.studySession_selectedProject);
@@ -154,7 +142,7 @@ class ProjectModals extends Component{
                         />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.closeAddProject}>Cancel</Button>
+                        <Button onClick={this.state.closeModals.closeAddModal}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.addProject}>Add Project</Button>
                     </Modal.Footer>
                 </Modal>
@@ -189,7 +177,7 @@ class ProjectModals extends Component{
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="danger" onClick={this.deleteProject} className="pull-left">Delete</Button>
-                        <Button onClick={this.closeEditProject}>Cancel</Button>
+                        <Button onClick={this.state.closeModals.closeEditModal}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.editProject}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
@@ -239,12 +227,12 @@ class ProjectModals extends Component{
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.closeStudySession}>Cancel</Button>
+                        <Button onClick={this.state.closeModals.closeStudyModal}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
                     </Modal.Footer>
                 </Modal>
 
-                {/* 10 MINUTE WARNING MODAL*/}
+                {/* 10 MINUTE WARNING MODAL */}
                 <Modal show={this.state.showWarningModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Warning!</Modal.Title>
@@ -256,7 +244,7 @@ class ProjectModals extends Component{
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.state.cancelStudySession} bsStyle="danger">Cancel Anyway</Button>
-                        <Button>Keep Studying</Button>
+                        <Button onClick={this.state.closeModals.closeWarningModal}>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>
 

@@ -12,8 +12,9 @@ class Timer extends Component{
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
-            timerTime: props.timerTime,
-            stopTimerCallback: props.stopTimerCallback,
+            timerStartTime: props.timerStartTime,
+            timerCurrentTime: props.timerTime,
+            stopTimerClick: props.stopTimerClick,
         }
 
 
@@ -36,11 +37,14 @@ class Timer extends Component{
             timerDirection: nextProps.timerDirection,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
-            timerTime: nextProps.timerTime,
+            timerStartTime: nextProps.timerStartTime,
         }, () => {
 
             if(startTimerNow){
-                this.runTimer();
+                this.setState(
+                    {timerCurrentTime: this.state.timerStartTime},
+                    ()=>{this.runTimer()}
+                );
             }
         });
     }
@@ -49,7 +53,7 @@ class Timer extends Component{
     timerStop(){
         //TODO: will I need a piece of state to describe the fact that a timer has ended and user interaction (may or may not) be required?
         var timerDirection = this.state.timerDirection;
-        var timerTime = this.state.timerTime;
+        var timerTime = this.state.timerStartTime;
         var timerTitle = this.state.timerTitle;
 
         var timerStopInfo = {
@@ -58,8 +62,10 @@ class Timer extends Component{
             timerTime,
         }
 
-        this.state.stopTimerCallback(timerStopInfo);
+        this.state.stopTimerClick(timerStopInfo);
     }
+
+
     timerSettings(){
         console.log("this is timer settings");
         //TODO: show a modal here...
@@ -75,7 +81,7 @@ class Timer extends Component{
 
             setTimeout(function() {
                 this.runTimer();
-                this.setState({timerTime: this.state.timerTime + dir});
+                this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
             }.bind(this),
             1000);
         }
@@ -116,7 +122,7 @@ class Timer extends Component{
         return (
             <Navbar fixedBottom className="timer-container">
                 <div className="timer-buttons">
-                    <Button className="timer-stop" bsStyle="danger" onClick={this.timerStop}><FaStop/></Button>
+                    <Button className="timer-stop" bsStyle="danger" onClick={this.state.stopTimerClick}><FaStop/></Button>
                     <br/>
                     <Button className="timer-settings" bsStyle="default" onClick={this.timerSettings}><FaCog /></Button>
                 </div>
@@ -125,7 +131,7 @@ class Timer extends Component{
                         {this.state.timerTitle}
                     </div>
                     <h1 className="timer-time">
-                        {this.formatTimer(this.state.timerTime)}
+                        {this.formatTimer(this.state.timerCurrentTime)}
                     </h1>
                 </div>
 

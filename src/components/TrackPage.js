@@ -17,8 +17,8 @@ class TrackPage extends Component {
         this.state = {
             studyData: null,
             loadedFromRemote: false,
-            showAddProject: false,
-            showEditProject: false,
+            showAddModal: false,
+            showEditModal: false,
             showLoadingModal: false,
             showStudyModal: false,
             showWarningModal: false,
@@ -29,6 +29,13 @@ class TrackPage extends Component {
             timerDirection:'down',
             timerRunning:false,
             timerTime:0,
+            closeModals: {
+                closeEditModal: this._closeEditModal.bind(this),
+                closeAddModal: this._closeAddModal.bind(this),
+                closeLooadingModal: this._closeLoadingModal.bind(this),
+                closeStudyModal: this._closeStudyModal.bind(this),
+                closeWarningModal: this._closeWarningModal.bind(this),
+            },
         };
 
         // Method bindings
@@ -49,8 +56,25 @@ class TrackPage extends Component {
 
         this._quickStartStudyCallback = this._quickStartStudyCallback.bind(this);
 
-
         this._cancelStudySession = this._cancelStudySession.bind(this);
+        this._stopTimerWarning = this._stopTimerWarning.bind(this);
+
+    }
+
+    _closeAddModal(){
+        this.setState({showAddModal: false});
+    }
+    _closeEditModal(){
+        this.setState({showEditModal: false});
+    }
+    _closeLoadingModal(){
+        this.setState({showLoadingModal: false});
+    }
+    _closeStudyModal(){
+        this.setState({showStudyModal: false});
+    }
+    _closeWarningModal(){
+        this.setState({showWarningModal: false});
     }
 
     _prepareChartData(studyData){
@@ -244,6 +268,12 @@ class TrackPage extends Component {
         });
     }
 
+    _stopTimerWarning(stopTimerInfo){
+        //TODO: do I need stopTimerInfo?
+        this.setState({showWarningModal: true});
+
+    }
+
     _quickStartStudyCallback(projectName){
         console.log(projectName);
         //TODO: set timer stuff here
@@ -312,8 +342,8 @@ class TrackPage extends Component {
                     timerDirection={this.state.timerDirection}
                     timerRunning={this.state.timerRunning}
                     timerTitle={this.state.timerTitle}
-                    timerTime={this.state.timerTime}
-                    stopTimerCallback={this._stopTimerCallback}
+                    timerStartTime={this.state.timerTime}
+                    stopTimerClick={this._stopTimerWarning}
                     />
                 </Col>
             </Row>
@@ -321,8 +351,8 @@ class TrackPage extends Component {
             
             <ProjectModals
                 startStudySession={this._startStudySession}
-                showAddProject={this.state.showAddProject}
-                showEditProject={this.state.showEditProject}
+                showAddProject={this.state.showAddModal}
+                showEditProject={this.state.showEditModal}
                 showLoadingModal={this.state.showLoadingModal}
                 showStudyModal={this.state.showStudyModal}
                 showWarningModal={this.state.showWarningModal}
@@ -335,6 +365,7 @@ class TrackPage extends Component {
                 editProject_idealGoal={this.state.editProject_idealGoal}
                 projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                 cancelStudySession={this._cancelStudySession}
+                closeModals={this.state.closeModals}
             />
         </Grid>
         );
