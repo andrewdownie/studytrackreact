@@ -20,10 +20,6 @@ const WeekOfYear = () => {
     return parseInt(Math.ceil((((d - yearStart) / 86400000) + 1)/7), 10);
 }
 
-const WeekOfYearFromDayOfYear = (dayOfYear) => {
-    return Math.floor(dayOfYear / 7);
-}
-
 const DayOfWeekFromDayOfYear = (dayOfYear) => {
     return dayOfYear % 7;
 }
@@ -37,7 +33,6 @@ const CellFromDayOfYear = (dayOfYear) => {
 }
 
 const DateUtil = {
-    WeekOfYearFromDayOfYear,
     DayOfWeekFromDayOfYear,
     CellFromDayOfYear,
     FirstDayOfWeek,
