@@ -59,6 +59,10 @@ class TrackPage extends Component {
         this._cancelStudySession = this._cancelStudySession.bind(this);
         this._stopTimerWarning = this._stopTimerWarning.bind(this);
 
+
+        this._saveTimerDuration = this._saveTimerDuration.bind(this);
+        this._showTimerWarning = this._showTimerWarning.bind(this);
+
     }
 
     _closeAddModal(){
@@ -269,8 +273,23 @@ class TrackPage extends Component {
     }
 
     _stopTimerWarning(stopTimerInfo){
+        console.log("this is stop timer warning, pls do something :(");
         //TODO: do I need stopTimerInfo?
-        this.setState({showWarningModal: true});
+
+
+        console.log(stopTimerInfo);
+
+        if(stopTimerInfo.timerDirection === 'up'){
+            if(stopTimerInfo.timerTime < 10 * 60){
+                //TODO: show confimation modal to stop timer if less than 10 minutes
+                //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
+                this.setState({showWarningModal: true});
+            }
+            else{
+                //TODO: save teh timer
+                //TODO: should the user be given a prompt before ending the timer?
+            }
+        }
 
     }
 
@@ -287,7 +306,14 @@ class TrackPage extends Component {
     }
 
     _cancelStudySession(){
-        console.log("this is cancel study session");
+        this.setState({timerRunning: false, showWarningModal: false});
+    }
+
+    _saveTimerDuration(){
+
+    }
+    _showTimerWarning(){
+        this.setState({showWarningModal: true});
     }
 
     render(){
@@ -343,7 +369,8 @@ class TrackPage extends Component {
                     timerRunning={this.state.timerRunning}
                     timerTitle={this.state.timerTitle}
                     timerStartTime={this.state.timerTime}
-                    stopTimerClick={this._stopTimerWarning}
+                    saveTimerDuration={this._saveTimerDuration}
+                    showTimerWarning={this._showTimerWarning}
                     />
                 </Col>
             </Row>

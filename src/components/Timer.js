@@ -14,11 +14,12 @@ class Timer extends Component{
             timerTitle: props.timerTitle,
             timerStartTime: props.timerStartTime,
             timerCurrentTime: props.timerTime,
-            stopTimerClick: props.stopTimerClick,
+            saveTimerDuration: props.saveTimerDuration,
+            showTimerWarning: props.showTimerWarning,
         }
 
 
-        this.timerStop = this.timerStop.bind(this);
+        this.stopButtonClick = this.stopButtonClick.bind(this);
         this.formatTimer = this.formatTimer.bind(this);
 
     }
@@ -35,9 +36,9 @@ class Timer extends Component{
 
         this.setState({
             timerDirection: nextProps.timerDirection,
+            timerStartTime: nextProps.timerStartTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
-            timerStartTime: nextProps.timerStartTime,
         }, () => {
 
             if(startTimerNow){
@@ -50,19 +51,35 @@ class Timer extends Component{
     }
 
 
-    timerStop(){
-        //TODO: will I need a piece of state to describe the fact that a timer has ended and user interaction (may or may not) be required?
+    stopButtonClick(){
         var timerDirection = this.state.timerDirection;
-        var timerTime = this.state.timerStartTime;
         var timerTitle = this.state.timerTitle;
+        var timerTime = this.state.timerCurrentTime;
 
         var timerStopInfo = {
-            timerDirection,
-            timerTitle,
-            timerTime,
+            timerDirection: this.state.timerDirection,
+            timerTitle: this.state.timerStartTime,
+            timerTime: this.state.timerTime,
         }
 
-        this.state.stopTimerClick(timerStopInfo);
+
+
+        if(timerDirection == 'up'){
+            if(timerTime < 60 * 10){
+                console.log("show timer warning");
+                this.state.showTimerWarning();
+            }
+            else{
+                console.log(" -save timer duration");
+                this.state.saveTimerDuration();
+            }
+        }
+        else if(timerDirection == 'down'){
+            console.log("MOOOOOOOOOOOEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWW");
+            //TODO: what happens when teh user presses the stop button in a full weight study session?
+            //TODO: fractional amount of time right?
+            //TODO: need to show warning
+        }
     }
 
 
@@ -102,8 +119,11 @@ class Timer extends Component{
         outputMinutes = minutes;
         outputSeconds = seconds;
 
-        if(hours < 10){
-            outputHours = "0" + hours;
+        if(hours == 0){
+            outputHours = "";
+        }
+        else if(hours < 10){
+            outputHours = "0" + hours + ":"
         }
         if(minutes < 10){
             outputMinutes = "0" + minutes;
@@ -112,7 +132,7 @@ class Timer extends Component{
             outputSeconds = "0" + seconds;
         }
 
-        return outputHours + ":" + outputMinutes + ":" + outputSeconds;
+        return outputHours + outputMinutes + ":" + outputSeconds;
     }
 
     render(){
@@ -122,7 +142,7 @@ class Timer extends Component{
         return (
             <Navbar fixedBottom className="timer-container">
                 <div className="timer-buttons">
-                    <Button className="timer-stop" bsStyle="danger" onClick={this.state.stopTimerClick}><FaStop/></Button>
+                    <Button className="timer-stop" bsStyle="danger" onClick={this.stopButtonClick}><FaStop/></Button>
                     <br/>
                     <Button className="timer-settings" bsStyle="default" onClick={this.timerSettings}><FaCog /></Button>
                 </div>
