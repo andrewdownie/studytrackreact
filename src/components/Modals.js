@@ -23,6 +23,7 @@ class ProjectModals extends Component{
             loadingModalMessage: props.loadingModalMessage,
             editProjectCallback: props.editProjectCallback,
             deleteProjectCallback: props.deleteProjectCallback,
+            cancelStudySession: props.cancelStudySession,
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
@@ -45,10 +46,14 @@ class ProjectModals extends Component{
 
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
-        console.log(nextProps.loadingModalMessage);
 
         if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject == "Loading projects..."){
             this.state.studySession_selectedProject = nextProps.projectNames[0];
+        }
+
+        var newProjectNames = nextProps.projectNames;
+        if(newProjectNames === null){
+            newProjectNames = [];
         }
 
         //TODO: do I need to set get the studySession minutes/hours? I don't think so, it's gonna be two way bound, and then shipped when the user presses the final enter button
@@ -64,7 +69,7 @@ class ProjectModals extends Component{
             editProject_originalName: nextProps.editProject_name,
             editProject_minGoal: nextProps.editProject_minGoal,
             editProject_idealGoal: nextProps.editProject_idealGoal,
-            projectNames: nextProps.projectNames,
+            projectNames: newProjectNames,
             startStudySession: nextProps.startStudySession,
         });
     }
@@ -250,7 +255,7 @@ class ProjectModals extends Component{
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle="danger">Cancel Anyway</Button>
+                        <Button onClick={this.state.cancelStudySession} bsStyle="danger">Cancel Anyway</Button>
                         <Button>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>

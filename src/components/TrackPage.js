@@ -48,6 +48,9 @@ class TrackPage extends Component {
 
 
         this._quickStartStudyCallback = this._quickStartStudyCallback.bind(this);
+
+
+        this._cancelStudySession = this._cancelStudySession.bind(this);
     }
 
     _prepareChartData(studyData){
@@ -253,6 +256,10 @@ class TrackPage extends Component {
         });
     }
 
+    _cancelStudySession(){
+        console.log("this is cancel study session");
+    }
+
     render(){
         this._loadTrackPageData();
 
@@ -327,6 +334,7 @@ class TrackPage extends Component {
                 editProject_minGoal={this.state.editProject_minGoal}
                 editProject_idealGoal={this.state.editProject_idealGoal}
                 projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
+                cancelStudySession={this._cancelStudySession}
             />
         </Grid>
         );
