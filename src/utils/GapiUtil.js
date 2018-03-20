@@ -74,18 +74,6 @@ const ReadSheetData = (gapiInfo) => {
             resolve(result);
         });
 
-        /*gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: gapiInfo.spreadsheet.id,
-            //TODO: could do full loads and make the assumption that the user will have local data saved to hide the download time, works because first load is expensive anyway
-            //TODO: or we could figureout up to what day the user has cached to and update the last day they have cached up to the most recent day << THIS SHOULD WORK THE BEST AND IS STILL EASY
-            range: gapiInfo.studysheet.title + '!A1:H53'
-        }).then(function(response){
-            resolve(response);
-        },//.bind(this),
-        function (response) {
-            console.log('Error: ' + response.result.error.message);
-        });*/
-
     });
 }
 
@@ -522,15 +510,45 @@ const InitializeGAPIInfo = (gapi, studySheetName) => {
     };
 }
 
+const DayOfWeekToColumn = (dayOfWeek) => {
+    var cols = ['B', 'C', 'D', 'E', 'F', 'G', 'H'];
+    return cols[dayOfWeek];
+}
+
+const GetTodaysStudyData = (gapiInfo) => {
+    return new Promise((resolve, reject) => {
+
+        var weekOfYear = DateUtil.WeekOfYear();
+        var dayOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear());
+
+        var column = DayOfWeekToColumn(dayOfWeek);
+        var targetCell = column + weekOfYear;
+        console.log(targetCell);
+
+        Get(gapiInfo, targetCell)
+        .then((result) => {
+            resolve(result);
+        });
+
+    });
+
+}
+
+const SetTodaysStudyData = (gapiInfo, studyData) => {
+
+}
+
 const GapiUtil = {
     FullLoad_LoadApisAndReturnAllStudyData,
     QuickLoad_ReturnRelevantStudyData,
-    InitializeGAPIInfo,
+    GetTodaysStudyData,
+    SetTodaysStudyData,
     FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
     JsonifyRawStudyData,
     CheckIfSheetExists,
+    InitializeGAPIInfo,
     CheckIfSSExists,
     AddNewProject,
     DeleteProject,

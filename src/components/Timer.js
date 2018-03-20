@@ -36,7 +36,7 @@ class Timer extends Component{
 
         this.setState({
             timerDirection: nextProps.timerDirection,
-            timerStartTime: nextProps.timerStartTime,
+            timerStartTime: 600,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
         }, () => {
@@ -66,12 +66,10 @@ class Timer extends Component{
 
         if(timerDirection == 'up'){
             if(timerTime < 60 * 10){
-                console.log("show timer warning");
                 this.state.showTimerWarning();
             }
             else{
-                console.log(" -save timer duration");
-                this.state.saveTimerDuration();
+                this.state.saveTimerDuration(timerStopInfo);
             }
         }
         else if(timerDirection == 'down'){

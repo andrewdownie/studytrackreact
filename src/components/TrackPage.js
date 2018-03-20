@@ -309,8 +309,16 @@ class TrackPage extends Component {
         this.setState({timerRunning: false, showWarningModal: false});
     }
 
-    _saveTimerDuration(){
-
+    _saveTimerDuration(timerStopInfo){
+        console.log("save timer duration");
+        //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
+        GapiUtil.GetTodaysStudyData(this.state.gapiInfo)
+        .then((result) => {
+            console.log(result);
+        });
+        //Step 2: add the timer duration to the loaded total from step 1
+        //Step 3: put the modified data back into the sheet (will require overwriting the entire day)
+        //GapiUtil.SetTodaysStudyData();
     }
     _showTimerWarning(){
         this.setState({showWarningModal: true});
