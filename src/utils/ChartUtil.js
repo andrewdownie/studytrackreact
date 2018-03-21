@@ -115,16 +115,17 @@ const _ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     // Vars
     var idealRemaining = talliedProjectInfo.idealGoal;
     var minRemaining = talliedProjectInfo.minGoal;
-    var studied = talliedProjectInfo.studied;
+    var studiedSeconds = talliedProjectInfo.studied;
+    var studiedHours = studiedSeconds / 3600;
 
     // Calculate each value relative to each other so the three of them add up to idealGoal
-    if(studied > minRemaining){
+    if(studiedHours > minRemaining){
         minRemaining = 0;
     }
     else{
-        minRemaining = minRemaining - studied;
+        minRemaining = minRemaining - studiedHours;
     }
-    idealRemaining = idealRemaining - minRemaining - studied;
+    idealRemaining = idealRemaining - minRemaining - studiedHours;
 
     // Clamp values to be 0 or above
     if(minRemaining < 0){
@@ -134,7 +135,7 @@ const _ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
         idealRemaining = 0;
     }
 
-    return [projectTitle, studied, minRemaining, idealRemaining, ""];
+    return [projectTitle, studiedHours, minRemaining, idealRemaining, ""];
 }
 
 const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
