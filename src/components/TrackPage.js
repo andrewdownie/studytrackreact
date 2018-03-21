@@ -82,6 +82,8 @@ class TrackPage extends Component {
     }
 
     _prepareChartData(studyData){
+        console.log(" --- prepare chart study data next:");
+        console.log(studyData);
         if(studyData == null){
             return {chartList: [], projectNames: []};
         }
@@ -303,7 +305,6 @@ class TrackPage extends Component {
     }
 
     _saveTimerDuration(timerStopInfo){
-        //TODO how is the state set to the wrong (and bigger) values before even getting here?
 
 
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
@@ -329,11 +330,14 @@ class TrackPage extends Component {
             else{
                 currentStudyTime = todaysObject[timerStopInfo.timerTitle].studied;
             }
+            todaysObject[timerStopInfo.timerTitle].studied = 0;
             todaysObject[timerStopInfo.timerTitle].studied = currentStudyTime + timerStopInfo.timerTime;
             
             //TODO: the updatedStudyData is wrong..
             var updatedStudyData = this.state.studyData;
-            updatedStudyData[DateUtil.WeekOfYear() - 1][DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear())] = todaysObject;
+            //TODO: I think I might be referecing the wrong day for the todays chart not updating error.
+            //TODO: still not sure about the doubling the this week chart and then adding this study period....
+            updatedStudyData[DateUtil.WeekOfYear() - 1][DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear()) - 1] = todaysObject;
             this.setState({timerRunning: false, studyData: updatedStudyData},
             () => {
                 console.log(this.state.studyData);
@@ -352,6 +356,7 @@ class TrackPage extends Component {
         this._loadTrackPageData();
 
         var preparedChartData = this._prepareChartData(this.state.studyData);
+        console.log(preparedChartData);
 
         return(
         <Grid fluid>
