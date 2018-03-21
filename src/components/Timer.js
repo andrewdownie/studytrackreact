@@ -25,6 +25,8 @@ class Timer extends Component{
     }
 
 
+
+
     componentWillReceiveProps(nextProps){
         //Start the timer this update
         var startTimerNow = false;
@@ -58,13 +60,13 @@ class Timer extends Component{
 
         var timerStopInfo = {
             timerDirection: this.state.timerDirection,
-            timerTitle: this.state.timerStartTime,
-            timerTime: this.state.timerTime,
+            timerTitle: this.state.timerTitle,
         }
 
 
 
         if(timerDirection == 'up'){
+            timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
                 this.state.showTimerWarning();
             }
@@ -73,6 +75,7 @@ class Timer extends Component{
             }
         }
         else if(timerDirection == 'down'){
+            timerStopInfo.timerTime = this.state.timerStartTime;
             console.log("MOOOOOOOOOOOEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWW");
             //TODO: what happens when teh user presses the stop button in a full weight study session?
             //TODO: fractional amount of time right?
@@ -87,12 +90,12 @@ class Timer extends Component{
     }
 
     runTimer(){
-        //TODO: this wont get set right away. The first thing this will see is false, and then it wont even run once
         if(this.state.timerRunning){
             var dir = 1;
             if(this.state.timerDirection === 'down'){
                 dir = -1;
             }
+
 
             setTimeout(function() {
                 this.runTimer();

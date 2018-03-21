@@ -96,7 +96,6 @@ class TrackPage extends Component {
         var twoWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 3);
 
 
-        console.log(todaysGChartData);
 
         chartList.push({title: "Today",         data: todaysGChartData});
         chartList.push({title: "Current Week",  data: currentWeeksGChartData});
@@ -246,8 +245,6 @@ class TrackPage extends Component {
     }
 
     _startStudySession(studySessionData){
-        console.log(studySessionData)
-        console.log("start the study session here pls");
         this.setState({
             showStudyModal: false,
             timerDirection: studySessionData.timerDirection,
@@ -258,7 +255,6 @@ class TrackPage extends Component {
     }
 
     _stopTimerCallback(stopTimerInfo){
-        console.log(stopTimerInfo);//TODO: use this info to figure out what to add to the sheet / what to show the user
 
         if(stopTimerInfo.timerDirection === 'up'){
             if(stopTimerInfo.timerTime < 10 * 60){
@@ -273,11 +269,9 @@ class TrackPage extends Component {
     }
 
     _stopTimerWarning(stopTimerInfo){
-        console.log("this is stop timer warning, pls do something :(");
         //TODO: do I need stopTimerInfo?
 
 
-        console.log(stopTimerInfo);
 
         if(stopTimerInfo.timerDirection === 'up'){
             if(stopTimerInfo.timerTime < 10 * 60){
@@ -294,7 +288,6 @@ class TrackPage extends Component {
     }
 
     _quickStartStudyCallback(projectName){
-        console.log(projectName);
         //TODO: set timer stuff here
         this.setState({
             showStudyModal: false,
@@ -310,15 +303,46 @@ class TrackPage extends Component {
     }
 
     _saveTimerDuration(timerStopInfo){
-        console.log("save timer duration");
+        //TODO how is the state set to the wrong (and bigger) values before even getting here?
+
+
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
         GapiUtil.GetTodaysStudyData(this.state.gapiInfo)
-        .then((result) => {
-            console.log(result);
+        .then((todaysStudyData) => {
+
+            //Step 2: add the timer duration to the loaded total from step 1
+            var todaysObject = JSON.parse(todaysStudyData.result.values[0]);
+            var projectFound = false;
+            for(var projName in todaysObject){
+
+                if(projName == timerStopInfo.timerTitle){
+                    projectFound = true;
+                    break;
+                }
+
+            }
+
+            var currentStudyTime = 0;
+            if(!projectFound){
+                todaysObject[timerStopInfo.timerTitle] = {};
+            }
+            else{
+                currentStudyTime = todaysObject[timerStopInfo.timerTitle].studied;
+            }
+            todaysObject[timerStopInfo.timerTitle].studied = currentStudyTime + timerStopInfo.timerTime;
+            
+            //TODO: the updatedStudyData is wrong..
+            var updatedStudyData = this.state.studyData;
+            updatedStudyData[DateUtil.WeekOfYear() - 1][DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear())] = todaysObject;
+            this.setState({timerRunning: false, studyData: updatedStudyData},
+            () => {
+                console.log(this.state.studyData);
+            });
+
+            //Step 3: put the modified data back into the sheet (will require overwriting the entire day)
+            var repackedData = JSON.stringify(todaysObject);
+            GapiUtil.SetTodaysStudyData(this.state.gapiInfo, repackedData);
         });
-        //Step 2: add the timer duration to the loaded total from step 1
-        //Step 3: put the modified data back into the sheet (will require overwriting the entire day)
-        //GapiUtil.SetTodaysStudyData();
     }
     _showTimerWarning(){
         this.setState({showWarningModal: true});
@@ -379,6 +403,7 @@ class TrackPage extends Component {
                     timerStartTime={this.state.timerTime}
                     saveTimerDuration={this._saveTimerDuration}
                     showTimerWarning={this._showTimerWarning}
+                    DeleteMe={this.DeleteMe}
                     />
                 </Col>
             </Row>

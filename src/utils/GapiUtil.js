@@ -317,7 +317,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
                 }
 
                 //Step 5: send the new project
-                Put(gapiInfo, "A" + wok, [sheetInput])//TODO: how am I gonna un hard code this? could just pass the date in?
+                Put(gapiInfo, "A" + wok, [sheetInput])
                 .then((response) => {
                     resolve(weekData);
                 });
@@ -518,11 +518,7 @@ const DayOfWeekToColumn = (dayOfWeek) => {
 const GetTodaysStudyData = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
-        var weekOfYear = DateUtil.WeekOfYear();
-        var dayOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear());
-
-        var column = DayOfWeekToColumn(dayOfWeek);
-        var targetCell = column + weekOfYear;
+        var targetCell = GetTodaysCell();
         console.log(targetCell);
 
         Get(gapiInfo, targetCell)
@@ -535,7 +531,26 @@ const GetTodaysStudyData = (gapiInfo) => {
 }
 
 const SetTodaysStudyData = (gapiInfo, studyData) => {
+    return new Promise((resolve, reject) => {
 
+        var targetCell = GetTodaysCell();
+        console.log(studyData);
+        console.log(targetCell);
+
+
+        Put(gapiInfo, targetCell, [[studyData]]);
+
+    });
+}
+
+const GetTodaysCell = () => {
+    var weekOfYear = DateUtil.WeekOfYear();
+    var dayOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear());
+
+    var column = DayOfWeekToColumn(dayOfWeek);
+    var todaysCell = column + weekOfYear;
+
+    return todaysCell;
 }
 
 const GapiUtil = {
