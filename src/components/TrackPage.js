@@ -335,13 +335,14 @@ class TrackPage extends Component {
             
             //TODO: the updatedStudyData is wrong..
             var updatedStudyData = this.state.studyData;
-            //TODO: I think I might be referecing the wrong day for the todays chart not updating error.
-            //TODO: still not sure about the doubling the this week chart and then adding this study period....
-            updatedStudyData[DateUtil.WeekOfYear() - 1][DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear()) - 1] = todaysObject;
-            this.setState({timerRunning: false, studyData: updatedStudyData},
-            () => {
-                console.log(this.state.studyData);
-            });
+
+
+            //TODO: like 95% sure that todaysObject is being put into the wrong index...
+            var woy = DateUtil.WeekOfYear() - 1;
+            var indexOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear()) + 1;
+            console.log(woy + " " + indexOfWeek);
+            updatedStudyData[woy][indexOfWeek] = todaysObject;
+            this.setState({timerRunning: false, studyData: updatedStudyData});
 
             //Step 3: put the modified data back into the sheet (will require overwriting the entire day)
             var repackedData = JSON.stringify(todaysObject);
@@ -355,6 +356,9 @@ class TrackPage extends Component {
     render(){
         this._loadTrackPageData();
 
+        //TODO: does this get passed the correct values?
+        //TODO: if this does get passed the correct values, does it render the old ones first anyway?
+        console.log(this.state.studyData);
         var preparedChartData = this._prepareChartData(this.state.studyData);
         console.log(preparedChartData);
 

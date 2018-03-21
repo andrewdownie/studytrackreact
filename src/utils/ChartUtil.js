@@ -8,6 +8,7 @@ const Day = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
     var todaysCellIndex = DateUtil.CellFromDayOfYear(dayOfYear);
+    console.log(todaysCellIndex);
     var projectTotals = _WeeksGoals(weekInfo);
     var output = [];
     var projName;
