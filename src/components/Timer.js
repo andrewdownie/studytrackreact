@@ -21,6 +21,7 @@ class Timer extends Component{
             //closeStudyWarningModal: props.closeStudyWarningModal,
             //showStudyWarningModal: props.showStudyWarningModal,
             showStudyWarningModal: false,
+            showQuickWarningModal: false,
         }
 
 
@@ -74,7 +75,8 @@ class Timer extends Component{
         if(timerDirection == 'up'){
             timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
-                this.state.showQuickWarning();
+                //this.state.showQuickWarning();
+                this.setState({showQuickWarningModal: true});
             }
             else{
                 this.state.saveTimerDuration(timerStopInfo);
@@ -153,7 +155,7 @@ class Timer extends Component{
         //TODO: do the calculation for how much time should be saved to the sheet
         var timePassed = this.state.timerStartTime - this.state.timerCurrentTime;
 
-        this.state.cancelStudySession(Math.ceil(timePassed / 2));
+        this.state.cancelStudySession(timePassed);
         this.setState({showStudyWarningModal: false});
     }
 
@@ -192,6 +194,25 @@ class Timer extends Component{
                     <Modal.Footer>
                         <Button bsStyle="danger" onClick={this.cancelStudySession}>Cancel Session</Button>
                         <Button bsStyle="default" onClick={() => {this.state.showStudyWarningModal = false} }>Continue Session</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {/* 10 MINUTE WARNING MODAL */}
+                <Modal show={this.state.showQuickWarningModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Warning!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>
+                            You have studied for less than 10 minutes this quick study session.
+                            If you cancel now only half of your study time will be recorded.
+                            If you would like to have 100% of your study time recorded, study for 
+                            at least 10 minutes.
+                        </p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={() => {this.state.cancelStudySession(this.state.timerTime)}} bsStyle="danger">Cancel Anyway</Button>
+                        <Button onClick={this.state.closeWarningModal}>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>
 

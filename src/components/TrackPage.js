@@ -306,7 +306,8 @@ class TrackPage extends Component {
         });
     }
 
-    _cancelStudySession(timeToAddToSheet){
+    _cancelStudySession(timerTime){
+        var timeToAddToSheet = Math.ceil(timerTime / 2);
         console.log("The amount of time to add to the sheet after cancelling is: " + timeToAddToSheet);
         if(this.state.timerDirection == 'down'){
             this.setState({timerRunning: false, showStudyWarningModal: false});

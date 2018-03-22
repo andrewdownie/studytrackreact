@@ -233,21 +233,6 @@ class ProjectModals extends Component{
                     </Modal.Footer>
                 </Modal>
 
-                {/* 10 MINUTE WARNING MODAL */}
-                <Modal show={this.state.showQuickWarningModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Warning!</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            You have studied for less than 10 minutes this quick study session. If you cancel now zero time will be recorded.
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={() => {this.state.cancelStudySession(0)}} bsStyle="danger">Cancel Anyway</Button>
-                        <Button onClick={this.state.closeModals.closeWarningModal}>Keep Studying</Button>
-                    </Modal.Footer>
-                </Modal>
 
                 {/* LOADING MODAL */}
                 <div className="loading-modal-container">
