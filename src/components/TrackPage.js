@@ -35,6 +35,7 @@ class TrackPage extends Component {
                 closeLooadingModal: this._closeLoadingModal.bind(this),
                 closeStudyModal: this._closeStudyModal.bind(this),
                 closeWarningModal: this._closeWarningModal.bind(this),
+                closeStudyWarningModal: this._closeStudyWarningModal.bind(this),
             },
         };
 
@@ -82,6 +83,9 @@ class TrackPage extends Component {
     }
     _closeWarningModal(){
         this.setState({showQuickWarningModal: false});
+    }
+    _closeStudyWarningModal(){
+        this.setState({showStudyWarningModal: false});
     }
 
     _prepareChartData(studyData){
@@ -304,11 +308,15 @@ class TrackPage extends Component {
     }
 
     _cancelStudySession(){
-
-        //TODO: if the timer is counting down, then take:
-        //TODO: (initial timer time - current timer time) * 0.5
-        //TODO: an argument will be needed to provide this info?
-        this.setState({timerRunning: false, showQuickWarningModal: false});
+        console.log("Cancel study session pls");
+        if(this.state.timerDirection == 'down'){
+            this.setState({timerRunning: false, showStudyWarningModal: false});
+            //TODO: how the hell I get the current timer time to here?
+            //TODO: should the modal be moved to the timer component?
+        }
+        else if(this.state.timerDirection == 'up'){
+            this.setState({timerRunning: false, showQuickWarningModal: false});
+        }
     }
 
     _saveTimerDuration(timerStopInfo){
@@ -424,6 +432,7 @@ class TrackPage extends Component {
                     showQuickWarning={this._showQuickWarning}
                     showStudyWarning={this._showStudyWarning}
                     DeleteMe={this.DeleteMe}
+                    cancelStudySession={this._cancelStudySession}
                     />
                 </Col>
             </Row>

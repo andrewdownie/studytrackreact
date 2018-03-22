@@ -272,8 +272,8 @@ class ProjectModals extends Component{
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.state.closeModals.closeStudyWarningModal}>Cancel Session</Button>
-                        <Button bsStyle="primary" onClick={this.cancelStudySession}>Continue Session</Button>
+                        <Button bsStyle="danger" onClick={this.state.cancelStudySession}>Cancel Session</Button>
+                        <Button bsStyle="default" onClick={this.state.closeModals.closeStudyWarningModal}>Continue Session</Button>
                     </Modal.Footer>
                 </Modal>
 
