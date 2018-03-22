@@ -35,7 +35,6 @@ class TrackPage extends Component {
                 closeLooadingModal: this._closeLoadingModal.bind(this),
                 closeStudyModal: this._closeStudyModal.bind(this),
                 closeWarningModal: this._closeWarningModal.bind(this),
-                closeStudyWarningModal: this._closeStudyWarningModal.bind(this),
             },
         };
 
@@ -67,6 +66,8 @@ class TrackPage extends Component {
         this._showQuickWarning = this._showQuickWarning.bind(this);
         this._showStudyWarning = this._showStudyWarning.bind(this);
 
+        this._closeStudyWarningModal = this._closeStudyWarningModal.bind(this);
+
     }
 
     _closeAddModal(){
@@ -89,8 +90,6 @@ class TrackPage extends Component {
     }
 
     _prepareChartData(studyData){
-        console.log(" --- prepare chart study data next:");
-        console.log(studyData);
         if(studyData == null){
             return {chartList: [], projectNames: []};
         }
@@ -307,8 +306,8 @@ class TrackPage extends Component {
         });
     }
 
-    _cancelStudySession(){
-        console.log("Cancel study session pls");
+    _cancelStudySession(timeToAddToSheet){
+        console.log("The amount of time to add to the sheet after cancelling is: " + timeToAddToSheet);
         if(this.state.timerDirection == 'down'){
             this.setState({timerRunning: false, showStudyWarningModal: false});
             //TODO: how the hell I get the current timer time to here?
@@ -348,14 +347,11 @@ class TrackPage extends Component {
             todaysObject[timerStopInfo.timerTitle].studied = 0;
             todaysObject[timerStopInfo.timerTitle].studied = currentStudyTime + timerStopInfo.timerTime;
             
-            //TODO: the updatedStudyData is wrong..
             var updatedStudyData = this.state.studyData;
 
 
-            //TODO: like 95% sure that todaysObject is being put into the wrong index...
             var woy = DateUtil.WeekOfYear() - 1;
             var indexOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear()) + 1;
-            console.log(woy + " " + indexOfWeek);
             updatedStudyData[woy][indexOfWeek] = todaysObject;
             this.setState({timerRunning: false, studyData: updatedStudyData});
 
@@ -376,9 +372,7 @@ class TrackPage extends Component {
 
         //TODO: does this get passed the correct values?
         //TODO: if this does get passed the correct values, does it render the old ones first anyway?
-        console.log(this.state.studyData);
         var preparedChartData = this._prepareChartData(this.state.studyData);
-        console.log(preparedChartData);
 
         return(
         <Grid fluid>
@@ -397,6 +391,7 @@ class TrackPage extends Component {
                         openStudySessionModalCallback={this._openStudySessionModalCallback}
                         loadedFromRemote={this.state.loadedFromRemote}
                         quickStartStudyCallback={this._quickStartStudyCallback}
+                        showStudyWarningModal={this._showStudyWarning}
                     />
                 </Col>
             </Row>
@@ -424,15 +419,15 @@ class TrackPage extends Component {
             <Row>
                 <Col xs={12}>
                     <Timer
-                    timerDirection={this.state.timerDirection}
-                    timerRunning={this.state.timerRunning}
-                    timerTitle={this.state.timerTitle}
-                    timerStartTime={this.state.timerTime}
-                    saveTimerDuration={this._saveTimerDuration}
-                    showQuickWarning={this._showQuickWarning}
-                    showStudyWarning={this._showStudyWarning}
-                    DeleteMe={this.DeleteMe}
-                    cancelStudySession={this._cancelStudySession}
+                        timerDirection={this.state.timerDirection}
+                        timerRunning={this.state.timerRunning}
+                        timerTitle={this.state.timerTitle}
+                        timerStartTime={this.state.timerTime}
+                        saveTimerDuration={this._saveTimerDuration}
+                        showQuickWarning={this._showQuickWarning}
+                        showStudyWarning={this._showStudyWarning}
+                        cancelStudySession={this._cancelStudySession}
+                        closeStudyWarningModal={this._closeStudyWarningModal}
                     />
                 </Col>
             </Row>

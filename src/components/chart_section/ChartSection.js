@@ -11,8 +11,6 @@ const ChartSection = (props) => {
         );
     }
 
-    console.log(props.gChartList);
-
     return(
         <Row className="show-grid">
             {

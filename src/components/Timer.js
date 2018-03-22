@@ -1,4 +1,4 @@
-import {Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
 import React, {Component} from 'react';
 import FaCog from 'react-icons/lib/fa/cog';
 import FaStop from 'react-icons/lib/fa/stop';
@@ -17,12 +17,16 @@ class Timer extends Component{
             saveTimerDuration: props.saveTimerDuration,
             showQuickWarning: props.showQuickWarning,
             showStudyWarning: props.showStudyWarning,
+            cancelStudySession: props.cancelStudySession,
+            //closeStudyWarningModal: props.closeStudyWarningModal,
+            //showStudyWarningModal: props.showStudyWarningModal,
+            showStudyWarningModal: false,
         }
 
 
         this.stopButtonClick = this.stopButtonClick.bind(this);
         this.formatTimer = this.formatTimer.bind(this);
-
+        this.cancelStudySession = this.cancelStudySession.bind(this);
     }
 
 
@@ -42,6 +46,7 @@ class Timer extends Component{
             timerStartTime: nextProps.timerStartTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
+            //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, () => {
 
             if(startTimerNow){
@@ -80,7 +85,8 @@ class Timer extends Component{
             console.log("MOOOOOOOOOOOEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWW");
             if(timerTime > 0){
                 console.log("show the fractional modal");
-                this.state.showStudyWarning();
+                //this.state.showStudyWarning();
+                this.setState({showStudyWarningModal: true});
             }
             //TODO: if (timerTime > 0){ show fractional modal; }
             //TODO: will there need to be an active check to see when a study session ends?
@@ -143,6 +149,14 @@ class Timer extends Component{
         return outputHours + outputMinutes + ":" + outputSeconds;
     }
 
+    cancelStudySession(){
+        //TODO: do the calculation for how much time should be saved to the sheet
+        var timePassed = this.state.timerStartTime - this.state.timerCurrentTime;
+
+        this.state.cancelStudySession(Math.ceil(timePassed / 2));
+        this.setState({showStudyWarningModal: false});
+    }
+
     render(){
         if(!this.state.timerRunning){
             return <div></div>;
@@ -162,6 +176,24 @@ class Timer extends Component{
                         {this.formatTimer(this.state.timerCurrentTime)}
                     </h1>
                 </div>
+
+                {/* STUDY SESSION WARNING MODAL */}
+                <Modal show={this.state.showStudyWarningModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>WARNING! Timer not done yet</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            If you cancel the timer now, only 50% of the timer you've studied will be recorded.
+                            If you want 100% of your study time this session to be recored, then continue Studying
+                            until the timer ends, and  considering setting a shorter timer next time.
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button bsStyle="danger" onClick={this.cancelStudySession}>Cancel Session</Button>
+                        <Button bsStyle="default" onClick={() => {this.state.showStudyWarningModal = false} }>Continue Session</Button>
+                    </Modal.Footer>
+                </Modal>
 
             </Navbar>
         );

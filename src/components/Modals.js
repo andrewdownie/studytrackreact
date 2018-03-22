@@ -101,7 +101,6 @@ class ProjectModals extends Component{
     }
 
     startStudySession(){
-        console.log(this.state.studySession_selectedProject);
         var studySessionData = {
             timerDirection: 'down',
             timerRunning: true,
@@ -245,7 +244,7 @@ class ProjectModals extends Component{
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.state.cancelStudySession} bsStyle="danger">Cancel Anyway</Button>
+                        <Button onClick={() => {this.state.cancelStudySession(0)}} bsStyle="danger">Cancel Anyway</Button>
                         <Button onClick={this.state.closeModals.closeWarningModal}>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>
@@ -259,23 +258,6 @@ class ProjectModals extends Component{
                     </Modal>
                 </div>
 
-                {/* STUDY SESSION WARNING MODAL */}
-                <Modal show={this.state.showStudyWarningModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>WARNING! Timer not done yet</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>
-                            If you cancel the timer now, only 50% of the timer you've studied will be recoreded.
-                            If you want 100% of your study time this session to be recored, then continue Studying
-                            until the timer ends, and  considering setting a shorter timer next time.
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button bsStyle="danger" onClick={this.state.cancelStudySession}>Cancel Session</Button>
-                        <Button bsStyle="default" onClick={this.state.closeModals.closeStudyWarningModal}>Continue Session</Button>
-                    </Modal.Footer>
-                </Modal>
 
             </div>
         );
