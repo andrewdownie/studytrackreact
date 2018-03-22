@@ -21,7 +21,7 @@ class TrackPage extends Component {
             showEditModal: false,
             showLoadingModal: false,
             showStudyModal: false,
-            showWarningModal: false,
+            showQuickWarningModal: false,
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
@@ -61,7 +61,10 @@ class TrackPage extends Component {
 
 
         this._saveTimerDuration = this._saveTimerDuration.bind(this);
-        this._showTimerWarning = this._showTimerWarning.bind(this);
+        this._showTimerWarning = this._showQuickWarning.bind(this);
+
+        this._showQuickWarning = this._showQuickWarning.bind(this);
+        this._showStudyWarning = this._showStudyWarning.bind(this);
 
     }
 
@@ -78,7 +81,7 @@ class TrackPage extends Component {
         this.setState({showStudyModal: false});
     }
     _closeWarningModal(){
-        this.setState({showWarningModal: false});
+        this.setState({showQuickWarningModal: false});
     }
 
     _prepareChartData(studyData){
@@ -262,7 +265,7 @@ class TrackPage extends Component {
             if(stopTimerInfo.timerTime < 10 * 60){
                 //TODO: show confimation modal to stop timer if less than 10 minutes
                 //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
-                this.setState({showWarningModal: true});
+                this.setState({showQuickWarningModal: true});
             }
         }
         this.setState({
@@ -279,7 +282,7 @@ class TrackPage extends Component {
             if(stopTimerInfo.timerTime < 10 * 60){
                 //TODO: show confimation modal to stop timer if less than 10 minutes
                 //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
-                this.setState({showWarningModal: true});
+                this.setState({showQuickWarningModal: true});
             }
             else{
                 //TODO: save teh timer
@@ -301,7 +304,11 @@ class TrackPage extends Component {
     }
 
     _cancelStudySession(){
-        this.setState({timerRunning: false, showWarningModal: false});
+
+        //TODO: if the timer is counting down, then take:
+        //TODO: (initial timer time - current timer time) * 0.5
+        //TODO: an argument will be needed to provide this info?
+        this.setState({timerRunning: false, showQuickWarningModal: false});
     }
 
     _saveTimerDuration(timerStopInfo){
@@ -349,8 +356,11 @@ class TrackPage extends Component {
             GapiUtil.SetTodaysStudyData(this.state.gapiInfo, repackedData);
         });
     }
-    _showTimerWarning(){
-        this.setState({showWarningModal: true});
+    _showQuickWarning(){
+        this.setState({showQuickWarningModal: true});
+    }
+    _showStudyWarning(){
+        this.setState({showStudyWarningModal: true});
     }
 
     render(){
@@ -411,7 +421,8 @@ class TrackPage extends Component {
                     timerTitle={this.state.timerTitle}
                     timerStartTime={this.state.timerTime}
                     saveTimerDuration={this._saveTimerDuration}
-                    showTimerWarning={this._showTimerWarning}
+                    showQuickWarning={this._showQuickWarning}
+                    showStudyWarning={this._showStudyWarning}
                     DeleteMe={this.DeleteMe}
                     />
                 </Col>
@@ -424,7 +435,8 @@ class TrackPage extends Component {
                 showEditProject={this.state.showEditModal}
                 showLoadingModal={this.state.showLoadingModal}
                 showStudyModal={this.state.showStudyModal}
-                showWarningModal={this.state.showWarningModal}
+                showQuickWarningModal={this.state.showQuickWarningModal}
+                showStudyWarningModal={this.state.showStudyWarningModal}
                 loadingModalMessage={this.state.loadingModalMessage}
                 addProjectCallback={this._addProjectCallback}
                 editProjectCallback={this._editProjectCallback}

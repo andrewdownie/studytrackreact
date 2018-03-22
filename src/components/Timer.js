@@ -15,7 +15,8 @@ class Timer extends Component{
             timerStartTime: props.timerStartTime,
             timerCurrentTime: props.timerTime,
             saveTimerDuration: props.saveTimerDuration,
-            showTimerWarning: props.showTimerWarning,
+            showQuickWarning: props.showQuickWarning,
+            showStudyWarning: props.showStudyWarning,
         }
 
 
@@ -38,7 +39,7 @@ class Timer extends Component{
 
         this.setState({
             timerDirection: nextProps.timerDirection,
-            timerStartTime: 600,
+            timerStartTime: nextProps.timerStartTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
         }, () => {
@@ -68,7 +69,7 @@ class Timer extends Component{
         if(timerDirection == 'up'){
             timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
-                this.state.showTimerWarning();
+                this.state.showQuickWarning();
             }
             else{
                 this.state.saveTimerDuration(timerStopInfo);
@@ -77,6 +78,12 @@ class Timer extends Component{
         else if(timerDirection == 'down'){
             timerStopInfo.timerTime = this.state.timerStartTime;
             console.log("MOOOOOOOOOOOEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWW");
+            if(timerTime > 0){
+                console.log("show the fractional modal");
+                this.state.showStudyWarning();
+            }
+            //TODO: if (timerTime > 0){ show fractional modal; }
+            //TODO: will there need to be an active check to see when a study session ends?
             //TODO: what happens when teh user presses the stop button in a full weight study session?
             //TODO: fractional amount of time right?
             //TODO: need to show warning

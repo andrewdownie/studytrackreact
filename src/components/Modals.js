@@ -18,7 +18,8 @@ class ProjectModals extends Component{
             showEditProject: props.showEditProject,
             showStudyModal: props.showStudyModal,
             showLoadingModal: props.showLoadingModal,
-            showWarningModal: props.showWarningModal,
+            showQuickWarningModal: props.showQuickWarningModal,
+            showStudyWarningModal: props.showStudyWarningModal,
             addProjectCallback: props.addProjectCallback,
             loadingModalMessage: props.loadingModalMessage,
             editProjectCallback: props.editProjectCallback,
@@ -61,7 +62,8 @@ class ProjectModals extends Component{
             showLoadingModal: nextProps.showLoadingModal,
             showAddProject: nextProps.showAddProject,
             showStudyModal: nextProps.showStudyModal,
-            showWarningModal: nextProps.showWarningModal,
+            showQuickWarningModal: nextProps.showQuickWarningModal,
+            showStudyWarningModal: nextProps.showStudyWarningModal,
             addProjectCallback: nextProps.addProjectCallback,
             editProject_name: nextProps.editProject_name,
             editProject_originalName: nextProps.editProject_name,
@@ -233,7 +235,7 @@ class ProjectModals extends Component{
                 </Modal>
 
                 {/* 10 MINUTE WARNING MODAL */}
-                <Modal show={this.state.showWarningModal}>
+                <Modal show={this.state.showQuickWarningModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Warning!</Modal.Title>
                     </Modal.Header>
@@ -256,6 +258,24 @@ class ProjectModals extends Component{
                         </Modal.Body>
                     </Modal>
                 </div>
+
+                {/* STUDY SESSION WARNING MODAL */}
+                <Modal show={this.state.showStudyWarningModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>WARNING! Timer not done yet</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>
+                            If you cancel the timer now, only 50% of the timer you've studied will be recoreded.
+                            If you want 100% of your study time this session to be recored, then continue Studying
+                            until the timer ends, and  considering setting a shorter timer next time.
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.state.closeModals.closeStudyWarningModal}>Cancel Session</Button>
+                        <Button bsStyle="primary" onClick={this.cancelStudySession}>Continue Session</Button>
+                    </Modal.Footer>
+                </Modal>
 
             </div>
         );
