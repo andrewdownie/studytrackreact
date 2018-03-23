@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import ProjectSection from '../components/project_section/ProjectSection';
 import ChartSection from './chart_section/ChartSection';
 import ProjectModals from './Modals';
-import Timer from './Timer';
+import TimerContainer from './TimerContainer';
 
 import SheetUtil from '../utils/SheetUtil';
 import ChartUtil from '../utils/ChartUtil';
@@ -15,6 +15,7 @@ class TrackPage extends Component {
     constructor(props){
         super(props);
         this.state = {
+            studySession_selectedProject: "Loading projects...",
             studyData: null,
             loadedFromRemote: false,
             showAddModal: false,
@@ -254,6 +255,8 @@ class TrackPage extends Component {
     }
 
     _startStudySession(studySessionData){
+        console.log(studySessionData);
+
         this.setState({
             showStudyModal: false,
             timerDirection: studySessionData.timerDirection,
@@ -413,7 +416,7 @@ class TrackPage extends Component {
 
             <Row>
                 <Col xs={12}>
-                    <Timer
+                    <TimerContainer
                         projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         timerDirection={this.state.timerDirection}
                         timerRunning={this.state.timerRunning}
@@ -425,6 +428,7 @@ class TrackPage extends Component {
                         cancelStudySession={this._cancelStudySession}
                         closeStudyWarningModal={this._closeStudyWarningModal}
                         showStudyModal={this.state.showStudyModal}
+                        startStudySession={this._startStudySession}
                     />
                 </Col>
             </Row>

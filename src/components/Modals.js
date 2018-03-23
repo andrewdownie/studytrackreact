@@ -96,9 +96,10 @@ class ProjectModals extends Component{
         deleteProjectData.targetName = this.state.editProject_name;
         this.state.deleteProjectCallback(deleteProjectData);
     }
-    changeSelectedStudySessionProject(projectTitle){
+
+    /*changeSelectedStudySessionProject(projectTitle){
         this.setState({studySession_selectedProject: projectTitle});
-    }
+    }*/
 
     startStudySession(){
         var studySessionData = {
