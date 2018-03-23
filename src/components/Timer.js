@@ -23,7 +23,7 @@ class Timer extends Component{
             //showStudyWarningModal: props.showStudyWarningModal,
             showStudyWarningModal: false,
             showQuickWarningModal: false,
-            projectNames: props.projectNames ? props.projectNames : [],
+            projectNames: [],
         }
 
 
@@ -56,7 +56,8 @@ class Timer extends Component{
 
 
         //TODO: why is project names coming in undefined?
-        console.log(projectNames);
+        console.log(nextProps);
+        console.log(nextProps.projectNames);
         
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
@@ -200,6 +201,7 @@ class Timer extends Component{
     }
 
     render(){
+        console.log("This is timer render");
         if(!this.state.timerRunning){
             return <div></div>;
         }

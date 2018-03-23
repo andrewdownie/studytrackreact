@@ -367,8 +367,7 @@ class TrackPage extends Component {
         //TODO: does this get passed the correct values?
         //TODO: if this does get passed the correct values, does it render the old ones first anyway?
         var preparedChartData = this._prepareChartData(this.state.studyData);
-        var projectNames = SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear());
-        projectNames = projectNames ? projectNames : [];
+
 
         return(
         <Grid fluid>
@@ -380,7 +379,7 @@ class TrackPage extends Component {
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
                     <ProjectSection
-                        projectNames={projectNames}
+                        projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         studyData={this.state.studyData}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         openEditProjectModalCallback={this._openEditProjectModalCallback}
@@ -415,6 +414,7 @@ class TrackPage extends Component {
             <Row>
                 <Col xs={12}>
                     <Timer
+                        projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         timerDirection={this.state.timerDirection}
                         timerRunning={this.state.timerRunning}
                         timerTitle={this.state.timerTitle}
@@ -425,7 +425,6 @@ class TrackPage extends Component {
                         cancelStudySession={this._cancelStudySession}
                         closeStudyWarningModal={this._closeStudyWarningModal}
                         showStudyModal={this.state.showStudyModal}
-                        projectNames={this.state.projectNames}
                     />
                 </Col>
             </Row>
@@ -446,7 +445,7 @@ class TrackPage extends Component {
                 editProject_name={this.state.editProject_name}
                 editProject_minGoal={this.state.editProject_minGoal}
                 editProject_idealGoal={this.state.editProject_idealGoal}
-                projectNames={projectNames}
+                projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                 cancelStudySession={this._cancelStudySession}
                 closeModals={this.state.closeModals}
             />
