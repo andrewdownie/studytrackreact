@@ -1,4 +1,4 @@
-import {Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {DropdownButton, Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
 import React, {Component} from 'react';
 import FaCog from 'react-icons/lib/fa/cog';
 import FaStop from 'react-icons/lib/fa/stop';
@@ -18,10 +18,12 @@ class Timer extends Component{
             showQuickWarning: props.showQuickWarning,
             showStudyWarning: props.showStudyWarning,
             cancelStudySession: props.cancelStudySession,
+            showStudyModal: props.showStudyModal,
             //closeStudyWarningModal: props.closeStudyWarningModal,
             //showStudyWarningModal: props.showStudyWarningModal,
             showStudyWarningModal: false,
             showQuickWarningModal: false,
+            projectNames: props.projectNames ? props.projectNames : [],
         }
 
 
@@ -34,28 +36,48 @@ class Timer extends Component{
 
 
     componentWillReceiveProps(nextProps){
+
         //Start the timer this update
         var startTimerNow = false;
         if(this.state.timerRunning === false){
             if(nextProps.timerRunning === true){
+                console.log("Start timer now");//TODO: this doesn't run when starting a study session?
                 startTimerNow = true;
             }
         }
 
+        console.log("Timer show study modal now pls: " + nextProps.showStudyModal);
+
+
+        var currentTime = this.state.timerCurrentTime;
+        if(startTimerNow){
+            currentTime: this.state.timerStartTime;
+        }
+
+
+        //TODO: why is project names coming in undefined?
+        console.log(projectNames);
+        
+        var projectNames = nextProps.projectNames;
+        projectNames = projectNames ? projectNames : [];
+
         this.setState({
             timerDirection: nextProps.timerDirection,
             timerStartTime: nextProps.timerStartTime,
+            timerCurrentTime: currentTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
+            showStudyModal: nextProps.showStudyModal,
+            projectNames: nextProps.projectNames,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, () => {
 
-            if(startTimerNow){
+            /*if(startTimerNow){
                 this.setState(
                     {timerCurrentTime: this.state.timerStartTime},
                     ()=>{this.runTimer()}
                 );
-            }
+            }*/
         });
     }
 
@@ -121,6 +143,7 @@ class Timer extends Component{
     }
 
     formatTimer(seconds){
+
         //TODO: this could be made cleaner
         var remaining = seconds;
         var outputHours, outputMinutes, outputSeconds;
@@ -153,10 +176,27 @@ class Timer extends Component{
 
     cancelStudySession(){
         //TODO: do the calculation for how much time should be saved to the sheet
-        var timePassed = this.state.timerStartTime - this.state.timerCurrentTime;
+        var timePassed = 0;
+
+
+        //var timeToAddToSheet = Math.ceil(timerTime / 2);
+        if(this.state.timerDirection == 'down'){
+            timePassed = this.state.timerStartTime - this.state.timerCurrentTime;
+        }
+        else if(this.state.timerDirection == 'up'){
+            timePassed = this.state.timerCurrentTime;
+        }
 
         this.state.cancelStudySession(timePassed);
-        this.setState({showStudyWarningModal: false});
+        this.setState({
+            showStudyWarningModal: false,
+            showQuickWarningModal: false,
+            timerRunning: false,
+            timerDirection: '',
+            timerStartTime: 0,
+        });
+
+
     }
 
     render(){
@@ -193,7 +233,7 @@ class Timer extends Component{
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="danger" onClick={this.cancelStudySession}>Cancel Session</Button>
-                        <Button bsStyle="default" onClick={() => {this.state.showStudyWarningModal = false} }>Continue Session</Button>
+                        <Button bsStyle="default" onClick={() => {this.setState({showStudyWarningModal: false})} }>Continue Session</Button>
                     </Modal.Footer>
                 </Modal>
 
@@ -211,11 +251,61 @@ class Timer extends Component{
                         </p>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => {this.state.cancelStudySession(this.state.timerTime)}} bsStyle="danger">Cancel Anyway</Button>
-                        <Button onClick={this.state.closeWarningModal}>Keep Studying</Button>
+                        <Button onClick={this.cancelStudySession} bsStyle="danger">Cancel Anyway</Button>
+                        <Button onClick={() => {this.setState({showQuickWarningModal: false})}}>Keep Studying</Button>
                     </Modal.Footer>
                 </Modal>
 
+                {/* STUDY SESSION MODAL */}
+                <Modal show={this.state.showStudyModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Start a Study Session</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h4>Project</h4>
+                        <DropdownButton
+                            title={this.state.studySession_selectedProject}
+                            key={1}
+                            id={`dropdown-basic-${1}`}
+                        >
+                        {console.log(this.state.projectNames)}
+                            {
+                                this.state.projectNames.map( (projectName, i) => {
+                                    return (
+                                        <MenuItem key={i} onClick={this.changeSelectedStudySessionProject.bind(this, projectName)} eventKey={i}>{projectName}</MenuItem>
+                                    )
+                                })
+                            }
+                        </DropdownButton>
+                        <h4>Duration</h4>
+                        <div>
+                            <p>Hours</p>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={this.state.studySession_hours}
+                                onChange={(event) => {this.setState({studySession_hours: event.target.value})}}
+                                min="0"
+                                max="12"
+                            />
+                        </div>
+                        <div>
+                            <p>Minutes</p>
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={this.state.studySession_minutes}
+                                onChange={(event) => {this.setState({studySession_minutes: event.target.value})}}
+                                min="0"
+                                max="59"
+                            />
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.closeStudyModal}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
+                    </Modal.Footer>
+                </Modal>
             </Navbar>
         );
     }

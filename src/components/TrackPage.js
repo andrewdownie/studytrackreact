@@ -240,7 +240,8 @@ class TrackPage extends Component {
     }
 
     _openStudySessionModalCallback(){
-        this.setState({showStudyModal: true, showAddModal: false});
+        console.log("open study session modal");
+        this.setState({showStudyModal: true});
     }
 
     _openLoadingModalCallback(loadingData){
@@ -306,17 +307,9 @@ class TrackPage extends Component {
         });
     }
 
-    _cancelStudySession(timerTime){
-        var timeToAddToSheet = Math.ceil(timerTime / 2);
-        console.log("The amount of time to add to the sheet after cancelling is: " + timeToAddToSheet);
-        if(this.state.timerDirection == 'down'){
-            this.setState({timerRunning: false, showStudyWarningModal: false});
-            //TODO: how the hell I get the current timer time to here?
-            //TODO: should the modal be moved to the timer component?
-        }
-        else if(this.state.timerDirection == 'up'){
-            this.setState({timerRunning: false, showQuickWarningModal: false});
-        }
+    _cancelStudySession(timePassed){
+        var timeToAddToSheet = Math.ceil(timePassed / 2);
+        console.log("Time to add to sheet: " + timeToAddToSheet);
     }
 
     _saveTimerDuration(timerStopInfo){
@@ -374,6 +367,8 @@ class TrackPage extends Component {
         //TODO: does this get passed the correct values?
         //TODO: if this does get passed the correct values, does it render the old ones first anyway?
         var preparedChartData = this._prepareChartData(this.state.studyData);
+        var projectNames = SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear());
+        projectNames = projectNames ? projectNames : [];
 
         return(
         <Grid fluid>
@@ -385,7 +380,7 @@ class TrackPage extends Component {
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
                     <ProjectSection
-                        projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
+                        projectNames={projectNames}
                         studyData={this.state.studyData}
                         openAddProjectModalCallback={this._openAddProjectModalCallback}
                         openEditProjectModalCallback={this._openEditProjectModalCallback}
@@ -429,6 +424,8 @@ class TrackPage extends Component {
                         showStudyWarning={this._showStudyWarning}
                         cancelStudySession={this._cancelStudySession}
                         closeStudyWarningModal={this._closeStudyWarningModal}
+                        showStudyModal={this.state.showStudyModal}
+                        projectNames={this.state.projectNames}
                     />
                 </Col>
             </Row>
@@ -449,7 +446,7 @@ class TrackPage extends Component {
                 editProject_name={this.state.editProject_name}
                 editProject_minGoal={this.state.editProject_minGoal}
                 editProject_idealGoal={this.state.editProject_idealGoal}
-                projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
+                projectNames={projectNames}
                 cancelStudySession={this._cancelStudySession}
                 closeModals={this.state.closeModals}
             />

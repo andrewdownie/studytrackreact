@@ -183,55 +183,6 @@ class ProjectModals extends Component{
                     </Modal.Footer>
                 </Modal>
 
-                {/* STUDY SESSION MODAL */}
-                <Modal show={this.state.showStudyModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Start a Study Session</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <h4>Project</h4>
-                        <DropdownButton
-                            title={this.state.studySession_selectedProject}
-                            key={1}
-                            id={`dropdown-basic-${1}`}
-                        >
-                            {
-                                this.state.projectNames.map( (projectName, i) => {
-                                    return (
-                                        <MenuItem key={i} onClick={this.changeSelectedStudySessionProject.bind(this, projectName)} eventKey={i}>{projectName}</MenuItem>
-                                    )
-                                })
-                            }
-                        </DropdownButton>
-                        <h4>Duration</h4>
-                        <div>
-                            <p>Hours</p>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={this.state.studySession_hours}
-                                onChange={(event) => {this.setState({studySession_hours: event.target.value})}}
-                                min="0"
-                                max="12"
-                            />
-                        </div>
-                        <div>
-                            <p>Minutes</p>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={this.state.studySession_minutes}
-                                onChange={(event) => {this.setState({studySession_minutes: event.target.value})}}
-                                min="0"
-                                max="59"
-                            />
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.state.closeModals.closeStudyModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
-                    </Modal.Footer>
-                </Modal>
 
 
                 {/* LOADING MODAL */}
