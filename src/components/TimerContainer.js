@@ -45,21 +45,12 @@ class TimerContainer extends Component{
         }
 
         //Start the timer this update
-        var startTimerNow = false;
+        /*var startTimerNow = false;
         if(this.state.timerRunning === false){
             if(nextProps.timerRunning === true){
-                console.log("Start timer now");//TODO: this doesn't run when starting a study session?
                 startTimerNow = true;
             }
-        }
-
-        console.log("Timer show study modal now pls: " + nextProps.showStudyModal);
-
-
-        console.log(nextProps.timerRunning);
-        console.log(nextProps.timerDirection);
-        console.log(nextProps.timerStartTime);
-
+        }*/
 
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
@@ -75,11 +66,10 @@ class TimerContainer extends Component{
             projectNames: projectNames,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
-            if(startTimerNow){
+            /*if(startTimerNow){
                 currentTime: this.state.timerStartTime;
-                console.log("start timer now");
                 this.runTimer();
-            }
+            }*/
         });
     }
 
@@ -91,8 +81,9 @@ class TimerContainer extends Component{
         this.setState({showStudyModal: false});
     }
     startStudySession(){
-        console.log("(Study session time), hours: " + this.state.studySession_hours + ", minutes: " + this.state.studySession_minutes);
         var timerTime = this.state.studySession_hours * 3600 + this.state.studySession_minutes * 60;
+        console.log(this.state.studySession_hours);
+        console.log(this.state.studySession_minutes);
         console.log(timerTime);
 
         var studySessionData = {
@@ -101,10 +92,21 @@ class TimerContainer extends Component{
             timerTitle: this.state.studySession_selectedProject,
             timerTime: timerTime,
         };
-        this.state.startStudySession(studySessionData);
+        this.setState({
+            timerDirection: 'down',
+            timerRunning: true,
+            timerTitle: this.state.studySession_selectedProject,
+            timerStartTime: timerTime,
+            timerCurrentTime: timerTime,
+            showStudyModal: false,
+        }, ()=>{
+            this.runTimer();
+        });
+        //this.state.startStudySession(studySessionData);
     }
 
     stopButtonClick(){
+        console.log("stop button click");
         var timerDirection = this.state.timerDirection;
         var timerTitle = this.state.timerTitle;
         var timerTime = this.state.timerCurrentTime;
@@ -128,9 +130,7 @@ class TimerContainer extends Component{
         }
         else if(timerDirection == 'down'){
             timerStopInfo.timerTime = this.state.timerStartTime;
-            console.log("MOOOOOOOOOOOEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWW");
             if(timerTime > 0){
-                console.log("show the fractional modal");
                 //this.state.showStudyWarning();
                 this.setState({showStudyWarningModal: true});
             }
@@ -144,7 +144,6 @@ class TimerContainer extends Component{
 
 
     timerSettings(){
-        console.log("this is timer settings");
         //TODO: show a modal here...
     }
 
@@ -155,10 +154,8 @@ class TimerContainer extends Component{
                 dir = -1;
             }
 
-            console.log("run timer");
 
             setTimeout(function() {
-                console.log("set timer state");
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
             }.bind(this),
@@ -287,8 +284,6 @@ class TimerContainer extends Component{
 
 
     render(){
-        console.log("This is timer render");
-        console.log(this.state.showStudyModal);
         if(!this.state.timerRunning){
             return <div>{this.timerModals()}</div>;
         }
@@ -297,7 +292,7 @@ class TimerContainer extends Component{
                 <Timer
                     timerCurrentTime={this.state.timerCurrentTime}
                     timerTitle={this.state.timerTitle}
-                    stopButtonClick={this.state.stopButtonClick}
+                    stopButtonClick={this.stopButtonClick}
                     timerSettings={this.state.timerSettings}
                 />
                 {this.timerModals()}
