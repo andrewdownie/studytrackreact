@@ -102,6 +102,7 @@ class ProjectModals extends Component{
     }*/
 
     startStudySession(){
+        console.log("hours: " + this.state.studySession_hours + ", minutes: " + this.state.studySession_minutes);
         var studySessionData = {
             timerDirection: 'down',
             timerRunning: true,

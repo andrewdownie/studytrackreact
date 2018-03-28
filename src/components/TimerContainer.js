@@ -1,6 +1,6 @@
 import {DropdownButton, Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
 import React, {Component} from 'react';
-import Timer from './Timer';
+import Timer from './TimerDisplay';
 
 
 class TimerContainer extends Component{
@@ -56,38 +56,30 @@ class TimerContainer extends Component{
         console.log("Timer show study modal now pls: " + nextProps.showStudyModal);
 
 
-        var currentTime = this.state.timerCurrentTime;
-        if(startTimerNow){
-            currentTime: this.state.timerStartTime;
-        }
+        console.log(nextProps.timerRunning);
+        console.log(nextProps.timerDirection);
+        console.log(nextProps.timerStartTime);
 
 
-        //TODO: why is project names coming in undefined?
-        console.log(nextProps);
-        console.log(nextProps.projectNames);
-        
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
 
-        console.log(nextProps.showStudyModal);
 
         this.setState({
             timerDirection: nextProps.timerDirection,
             timerStartTime: nextProps.timerStartTime,
-            timerCurrentTime: currentTime,
+            timerCurrentTime: nextProps.timerStartTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,
-            projectNames: nextProps.projectNames,
+            projectNames: projectNames,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
-        }, () => {
-            console.log(this.state.showStudyModal);
-            /*if(startTimerNow){
-                this.setState(
-                    {timerCurrentTime: this.state.timerStartTime},
-                    ()=>{this.runTimer()}
-                );
-            }*/
+        }, ()=>{
+            if(startTimerNow){
+                currentTime: this.state.timerStartTime;
+                console.log("start timer now");
+                this.runTimer();
+            }
         });
     }
 
@@ -99,11 +91,15 @@ class TimerContainer extends Component{
         this.setState({showStudyModal: false});
     }
     startStudySession(){
+        console.log("(Study session time), hours: " + this.state.studySession_hours + ", minutes: " + this.state.studySession_minutes);
+        var timerTime = this.state.studySession_hours * 3600 + this.state.studySession_minutes * 60;
+        console.log(timerTime);
+
         var studySessionData = {
             timerDirection: 'down',
             timerRunning: true,
             timerTitle: this.state.studySession_selectedProject,
-            timerTime: this.state.studySession_hours * 3600 + this.state.studySession_minutes * 60,
+            timerTime: timerTime,
         };
         this.state.startStudySession(studySessionData);
     }
@@ -159,8 +155,10 @@ class TimerContainer extends Component{
                 dir = -1;
             }
 
+            console.log("run timer");
 
             setTimeout(function() {
+                console.log("set timer state");
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
             }.bind(this),
@@ -220,7 +218,6 @@ class TimerContainer extends Component{
                             key={1}
                             id={`dropdown-basic-${1}`}
                         >
-                        {console.log(this.state.projectNames)}
                             {
                                 this.state.projectNames.map( (projectName, i) => {
                                     return (
