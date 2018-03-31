@@ -1,4 +1,4 @@
-import {DropdownButton, Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {DropdownButton, Modal, Button, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
 import Timer from './TimerDisplay';
 
@@ -40,8 +40,10 @@ class TimerContainer extends Component{
 
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject == "Loading projects..."){
-            this.state.studySession_selectedProject = nextProps.projectNames[0];
+        var selectedProject = this.state.studySession_selectedProject;
+        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject === "Loading projects..."){
+            //this.state.studySession_selectedProject = nextProps.projectNames[0];
+            selectedProject = nextProps.projectNames[0];
         }
 
         //Start the timer this update
@@ -64,6 +66,7 @@ class TimerContainer extends Component{
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,
             projectNames: projectNames,
+            studySession_selectedProject: selectedProject,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             /*if(startTimerNow){
@@ -86,12 +89,14 @@ class TimerContainer extends Component{
         console.log(this.state.studySession_minutes);
         console.log(timerTime);
 
+        /*
         var studySessionData = {
             timerDirection: 'down',
             timerRunning: true,
             timerTitle: this.state.studySession_selectedProject,
             timerTime: timerTime,
         };
+        */
         this.setState({
             timerDirection: 'down',
             timerRunning: true,
@@ -108,7 +113,6 @@ class TimerContainer extends Component{
     stopButtonClick(){
         console.log("stop button click");
         var timerDirection = this.state.timerDirection;
-        var timerTitle = this.state.timerTitle;
         var timerTime = this.state.timerCurrentTime;
 
         var timerStopInfo = {
@@ -118,7 +122,7 @@ class TimerContainer extends Component{
 
 
 
-        if(timerDirection == 'up'){
+        if(timerDirection === 'up'){
             timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
                 //this.state.showQuickWarning();
@@ -128,7 +132,7 @@ class TimerContainer extends Component{
                 this.state.saveTimerDuration(timerStopInfo);
             }
         }
-        else if(timerDirection == 'down'){
+        else if(timerDirection === 'down'){
             timerStopInfo.timerTime = this.state.timerStartTime;
             if(timerTime > 0){
                 //this.state.showStudyWarning();
@@ -263,10 +267,10 @@ class TimerContainer extends Component{
 
 
         //var timeToAddToSheet = Math.ceil(timerTime / 2);
-        if(this.state.timerDirection == 'down'){
+        if(this.state.timerDirection === 'down'){
             timePassed = this.state.timerStartTime - this.state.timerCurrentTime;
         }
-        else if(this.state.timerDirection == 'up'){
+        else if(this.state.timerDirection === 'up'){
             timePassed = this.state.timerCurrentTime;
         }
 

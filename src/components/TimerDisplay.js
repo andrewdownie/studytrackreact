@@ -1,5 +1,5 @@
 import React from 'react';
-import {DropdownButton, Modal, Button, Navbar, Nav, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {Button, Navbar} from 'react-bootstrap';
 import FaStop from 'react-icons/lib/fa/stop';
 import FaCog from 'react-icons/lib/fa/cog';
 
@@ -8,7 +8,7 @@ const formatTimer = (seconds) => {
     //TODO: this could be made cleaner
     var remaining = seconds;
     var outputHours, outputMinutes, outputSeconds;
-    var hours, minutes, seconnds;
+    var hours, minutes;
     hours = Math.floor(seconds / 3600);
     remaining = remaining - (hours * 3600);
     minutes = Math.floor(seconds / 60);
@@ -19,7 +19,7 @@ const formatTimer = (seconds) => {
     outputMinutes = minutes;
     outputSeconds = seconds;
 
-    if(hours == 0){
+    if(hours === 0){
         outputHours = "";
     }
     else if(hours < 10){

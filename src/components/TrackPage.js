@@ -327,7 +327,7 @@ class TrackPage extends Component {
             var projectFound = false;
             for(var projName in todaysObject){
 
-                if(projName == timerStopInfo.timerTitle){
+                if(projName === timerStopInfo.timerTitle){
                     projectFound = true;
                     break;
                 }

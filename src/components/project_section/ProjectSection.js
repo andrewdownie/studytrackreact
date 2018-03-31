@@ -1,8 +1,12 @@
+/* Imports */
+import {Modal, Button} from 'react-bootstrap';
+import React, {Component} from 'react';
+
+/* Component Imports */
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
 import ProjectList from './ProjectList';
-import {Row, Modal, Button} from 'react-bootstrap';
-import React, {Component} from 'react';
-import SheetUtil from '../../utils/SheetUtil';
+
+/* Util Imports */
 import DateUtil from '../../utils/DateUtil';
 
 
@@ -28,7 +32,7 @@ class ProjectSection extends Component {
         var noProjectsFound;
 
         if(props.projectNames){
-            noProjectsFound = props.projectNames.length == 0 && props.loadedFromRemote;
+            noProjectsFound = props.projectNames.length === 0 && props.loadedFromRemote;
         }
         else{
             noProjectsFound = true;

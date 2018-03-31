@@ -2,7 +2,6 @@
 study data once it's been brought local*/
 
 import DateUtil from './DateUtil';
-import GapiUtil from './GapiUtil';
 
 const RowOfSheet_WOY = (weekOfYear) => {
     return weekOfYear - 1;

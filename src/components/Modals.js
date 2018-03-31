@@ -1,4 +1,4 @@
-import {Modal, Button, OverlayTrigger, DropdownButton, MenuItem} from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import React, {Component} from 'react';
 
@@ -45,9 +45,11 @@ class ProjectModals extends Component{
 
     //TODO: this will be called even when the props havent changed, need to check to see if they've changed or not?
     componentWillReceiveProps(nextProps){
+        var selectedProject = this.state.studySession_selectedProject;
 
-        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject == "Loading projects..."){
-            this.state.studySession_selectedProject = nextProps.projectNames[0];
+        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject === "Loading projects..."){
+            //this.state.studySession_selectedProject = nextProps.projectNames[0];
+            selectedProject = nextProps.projectNames[0];
         }
 
         var newProjectNames = nextProps.projectNames;
@@ -71,6 +73,7 @@ class ProjectModals extends Component{
             editProject_idealGoal: nextProps.editProject_idealGoal,
             projectNames: newProjectNames,
             startStudySession: nextProps.startStudySession,
+            studySession_selectedProject: selectedProject,
         });
     }
 

@@ -78,9 +78,11 @@ const ReadSheetData = (gapiInfo) => {
 }
 
 
+/*
 const GetWeeksGoals = (gapiInfo, weekOfYear) => {
     console.log("GetWeekGoals doesnt do anything yet");
 }
+*/
 
 const CheckIfSSExists = (gapiInfo) => {
     return new Promise((resolve, reject) => {
@@ -172,6 +174,7 @@ const CreateSheetIfNotExists = (gapiInfo) => {
 }
 
 const DeleteProject = (gapiInfo, deleteProjectData) => {
+    var i;
     return new Promise((resolve, reject) => {
         var wok = DateUtil.WeekOfYear();
         var projName;
@@ -189,7 +192,7 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
             var wok = DateUtil.WeekOfYear();
 
             var weekData = [];
-            for(var i = 0; i < 8; i++){
+            for(i = 0; i < 8; i++){
                 weekData.push(JSON.parse(response.result.values[0][i]));
             }
             var curProjGoals = weekData[0];
@@ -210,10 +213,10 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
                 weekData[0] = curProjGoals;
 
                 //3.2: delete the project from each day of the week
-                for(var i = 1; i < 8; i++){
+                for(i = 1; i < 8; i++){
                     var dayData = weekData[i];
                     for(projName in dayData){
-                        if(projName == deleteProjectData.targetName){
+                        if(projName === deleteProjectData.targetName){
                             delete dayData[projName];
                             weekData[i] = dayData;
                             break;
@@ -241,6 +244,7 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
 }
 
 const UpdateProject = (gapiInfo, editProjectData) => {
+    var i;
     //TODO: get most recent version of project goals
     //TODO: check to make sure that the project that is to be edited actually exists
     //TODO: update the project that is to be edited
@@ -261,7 +265,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
             var wok = DateUtil.WeekOfYear();
 
             var weekData = [];
-            for(var i = 0; i < 8; i++){
+            for(i = 0; i < 8; i++){
                 weekData.push(JSON.parse(response.result.values[0][i]));
             }
             var curProjGoals = weekData[0];
@@ -270,14 +274,9 @@ const UpdateProject = (gapiInfo, editProjectData) => {
 
             //Step 2: make sure the project we are going to update actually exists
             var targetProjectExists = false;
-            var newProjectNameExists = false;
             for(projName in curProjGoals){
                 if(projName === editProjectData.originalName){
                     targetProjectExists = true;
-                    break;
-                }
-                if(projName === editProjectData.newName){
-                    newProjectNameExists = true;
                     break;
                 }
             }
@@ -285,8 +284,6 @@ const UpdateProject = (gapiInfo, editProjectData) => {
             if(targetProjectExists){
                 //Step 3: update the week data
                 //3.1: Update the project goals
-                var minGoal = curProjGoals[editProjectData.originalName].minGoal;
-                var idealGoal = curProjGoals[editProjectData.originalName].idealGoal;
                 delete curProjGoals[editProjectData.originalName];
                 curProjGoals[editProjectData.newName] = {};
                 curProjGoals[editProjectData.newName].minGoal = editProjectData.minGoal;
@@ -294,10 +291,10 @@ const UpdateProject = (gapiInfo, editProjectData) => {
                 weekData[0] = curProjGoals;
 
                 //3.2: Update the project name for each day of the week
-                for(var i = 1; i < 8; i++){
+                for(i = 1; i < 8; i++){
                     var dayData = weekData[i];
                     for(projName in dayData){
-                        if(projName == editProjectData.originalName){
+                        if(projName === editProjectData.originalName){
 
                             var studyTime = dayData[projName].studied;
                             delete dayData[projName];

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Row, Col, Button, Table} from 'react-bootstrap';
+import React from 'react';
+import {Button} from 'react-bootstrap';
 
 import FaPlayCircle from 'react-icons/lib/fa/play-circle';
 import FaSpinner from 'react-icons/lib/fa/spinner';

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Row, Col} from 'react-bootstrap';
 import StudyChart from './StudyChart';
 import FaSpinner from 'react-icons/lib/fa/spinner';
