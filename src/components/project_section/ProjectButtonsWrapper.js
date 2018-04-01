@@ -15,8 +15,8 @@ const ProjectButtonsWrapper = (props) => {
 
     return(
         <ButtonGroup vertical block className="project-button-group">
-            <Button onClick={props.openStudySessionModalCallback} className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
-            <Button onClick={props.openAddProjectModalCallback} className={newProjectClasses} bsStyle="success"><FaPlus/> New Project</Button>
+            <Button onClick={props.callbacks.openStudyModal} className="btn-spacing-sm" bsStyle="primary"><MdSchedule/> Start Study Session</Button>
+            <Button onClick={props.callbacks.openAddModal} className={newProjectClasses} bsStyle="success"><FaPlus/> New Project</Button>
         </ButtonGroup>
     );
 }

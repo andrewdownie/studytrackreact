@@ -6,22 +6,19 @@ import React, {Component} from 'react';
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
 import ProjectList from './ProjectList';
 
-/* Util Imports */
-import DateUtil from '../../utils/DateUtil';
-
 
 
 class ProjectSection extends Component {
     constructor(props){
         super(props);
         this.state = {
-            openStudySessionModalCallback: props.openStudySessionModalCallback,
-            openEditProjectModalCallback: props.openEditProjectModalCallback,
-            openAddProjectModalCallback: props.openAddProjectModalCallback,
-            quickStartStudyCallback: props.quickStartStudyCallback,
+            callbacks: props.callbacks,
             noProjectsFound: this.noProjectsFound(props),
             loadedFromRemote: props.loadedFromRemote,
-            showEditProject: false,
+            showEditModal: false,
+            editModal_name: "",
+            editModal_minGoal: 0,
+            editModal_idealGoal: 0,
         };
 
         this.openEditModal = this.openEditModal.bind(this);
@@ -46,13 +43,21 @@ class ProjectSection extends Component {
             noProjectsFound: this.noProjectsFound(nextProps),
             loadedFromRemote: nextProps.loadedFromRemote,
             projectNames: nextProps.projectNames,
+            showEditModal: nextProps.showEditModal,
+            editModal_name: nextProps.editModal_name, 
+            editModal_minGoal: nextProps.editModal_minGoal,
+            editModal_idealGoal: nextProps.editModal_idealGoal,
         });
     }
 
     openEditModal(projectName){
         //TODO: get the info about the selected project...
         //TODO: how?
+        //TODO: this has to get moved up to track page...
+
+        /*
         var woy = DateUtil.WeekOfYear();
+
         var projectGoals = this.state.studyData[woy - 1][0][projectName];
         this.setState({
             showEditProject: true,
@@ -60,6 +65,7 @@ class ProjectSection extends Component {
             editProject_minGoal: projectGoals.minGoal,
             editProject_idealGoal: projectGoals.idealGoal,
         });
+        */
     }
     closeEditModal(){
         this.setState({showEditProject: false});
@@ -70,20 +76,18 @@ class ProjectSection extends Component {
         return(
             <div className="show-grid project-section">
                 <ProjectButtonsWrapper
-                    openStudySessionModalCallback={this.state.openStudySessionModalCallback}
-                    openAddProjectModalCallback={this.state.openAddProjectModalCallback}
+                    callbacks={this.state.callbacks}
                     highlightAddProjectButton={this.state.noProjectsFound}
                 />
                 <ProjectList
-                    openEditProjectModalCallback={this.openEditModal}
-                    quickStartStudyCallback={this.state.quickStartStudyCallback}
+                    callbacks={this.state.callbacks}
                     loadedFromRemote={this.state.loadedFromRemote}
                     noProjectsFound={this.state.noProjectsFound}
                     projectNames={this.state.projectNames}
                 />
 
                 {/* EDIT PROJECT MODAL */}
-                <Modal show={this.state.showEditProject}>
+                <Modal show={this.state.showEditModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Edit project</Modal.Title>
                     </Modal.Header>
@@ -92,22 +96,22 @@ class ProjectSection extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            value={this.state.editProject_name}
-                            onChange={(event) => {this.setState({editProject_name: event.target.value})}}
+                            value={this.state.editModal_name}
+                            onChange={(event) => {this.setState({editModal_name: event.target.value})}}
                         />
                         <h5>Minimum Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
-                            value={this.state.editProject_minGoal}
-                            onChange={(event) => {this.setState({editProject_minGoal: event.target.value})}}
+                            value={this.state.editModal_minGoal}
+                            onChange={(event) => {this.setState({editModal_minGoal: event.target.value})}}
                         />
                         <h5>Ideal Weekly Goal (hours)</h5>
                         <input
                             type="number"
                             className="form-control"
-                            value={this.state.editProject_idealGoal}
-                            onChange={(event) => {this.setState({editProject_idealGoal: event.target.value})}}
+                            value={this.state.editModal_idealGoal}
+                            onChange={(event) => {this.setState({editModal_idealGoal: event.target.value})}}
                         />
                     </Modal.Body>
                     <Modal.Footer>

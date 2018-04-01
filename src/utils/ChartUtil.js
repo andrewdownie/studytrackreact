@@ -8,7 +8,7 @@ const Day = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
     var todaysCellIndex = DateUtil.CellFromDayOfYear(dayOfYear);
-    var projectTotals = _WeeksGoals(weekInfo);
+    var projectTotals = WeeksGoals(weekInfo);
     var output = [];
     var projName;
 
@@ -38,7 +38,7 @@ const Day = (studyData, dayOfYear) => {
 
     // Chartify the data
     for(projName in projectTotals){
-        output.push(_ChartifySingleProject(projName, projectTotals[projName]));
+        output.push(ChartifySingleProject(projName, projectTotals[projName]));
     }
 
     if(output.length === 1){
@@ -51,7 +51,7 @@ const Day = (studyData, dayOfYear) => {
 const Week = (studyData, weekOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
-    var projectTotals = _WeeksGoals(weekInfo);
+    var projectTotals = WeeksGoals(weekInfo);
     var output = [];
     var projName;
 
@@ -78,7 +78,7 @@ const Week = (studyData, weekOfYear) => {
 
     // Chartify the data
     for(projName in projectTotals){
-        output.push(_ChartifySingleProject(projName, projectTotals[projName]));
+        output.push(ChartifySingleProject(projName, projectTotals[projName]));
     }
 
     if(output.length === 1){
@@ -88,7 +88,7 @@ const Week = (studyData, weekOfYear) => {
     return output;
 }
 
-const _WeeksGoals = (weekInfo) => {
+const WeeksGoals = (weekInfo) => {
     var projectTotals = {};
     var projName;
 
@@ -110,7 +110,7 @@ const _WeeksGoals = (weekInfo) => {
 ///
 /// ChartifySingleProject
 ///
-const _ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
+const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     // Vars
     var idealRemaining = talliedProjectInfo.idealGoal;
     var minRemaining = talliedProjectInfo.minGoal;

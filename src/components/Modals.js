@@ -14,7 +14,7 @@ class ProjectModals extends Component{
             studySession_minutes: 30,
             studySession_hours: 0,
             startStudySession: props.startStudySession,
-            showAddProject: props.showAddProject,
+            showAddModal: props.showAddModal,
             showEditProject: props.showEditProject,
             showStudyModal: props.showStudyModal,
             showLoadingModal: props.showLoadingModal,
@@ -62,7 +62,7 @@ class ProjectModals extends Component{
             loadingModalMessage: nextProps.loadingModalMessage,
             showEditProject: nextProps.showEditProject,
             showLoadingModal: nextProps.showLoadingModal,
-            showAddProject: nextProps.showAddProject,
+            showAddModal: nextProps.showAddModal,
             showStudyModal: nextProps.showStudyModal,
             showQuickWarningModal: nextProps.showQuickWarningModal,
             showStudyWarningModal: nextProps.showStudyWarningModal,
@@ -120,7 +120,7 @@ class ProjectModals extends Component{
         return(
             <div>
                 {/* ADD PROJECT MODAL */}
-                <Modal show={this.state.showAddProject}>
+                <Modal show={this.state.showAddModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add a project</Modal.Title>
                     </Modal.Header>

@@ -14,6 +14,37 @@ import GapiUtil from '../utils/GapiUtil';
 class TrackPage extends Component {
     constructor(props){
         super(props);
+
+        /* Method Bindings */
+        this.openLoadingModalCallback = this.openLoadingModalCallback.bind(this);
+        this.openStudySessionModalCallback = this.openStudySessionModalCallback.bind(this);
+        this.openAddProjectModalCallback = this.openAddProjectModalCallback.bind(this);
+        this.addProjectCallback = this.addProjectCallback.bind(this);
+        this.openEditProjectModalCallback = this.openEditProjectModalCallback.bind(this);
+        this.editProjectCallback = this.editProjectCallback.bind(this);
+        this.deleteProjectCallback = this.deleteProjectCallback.bind(this);
+
+        this.startStudySession = this.startStudySession.bind(this);
+
+        this.stopTimerCallback = this.stopTimerCallback.bind(this);
+
+
+        this.quickStartStudyCallback = this.quickStartStudyCallback.bind(this);
+
+        this.cancelStudySession = this.cancelStudySession.bind(this);
+        this.stopTimerWarning = this.stopTimerWarning.bind(this);
+
+
+        this.saveTimerDuration = this.saveTimerDuration.bind(this);
+        this.showTimerWarning = this.showQuickWarning.bind(this);
+
+        this.showQuickWarning = this.showQuickWarning.bind(this);
+        this.showStudyWarning = this.showStudyWarning.bind(this);
+
+        this.closeStudyWarningModal = this.closeStudyWarningModal.bind(this);
+
+
+        /* Initialize State */
         this.state = {
             studySession_selectedProject: "Loading projects...",
             studyData: null,
@@ -31,66 +62,47 @@ class TrackPage extends Component {
             timerRunning:false,
             timerTime:0,
             closeModals: {
-                closeEditModal: this._closeEditModal.bind(this),
-                closeAddModal: this._closeAddModal.bind(this),
-                closeLooadingModal: this._closeLoadingModal.bind(this),
-                closeStudyModal: this._closeStudyModal.bind(this),
-                closeWarningModal: this._closeWarningModal.bind(this),
+                closeEditModal: this.closeEditModal.bind(this),
+                closeAddModal: this.closeAddModal.bind(this),
+                closeLooadingModal: this.closeLoadingModal.bind(this),
+                closeStudyModal: this.closeStudyModal.bind(this),
+                closeWarningModal: this.closeWarningModal.bind(this),
             },
+            callbacks: {
+                openStudyModal: this.openStudySessionModalCallback,
+                openEditModal: this.openEditProjectModalCallback,
+                openLoadingModal: this.openLoadingModalCallback,
+                openAddModal: this.openAddProjectModalCallback,
+                deleteProject: this.deleteProjectCallback,
+                editProject: this.editProjectCallback,
+                addProject: this.addProjectCallback,
+                quickStartStudy: this.quickStartStudyCallback,
+            }
         };
 
-        // Method bindings
-        this._openLoadingModalCallback = this._openLoadingModalCallback.bind(this);
-        this._openStudySessionModalCallback = this._openStudySessionModalCallback.bind(this);
-
-        this._openAddProjectModalCallback = this._openAddProjectModalCallback.bind(this);
-        this._addProjectCallback = this._addProjectCallback.bind(this);
-
-        this._openEditProjectModalCallback = this._openEditProjectModalCallback.bind(this);
-        this._editProjectCallback = this._editProjectCallback.bind(this);
-        this._deleteProjectCallback = this._deleteProjectCallback.bind(this);
-
-        this._startStudySession = this._startStudySession.bind(this);
-
-        this._stopTimerCallback = this._stopTimerCallback.bind(this);
-
-
-        this._quickStartStudyCallback = this._quickStartStudyCallback.bind(this);
-
-        this._cancelStudySession = this._cancelStudySession.bind(this);
-        this._stopTimerWarning = this._stopTimerWarning.bind(this);
-
-
-        this._saveTimerDuration = this._saveTimerDuration.bind(this);
-        this._showTimerWarning = this._showQuickWarning.bind(this);
-
-        this._showQuickWarning = this._showQuickWarning.bind(this);
-        this._showStudyWarning = this._showStudyWarning.bind(this);
-
-        this._closeStudyWarningModal = this._closeStudyWarningModal.bind(this);
 
     }
 
-    _closeAddModal(){
+    closeAddModal(){
         this.setState({showAddModal: false});
     }
-    _closeEditModal(){
+    closeEditModal(){
         this.setState({showEditModal: false});
     }
-    _closeLoadingModal(){
+    closeLoadingModal(){
         this.setState({showLoadingModal: false});
     }
-    _closeStudyModal(){
+    closeStudyModal(){
         this.setState({showStudyModal: false});
     }
-    _closeWarningModal(){
+    closeWarningModal(){
         this.setState({showQuickWarningModal: false});
     }
-    _closeStudyWarningModal(){
+    closeStudyWarningModal(){
         this.setState({showStudyWarningModal: false});
     }
 
-    _prepareChartData(studyData){
+    prepareChartData(studyData){
         if(studyData == null){
             return {chartList: [], projectNames: []};
         }
@@ -116,7 +128,7 @@ class TrackPage extends Component {
         return {chartList, projectNames};
     }
 
-    async _loadTrackPageData(){
+    async loadTrackPageData(){
         //TODO: there is a lot that will be done here in the future, for now it's working code mixed with example code
         if(this.props.isSignedIn === false || this.state.loadedFromRemote){
             return;
@@ -143,7 +155,7 @@ class TrackPage extends Component {
         }
     }
 
-    _setupThisWeek(gapiInfo){
+    setupThisWeek(gapiInfo){
         //Fill the current week with empty objects?
         //gapi_util.SendData(this.state.gapiInfo, "A" + currentWeek, [["{}","{}","{}","{}","{}","{}","{}","{}"]]);
 
@@ -174,8 +186,8 @@ class TrackPage extends Component {
         }
     }
     
-    _addProjectCallback(newProjectData){
-        this._openLoadingModalCallback("Creating: " + newProjectData.title + "...");
+    addProjectCallback(newProjectData){
+        this.openLoadingModalCallback("Creating: " + newProjectData.title + "...");
 
         var wok = DateUtil.WeekOfYear();
 
@@ -188,34 +200,42 @@ class TrackPage extends Component {
 
 
     }
-    _openAddProjectModalCallback(){
+    openAddProjectModalCallback(){
+        console.log("Show add project now pls");
         this.setState({
-            showAddProject: true,
+            showAddModal: true,
             showStudyModal: false,
             showEditModal: false,
             showLoadingModal: false,
         });
     }
-    _openEditProjectModalCallback(projectName){
+    openEditProjectModalCallback(projectName){
+        console.log("Show edit project now pls");
 
         var wok = DateUtil.WeekOfYear();
 
         var projectGoals = this.state.studyData[wok - 1][0][projectName];
+
+        console.log(projectName);
+        console.log(projectGoals);
 
 
         var minGoal, idealGoal;
         minGoal = projectGoals.minGoal;
         idealGoal = projectGoals.idealGoal;
         this.setState({
-            showEditProject: true,
-            editProject_name: projectName,
-            editProject_minGoal: minGoal,
-            editProject_idealGoal: idealGoal
+            showEditModal: true,
+            showAddModal: false,
+            showLoadingModal: false,
+            showStudyModal: false,
+            editModal_name: projectName,
+            editModal_minGoal: minGoal,
+            editModal_idealGoal: idealGoal
         });
     }
 
-    _editProjectCallback(editProjectData){
-        this._openLoadingModalCallback("Editing: " + editProjectData.originalName + "...");
+    editProjectCallback(editProjectData){
+        this.openLoadingModalCallback("Editing: " + editProjectData.originalName + "...");
 
         GapiUtil.UpdateProject(this.state.gapiInfo, editProjectData)
         .then((response) => {
@@ -228,8 +248,8 @@ class TrackPage extends Component {
         });
     }
 
-    _deleteProjectCallback(deleteProjectData){
-        this._openLoadingModalCallback("Deleting: " + deleteProjectData.targetName + "...");
+    deleteProjectCallback(deleteProjectData){
+        this.openLoadingModalCallback("Deleting: " + deleteProjectData.targetName + "...");
 
         GapiUtil.DeleteProject(this.state.gapiInfo, deleteProjectData)
         .then((response) => {
@@ -240,12 +260,12 @@ class TrackPage extends Component {
         });
     }
 
-    _openStudySessionModalCallback(){
+    openStudySessionModalCallback(){
         console.log("open study session modal");
         this.setState({showStudyModal: true});
     }
 
-    _openLoadingModalCallback(loadingData){
+    openLoadingModalCallback(loadingData){
         this.setState({
             showEditProject: false,
             showAddProject: false,
@@ -254,7 +274,7 @@ class TrackPage extends Component {
         });
     }
 
-    _startStudySession(studySessionData){
+    startStudySession(studySessionData){
         console.log(studySessionData);
 
         this.setState({
@@ -266,7 +286,7 @@ class TrackPage extends Component {
         });
     }
 
-    _stopTimerCallback(stopTimerInfo){
+    stopTimerCallback(stopTimerInfo){
 
         if(stopTimerInfo.timerDirection === 'up'){
             if(stopTimerInfo.timerTime < 10 * 60){
@@ -280,7 +300,7 @@ class TrackPage extends Component {
         });
     }
 
-    _stopTimerWarning(stopTimerInfo){
+    stopTimerWarning(stopTimerInfo){
         //TODO: do I need stopTimerInfo?
 
 
@@ -299,7 +319,7 @@ class TrackPage extends Component {
 
     }
 
-    _quickStartStudyCallback(projectName){
+    quickStartStudyCallback(projectName){
         //TODO: set timer stuff here
         this.setState({
             showStudyModal: false,
@@ -310,12 +330,12 @@ class TrackPage extends Component {
         });
     }
 
-    _cancelStudySession(timePassed){
+    cancelStudySession(timePassed){
         var timeToAddToSheet = Math.ceil(timePassed / 2);
         console.log("Time to add to sheet: " + timeToAddToSheet);
     }
 
-    _saveTimerDuration(timerStopInfo){
+    saveTimerDuration(timerStopInfo){
 
 
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
@@ -357,19 +377,19 @@ class TrackPage extends Component {
             GapiUtil.SetTodaysStudyData(this.state.gapiInfo, repackedData);
         });
     }
-    _showQuickWarning(){
+    showQuickWarning(){
         this.setState({showQuickWarningModal: true});
     }
-    _showStudyWarning(){
+    showStudyWarning(){
         this.setState({showStudyWarningModal: true});
     }
 
     render(){
-        this._loadTrackPageData();
+        this.loadTrackPageData();
 
         //TODO: does this get passed the correct values?
         //TODO: if this does get passed the correct values, does it render the old ones first anyway?
-        var preparedChartData = this._prepareChartData(this.state.studyData);
+        var preparedChartData = this.prepareChartData(this.state.studyData);
 
 
         return(
@@ -384,12 +404,13 @@ class TrackPage extends Component {
                     <ProjectSection
                         projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
                         studyData={this.state.studyData}
-                        openAddProjectModalCallback={this._openAddProjectModalCallback}
-                        openEditProjectModalCallback={this._openEditProjectModalCallback}
-                        openStudySessionModalCallback={this._openStudySessionModalCallback}
+                        callbacks={this.state.callbacks}
                         loadedFromRemote={this.state.loadedFromRemote}
-                        quickStartStudyCallback={this._quickStartStudyCallback}
-                        showStudyWarningModal={this._showStudyWarning}
+                        showStudyWarningModal={this.showStudyWarning}
+                        showEditModal={this.state.showEditModal}
+                        editModal_idealGoal={this.state.editModal_idealGoal}
+                        editModal_minGoal={this.state.editModal_minGoal}
+                        editModal_name={this.state.editModal_name}
                     />
                 </Col>
             </Row>
@@ -422,35 +443,35 @@ class TrackPage extends Component {
                         timerRunning={this.state.timerRunning}
                         timerTitle={this.state.timerTitle}
                         timerStartTime={this.state.timerTime}
-                        saveTimerDuration={this._saveTimerDuration}
-                        showQuickWarning={this._showQuickWarning}
-                        showStudyWarning={this._showStudyWarning}
-                        cancelStudySession={this._cancelStudySession}
-                        closeStudyWarningModal={this._closeStudyWarningModal}
+                        saveTimerDuration={this.saveTimerDuration}
+                        showQuickWarning={this.showQuickWarning}
+                        showStudyWarning={this.showStudyWarning}
+                        cancelStudySession={this.cancelStudySession}
+                        closeStudyWarningModal={this.closeStudyWarningModal}
                         showStudyModal={this.state.showStudyModal}
-                        startStudySession={this._startStudySession}
+                        startStudySession={this.startStudySession}
                     />
                 </Col>
             </Row>
 
             
             <ProjectModals
-                startStudySession={this._startStudySession}
-                showAddProject={this.state.showAddModal}
+                startStudySession={this.startStudySession}
+                showAddModal={this.state.showAddModal}
                 showEditProject={this.state.showEditModal}
                 showLoadingModal={this.state.showLoadingModal}
                 showStudyModal={this.state.showStudyModal}
                 showQuickWarningModal={this.state.showQuickWarningModal}
                 showStudyWarningModal={this.state.showStudyWarningModal}
                 loadingModalMessage={this.state.loadingModalMessage}
-                addProjectCallback={this._addProjectCallback}
-                editProjectCallback={this._editProjectCallback}
-                deleteProjectCallback={this._deleteProjectCallback}
+                addProjectCallback={this.addProjectCallback}
+                editProjectCallback={this.editProjectCallback}
+                deleteProjectCallback={this.deleteProjectCallback}
                 editProject_name={this.state.editProject_name}
                 editProject_minGoal={this.state.editProject_minGoal}
                 editProject_idealGoal={this.state.editProject_idealGoal}
                 projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
-                cancelStudySession={this._cancelStudySession}
+                cancelStudySession={this.cancelStudySession}
                 closeModals={this.state.closeModals}
             />
         </Grid>
