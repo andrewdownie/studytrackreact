@@ -47,12 +47,12 @@ class TimerContainer extends Component{
         }
 
         //Start the timer this update
-        /*var startTimerNow = false;
+        var startTimerNow = false;
         if(this.state.timerRunning === false){
             if(nextProps.timerRunning === true){
                 startTimerNow = true;
             }
-        }*/
+        }
 
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
@@ -69,10 +69,10 @@ class TimerContainer extends Component{
             studySession_selectedProject: selectedProject,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
-            /*if(startTimerNow){
+            if(startTimerNow){
                 currentTime: this.state.timerStartTime;
                 this.runTimer();
-            }*/
+            }
         });
     }
 
