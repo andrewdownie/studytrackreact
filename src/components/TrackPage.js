@@ -258,7 +258,7 @@ class TrackPage extends Component {
             var wok = DateUtil.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
-            this.setState({studyData: studyData, showEditModal: false, showLoadingModal: false});
+            this.setState({studyData: studyData, showLoadingModal: false});
         });
     }
 
@@ -269,8 +269,8 @@ class TrackPage extends Component {
 
     openLoadingModalCallback(loadingData){
         this.setState({
-            showEditProject: false,
-            showAddProject: false,
+            showEditModal: false,
+            showAddModal: false,
             showLoadingModal: true,
             loadingModalMessage: loadingData
         });

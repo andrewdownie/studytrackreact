@@ -21,7 +21,8 @@ class ProjectSection extends Component {
             editModal_idealGoal: 0,
         };
 
-        this.deleteProject = this.deleteProject.bind(this);
+        this.deleteProjectPassthru = this.deleteProjectPassthru.bind(this);
+        this.editProjectPassthru = this.editProjectPassthru.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
         this.closeEditModal = this.closeEditModal.bind(this);
     }
@@ -40,12 +41,17 @@ class ProjectSection extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        var editModal_originalName = "";
+        if(nextProps.showEditModal){
+            editModal_originalName = nextProps.editModal_name;
+        }
         this.setState({
             noProjectsFound: this.noProjectsFound(nextProps),
             loadedFromRemote: nextProps.loadedFromRemote,
             projectNames: nextProps.projectNames,
             showEditModal: nextProps.showEditModal,
-            editModal_name: nextProps.editModal_name, 
+            editModal_name: nextProps.editModal_name, //TODO: rename editModal_name to editModal_newName
+            editModal_originalName: editModal_originalName,
             editModal_minGoal: nextProps.editModal_minGoal,
             editModal_idealGoal: nextProps.editModal_idealGoal,
         });
@@ -72,8 +78,16 @@ class ProjectSection extends Component {
         this.setState({showEditProject: false});
     }
 
-    deleteProject() {
+    deleteProjectPassthru() {
         this.state.callbacks.deleteProject(this.state.editModal_name);
+    }
+    editProjectPassthru() {
+        var newProjectInfo = {};
+        newProjectInfo.newName = this.state.editModal_name;
+        newProjectInfo.originalName = this.state.editModal_originalName;
+        newProjectInfo.minGoal = this.state.editModal_minGoal;
+        newProjectInfo.idealGoal = this.state.editModal_idealGoal;
+        this.state.callbacks.editProject(newProjectInfo);
     }
 
     render(){
@@ -119,9 +133,9 @@ class ProjectSection extends Component {
                         />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle="danger" onClick={this.deleteProject} className="pull-left">Delete</Button>
+                        <Button bsStyle="danger" onClick={this.deleteProjectPassthru} className="pull-left">Delete</Button>
                         <Button onClick={this.state.callbacks.closeEditModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.state.callbacks.closeEditModal}>Save Changes</Button>
+                        <Button bsStyle="primary" onClick={this.editProjectPassthru}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
