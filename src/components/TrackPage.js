@@ -73,6 +73,7 @@ class TrackPage extends Component {
                 openEditModal: this.openEditProjectModalCallback,
                 openLoadingModal: this.openLoadingModalCallback,
                 openAddModal: this.openAddProjectModalCallback,
+                closeEditModal: this.closeEditModal.bind(this),
                 deleteProject: this.deleteProjectCallback,
                 editProject: this.editProjectCallback,
                 addProject: this.addProjectCallback,
@@ -248,15 +249,16 @@ class TrackPage extends Component {
         });
     }
 
-    deleteProjectCallback(deleteProjectData){
-        this.openLoadingModalCallback("Deleting: " + deleteProjectData.targetName + "...");
+    deleteProjectCallback(deleteProjectName){
+        this.openLoadingModalCallback("Deleting: " + deleteProjectName + "...");
 
-        GapiUtil.DeleteProject(this.state.gapiInfo, deleteProjectData)
+
+        GapiUtil.DeleteProject(this.state.gapiInfo, deleteProjectName)
         .then((response) => {
             var wok = DateUtil.WeekOfYear();
             var studyData = this.state.studyData;
             studyData[wok - 1] = response
-            this.setState({studyData: studyData, showLoadingModal: false});
+            this.setState({studyData: studyData, showEditModal: false, showLoadingModal: false});
         });
     }
 

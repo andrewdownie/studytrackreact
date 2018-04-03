@@ -173,7 +173,7 @@ const CreateSheetIfNotExists = (gapiInfo) => {
     });
 }
 
-const DeleteProject = (gapiInfo, deleteProjectData) => {
+const DeleteProject = (gapiInfo, deleteProjectName) => {
     var i;
     return new Promise((resolve, reject) => {
         var wok = DateUtil.WeekOfYear();
@@ -200,7 +200,7 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
             //Step 2: make sure the project we are going to update actually exists
             var targetProjectExists = false;
             for(projName in curProjGoals){
-                if(projName === deleteProjectData.targetName){
+                if(projName === deleteProjectName){
                     targetProjectExists = true;
                     break;
                 }
@@ -209,14 +209,14 @@ const DeleteProject = (gapiInfo, deleteProjectData) => {
             if(targetProjectExists){
                 //Step 3: update the week data
                 //3.1: delete the project from project goals
-                delete curProjGoals[deleteProjectData.targetName];
+                delete curProjGoals[deleteProjectName];
                 weekData[0] = curProjGoals;
 
                 //3.2: delete the project from each day of the week
                 for(i = 1; i < 8; i++){
                     var dayData = weekData[i];
                     for(projName in dayData){
-                        if(projName === deleteProjectData.targetName){
+                        if(projName === deleteProjectName){
                             delete dayData[projName];
                             weekData[i] = dayData;
                             break;

@@ -21,6 +21,7 @@ class ProjectSection extends Component {
             editModal_idealGoal: 0,
         };
 
+        this.deleteProject = this.deleteProject.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
         this.closeEditModal = this.closeEditModal.bind(this);
     }
@@ -71,6 +72,9 @@ class ProjectSection extends Component {
         this.setState({showEditProject: false});
     }
 
+    deleteProject() {
+        this.state.callbacks.deleteProject(this.state.editModal_name);
+    }
 
     render(){
         return(
@@ -116,8 +120,8 @@ class ProjectSection extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle="danger" onClick={this.deleteProject} className="pull-left">Delete</Button>
-                        <Button onClick={this.closeEditModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.editProject}>Save Changes</Button>
+                        <Button onClick={this.state.callbacks.closeEditModal}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.state.callbacks.closeEditModal}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

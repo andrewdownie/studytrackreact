@@ -70,7 +70,6 @@ class TimerContainer extends Component{
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
-                currentTime: this.state.timerStartTime;
                 this.runTimer();
             }
         });
