@@ -1,11 +1,19 @@
 import {DropdownButton, Modal, Button, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
 import Timer from './TimerDisplay';
+import QuickWarningModal from './modals/QuickWarningModal';
+import StopSessionModal from './modals/StopSessionModal';
 
 
 class TimerContainer extends Component{
     constructor(props){
         super(props);
+
+        /* Bindings */
+        this.stopButtonClick = this.stopButtonClick.bind(this);
+        this.cancelStudySession = this.cancelStudySession.bind(this);
+        this.closeStudyModal = this.closeStudyModal.bind(this);
+        this.startStudySession = this.startStudySession.bind(this);
 
         this.state={
             timerDirection: props.timerDirection,
@@ -15,7 +23,7 @@ class TimerContainer extends Component{
             timerCurrentTime: 0,
             saveTimerDuration: props.saveTimerDuration,
             showQuickWarning: props.showQuickWarning,
-            showStudyWarning: props.showStudyWarning,
+            showStopSession: props.showStopSession,
             cancelStudySession: props.cancelStudySession,
             showStudyModal: props.showStudyModal,
             //closeStudyWarningModal: props.closeStudyWarningModal,
@@ -27,15 +35,26 @@ class TimerContainer extends Component{
             studySession_minutes: 30,
             studySession_hours: 0,
             startStudySession: props.startStudySession,
+            callbacks: {
+                cancelStudySession: this.cancelStudySession,
+                hideQuickWarningModal: this.hideQuickWarningModal.bind(this),
+                hideStopSessionModal: this.hideStopSessionModal.bind(this),
+            }
         }
 
 
-        this.stopButtonClick = this.stopButtonClick.bind(this);
-        this.cancelStudySession = this.cancelStudySession.bind(this);
-        this.closeStudyModal = this.closeStudyModal.bind(this);
-        this.startStudySession = this.startStudySession.bind(this);
     }
 
+
+    hideQuickWarningModal(){
+        console.log("hide quick warning modal");
+        this.setState({showQuickWarningModal: false});
+    }
+
+    hideStopSessionModal(){
+        console.log("hide stop session modal");
+        this.setState({showStopSessionModal: false});
+    }
 
 
 
@@ -135,7 +154,7 @@ class TimerContainer extends Component{
             timerStopInfo.timerTime = this.state.timerStartTime;
             if(timerTime > 0){
                 //this.state.showStudyWarning();
-                this.setState({showStudyWarningModal: true});
+                this.setState({showStopSessionModal: true});
             }
             //TODO: if (timerTime > 0){ show fractional modal; }
             //TODO: will there need to be an active check to see when a study session ends?
@@ -169,42 +188,7 @@ class TimerContainer extends Component{
     timerModals(){
         return(
             <div>
-                {/* STUDY SESSION WARNING MODAL */}
-                <Modal show={this.state.showStudyWarningModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>WARNING! Timer not done yet</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>
-                            If you cancel the timer now, only 50% of the timer you've studied will be recorded.
-                            If you want 100% of your study time this session to be recored, then continue Studying
-                            until the timer ends, and  considering setting a shorter timer next time.
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button bsStyle="danger" onClick={this.cancelStudySession}>Cancel Session</Button>
-                        <Button bsStyle="default" onClick={() => {this.setState({showStudyWarningModal: false})} }>Continue Session</Button>
-                    </Modal.Footer>
-                </Modal>
 
-                {/* 10 MINUTE WARNING MODAL */}
-                <Modal show={this.state.showQuickWarningModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Warning!</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            You have studied for less than 10 minutes this quick study session.
-                            If you cancel now only half of your study time will be recorded.
-                            If you would like to have 100% of your study time recorded, study for 
-                            at least 10 minutes.
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.cancelStudySession} bsStyle="danger">Cancel Anyway</Button>
-                        <Button onClick={() => {this.setState({showQuickWarningModal: false})}}>Keep Studying</Button>
-                    </Modal.Footer>
-                </Modal>
 
                 {/* STUDY SESSION MODAL */}
                 <Modal show={this.state.showStudyModal}>
@@ -261,6 +245,7 @@ class TimerContainer extends Component{
 
 
     cancelStudySession(){
+        console.log("cancel study session pls...");
         //TODO: do the calculation for how much time should be saved to the sheet
         var timePassed = 0;
 
@@ -299,6 +284,14 @@ class TimerContainer extends Component{
                     timerSettings={this.state.timerSettings}
                 />
                 {this.timerModals()}
+                <QuickWarningModal
+                    callbacks={this.state.callbacks}
+                    showQuickWarningModal={this.state.showQuickWarningModal}
+                />
+                <StopSessionModal
+                    callbacks={this.state.callbacks}
+                    showStopSessionModal={this.state.showStopSessionModal}
+                />
             </div>
         );
     }

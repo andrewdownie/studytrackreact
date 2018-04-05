@@ -116,6 +116,7 @@ class ProjectSection extends Component {
                     callbacks={this.state.callbacks}
                     highlightAddProjectButton={this.state.noProjectsFound}
                 />
+
                 <ProjectList
                     callbacks={this.state.callbacks}
                     loadedFromRemote={this.state.loadedFromRemote}
@@ -139,7 +140,6 @@ class ProjectSection extends Component {
                     addModal_minGoal={this.state.addModal_minGoal}
                     addModal_name={this.state.addModal_name}
                 />
-                
 
                 {/* Loading Modal */}
                 <LoadingModal
