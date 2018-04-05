@@ -76,7 +76,7 @@ class ProjectSection extends Component {
             showLoadingModal: nextProps.showLoadingModal,
             loadingModalMessage: nextProps.loadingModalMessage,
             editProject_name: "",
-            addModal_originalName: "",
+            addModal_name: "",
             addModal_minGoal: 2,
             addModal_idealGoal: 5,
             showEditModal: nextProps.showEditModal,
@@ -137,7 +137,7 @@ class ProjectSection extends Component {
                     showAddModal={this.state.showAddModal}
                     addModal_idealGoal={this.state.addModal_idealGoal}
                     addModal_minGoal={this.state.addModal_minGoal}
-                    addModal_nameGoal={this.state.addModal_nameGoal}
+                    addModal_name={this.state.addModal_name}
                 />
                 
 

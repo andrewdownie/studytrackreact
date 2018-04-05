@@ -13,7 +13,7 @@ class AddModal extends Component{
         this.state = {
             callbacks: props.callbacks,
             showAddModal: props.showAddModal,
-            name: props.addModal_name,
+            name: "",
             minGoal: props.addModal_minGoal,
             idealGoal: props.addModal_idealGoal,
         };
