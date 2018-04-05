@@ -119,51 +119,9 @@ class ProjectModals extends Component{
     render(){
         return(
             <div>
-                {/* ADD PROJECT MODAL */}
-                <Modal show={this.state.showAddModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add a project</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <h5>Title</h5>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={this.state.addProject_name}
-                            onChange={(event) => {this.setState({addProject_name: event.target.value})}}
-                        />
-                        <h5>Minimum Weekly Goal (hours)</h5>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={this.state.addProject_minGoal}
-                            onChange={(event) => {this.setState({addProject_minGoal: event.target.value})}}
-                        />
-                        <h5>Ideal Weekly Goal (hours)</h5>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={this.state.addProject_idealGoal}
-                            onChange={(event) => {this.setState({addProject_idealGoal: event.target.value})}}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.state.closeModals.closeAddModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.addProject}>Add Project</Button>
-                    </Modal.Footer>
-                </Modal>
 
 
 
-
-                {/* LOADING MODAL */}
-                <div className="loading-modal-container">
-                    <Modal show={this.state.showLoadingModal} className="loading-modal">
-                        <Modal.Body>
-                            <h2><FaSpinner className="spin"/> {this.state.loadingModalMessage}</h2>
-                        </Modal.Body>
-                    </Modal>
-                </div>
 
 
             </div>

@@ -1,6 +1,7 @@
 /* Imports */
 import {Modal, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 
 /* Component Imports */
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
@@ -16,15 +17,31 @@ class ProjectSection extends Component {
             noProjectsFound: this.noProjectsFound(props),
             loadedFromRemote: props.loadedFromRemote,
             showEditModal: false,
+            showAddModal: false,
             editModal_name: "",
             editModal_minGoal: 0,
             editModal_idealGoal: 0,
+            showLoadingModal: false,
+            loadingModalMessage: "",
+            //TODO: I have two sets of edit modal/project info
+            addProject_name: "",
+            addProject_minGoal: 2,
+            addProject_idealGoal: 5,
         };
 
         this.deleteProjectPassthru = this.deleteProjectPassthru.bind(this);
         this.editProjectPassthru = this.editProjectPassthru.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
         this.closeEditModal = this.closeEditModal.bind(this);
+        this.addProject = this.addProject.bind(this);
+    }
+
+    addProject(){
+        this.state.callbacks.addProject({
+            title: this.state.addProject_name,
+            minGoal: this.state.addProject_minGoal,
+            idealGoal: this.state.addProject_idealGoal,
+        });
     }
 
     noProjectsFound(props){
@@ -50,10 +67,17 @@ class ProjectSection extends Component {
             loadedFromRemote: nextProps.loadedFromRemote,
             projectNames: nextProps.projectNames,
             showEditModal: nextProps.showEditModal,
-            editModal_name: nextProps.editModal_name, //TODO: rename editModal_name to editModal_newName
-            editModal_originalName: editModal_originalName,
-            editModal_minGoal: nextProps.editModal_minGoal,
-            editModal_idealGoal: nextProps.editModal_idealGoal,
+            showAddModal: nextProps.showAddModal,
+            closeAddModal: nextProps.closeAddModal,
+            editModal_name: nextProps.editProject_name, //TODO: rename editModal_name to editModal_newName
+            editModal_minGoal: nextProps.editProject_minGoal,
+            editModal_idealGoal: nextProps.editProject_idealGoal,
+            showLoadingModal: nextProps.showLoadingModal,
+            loadingModalMessage: nextProps.loadingModalMessage,
+            editProject_name: "",
+            addProject_originalName: "",
+            addProject_minGoal: 2,
+            addProject_idealGoal: 5,
         });
     }
 
@@ -138,6 +162,50 @@ class ProjectSection extends Component {
                         <Button bsStyle="primary" onClick={this.editProjectPassthru}>Save Changes</Button>
                     </Modal.Footer>
                 </Modal>
+
+                {/* LOADING MODAL */}
+                <div className="loading-modal-container">
+                    <Modal show={this.state.showLoadingModal} className="loading-modal">
+                        <Modal.Body>
+                            <h2><FaSpinner className="spin"/> {this.state.loadingModalMessage}</h2>
+                        </Modal.Body>
+                    </Modal>
+                </div>
+
+                {/* ADD PROJECT MODAL */}
+                <Modal show={this.state.showAddModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add a project</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h5>Title</h5>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={this.state.addProject_name}
+                            onChange={(event) => {this.setState({addProject_name: event.target.value})}}
+                        />
+                        <h5>Minimum Weekly Goal (hours)</h5>
+                        <input
+                            type="number"
+                            className="form-control"
+                            value={this.state.addProject_minGoal}
+                            onChange={(event) => {this.setState({addProject_minGoal: event.target.value})}}
+                        />
+                        <h5>Ideal Weekly Goal (hours)</h5>
+                        <input
+                            type="number"
+                            className="form-control"
+                            value={this.state.addProject_idealGoal}
+                            onChange={(event) => {this.setState({addProject_idealGoal: event.target.value})}}
+                        />
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.state.closeAddModal}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.addProject}>Add Project</Button>
+                    </Modal.Footer>
+                </Modal>
+
             </div>
         );
     }

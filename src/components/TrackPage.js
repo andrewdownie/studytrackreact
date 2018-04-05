@@ -73,6 +73,7 @@ class TrackPage extends Component {
                 openEditModal: this.openEditProjectModalCallback,
                 openLoadingModal: this.openLoadingModalCallback,
                 openAddModal: this.openAddProjectModalCallback,
+                closeAddModal: this.closeAddModal.bind(this),
                 closeEditModal: this.closeEditModal.bind(this),
                 deleteProject: this.deleteProjectCallback,
                 editProject: this.editProjectCallback,
@@ -410,9 +411,13 @@ class TrackPage extends Component {
                         loadedFromRemote={this.state.loadedFromRemote}
                         showStudyWarningModal={this.showStudyWarning}
                         showEditModal={this.state.showEditModal}
-                        editModal_idealGoal={this.state.editModal_idealGoal}
-                        editModal_minGoal={this.state.editModal_minGoal}
-                        editModal_name={this.state.editModal_name}
+                        showAddModal={this.state.showAddModal}
+                        closeAddModal={this.state.callbacks.closeAddModal}
+                        showLoadingModal={this.state.showLoadingModal}
+                        loadingModalMessage={this.state.loadingModalMessage}
+                        editProject_name={this.state.editProject_name}
+                        editProject_minGoal={this.state.editProject_minGoal}
+                        editProject_idealGoal={this.state.editProject_idealGoal}
                     />
                 </Col>
             </Row>
