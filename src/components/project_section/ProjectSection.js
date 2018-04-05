@@ -1,11 +1,11 @@
 /* Imports */
 import {Modal, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
-import FaSpinner from 'react-icons/lib/fa/spinner';
 
 /* Component Imports */
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
 import ProjectList from './ProjectList';
+import LoadingModal from '../modals/LoadingModal';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
 
@@ -141,14 +141,11 @@ class ProjectSection extends Component {
                 />
                 
 
-                {/* LOADING MODAL */}
-                <div className="loading-modal-container">
-                    <Modal show={this.state.showLoadingModal} className="loading-modal">
-                        <Modal.Body>
-                            <h2><FaSpinner className="spin"/> {this.state.loadingModalMessage}</h2>
-                        </Modal.Body>
-                    </Modal>
-                </div>
+                {/* Loading Modal */}
+                <LoadingModal
+                    showLoadingModal={this.state.showLoadingModal}
+                    loadingModalMessage={this.state.loadingModalMessage}
+                />
 
 
             </div>

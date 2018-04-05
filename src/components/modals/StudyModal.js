@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 
-class AddModal extends Component{
+class StudyModal extends Component{
     constructor(props){
         super(props);
 
