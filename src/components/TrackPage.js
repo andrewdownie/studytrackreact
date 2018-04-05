@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 import ProjectSection from '../components/project_section/ProjectSection';
 import ChartSection from './chart_section/ChartSection';
-import ProjectModals from './Modals';
 import TimerContainer from './TimerContainer';
 
 import SheetUtil from '../utils/SheetUtil';
@@ -415,9 +414,9 @@ class TrackPage extends Component {
                         closeAddModal={this.state.callbacks.closeAddModal}
                         showLoadingModal={this.state.showLoadingModal}
                         loadingModalMessage={this.state.loadingModalMessage}
-                        editModal_idealGoal={this.state.editProject_idealGoal}
-                        editModal_minGoal={this.state.editProject_minGoal}
-                        editModal_name={this.state.editProject_nameGoal}
+                        editModal_idealGoal={this.state.editModal_idealGoal}
+                        editModal_minGoal={this.state.editModal_minGoal}
+                        editModal_name={this.state.editModal_name}
                     />
                 </Col>
             </Row>
@@ -462,25 +461,6 @@ class TrackPage extends Component {
             </Row>
 
             
-            <ProjectModals
-                startStudySession={this.startStudySession}
-                showAddModal={this.state.showAddModal}
-                showEditProject={this.state.showEditModal}
-                showLoadingModal={this.state.showLoadingModal}
-                showStudyModal={this.state.showStudyModal}
-                showQuickWarningModal={this.state.showQuickWarningModal}
-                showStudyWarningModal={this.state.showStudyWarningModal}
-                loadingModalMessage={this.state.loadingModalMessage}
-                addProjectCallback={this.addProjectCallback}
-                editProjectCallback={this.editProjectCallback}
-                deleteProjectCallback={this.deleteProjectCallback}
-                editProject_name={this.state.editProject_name}
-                editProject_minGoal={this.state.editProject_minGoal}
-                editProject_idealGoal={this.state.editProject_idealGoal}
-                projectNames={SheetUtil.ProjectNames(this.state.studyData, DateUtil.WeekOfYear())}
-                cancelStudySession={this.cancelStudySession}
-                closeModals={this.state.closeModals}
-            />
         </Grid>
         );
     }

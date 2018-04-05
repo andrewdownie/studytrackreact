@@ -27,6 +27,10 @@ class ProjectSection extends Component {
             addProject_name: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
+            editModal_originalName: props.editModal_name,
+            editModal_name: props.editModal_name,
+            editModal_minGoal: props.editModal_minGoal,
+            editModal_idealGoal: props.editModal_idealGoal,
         };
 
         this.deleteProjectPassthru = this.deleteProjectPassthru.bind(this);
@@ -58,10 +62,13 @@ class ProjectSection extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        /*
         var editModal_originalName = "";
         if(nextProps.showEditModal){
             editModal_originalName = nextProps.editModal_name;
         }
+        */
+
         this.setState({
             noProjectsFound: this.noProjectsFound(nextProps),
             loadedFromRemote: nextProps.loadedFromRemote,
@@ -69,15 +76,16 @@ class ProjectSection extends Component {
             showEditModal: nextProps.showEditModal,
             showAddModal: nextProps.showAddModal,
             closeAddModal: nextProps.closeAddModal,
-            editModal_name: nextProps.editModal_name, //TODO: rename editModal_name to editModal_newName
-            editModal_minGoal: nextProps.editModal_minGoal,
-            editModal_idealGoal: nextProps.editModal_idealGoal,
             showLoadingModal: nextProps.showLoadingModal,
             loadingModalMessage: nextProps.loadingModalMessage,
             editProject_name: "",
             addProject_originalName: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
+            editModal_name: nextProps.editModal_name,
+            editModal_originalName: nextProps.editModal_name,
+            editModal_minGoal: nextProps.editModal_minGoal,
+            editModal_idealGoal: nextProps.editModal_idealGoal,
         });
     }
 
