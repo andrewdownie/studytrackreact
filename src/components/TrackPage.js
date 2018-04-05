@@ -63,7 +63,7 @@ class TrackPage extends Component {
             closeModals: {
                 closeEditModal: this.closeEditModal.bind(this),
                 closeAddModal: this.closeAddModal.bind(this),
-                closeLooadingModal: this.closeLoadingModal.bind(this),
+                closeLoadingModal: this.closeLoadingModal.bind(this),
                 closeStudyModal: this.closeStudyModal.bind(this),
                 closeWarningModal: this.closeWarningModal.bind(this),
             },
