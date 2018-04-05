@@ -69,9 +69,9 @@ class ProjectSection extends Component {
             showEditModal: nextProps.showEditModal,
             showAddModal: nextProps.showAddModal,
             closeAddModal: nextProps.closeAddModal,
-            editModal_name: nextProps.editProject_name, //TODO: rename editModal_name to editModal_newName
-            editModal_minGoal: nextProps.editProject_minGoal,
-            editModal_idealGoal: nextProps.editProject_idealGoal,
+            editModal_name: nextProps.editModal_name, //TODO: rename editModal_name to editModal_newName
+            editModal_minGoal: nextProps.editModal_minGoal,
+            editModal_idealGoal: nextProps.editModal_idealGoal,
             showLoadingModal: nextProps.showLoadingModal,
             loadingModalMessage: nextProps.loadingModalMessage,
             editProject_name: "",

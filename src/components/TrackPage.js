@@ -415,9 +415,9 @@ class TrackPage extends Component {
                         closeAddModal={this.state.callbacks.closeAddModal}
                         showLoadingModal={this.state.showLoadingModal}
                         loadingModalMessage={this.state.loadingModalMessage}
-                        editProject_name={this.state.editProject_name}
-                        editProject_minGoal={this.state.editProject_minGoal}
-                        editProject_idealGoal={this.state.editProject_idealGoal}
+                        editModal_idealGoal={this.state.editProject_idealGoal}
+                        editModal_minGoal={this.state.editProject_minGoal}
+                        editModal_name={this.state.editProject_nameGoal}
                     />
                 </Col>
             </Row>
