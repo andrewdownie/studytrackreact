@@ -6,6 +6,7 @@ import FaSpinner from 'react-icons/lib/fa/spinner';
 /* Component Imports */
 import ProjectButtonsWrapper from './ProjectButtonsWrapper';
 import ProjectList from './ProjectList';
+import EditModal from '../modals/EditModal';
 
 
 
@@ -33,8 +34,6 @@ class ProjectSection extends Component {
             editModal_idealGoal: props.editModal_idealGoal,
         };
 
-        this.deleteProjectPassthru = this.deleteProjectPassthru.bind(this);
-        this.editProjectPassthru = this.editProjectPassthru.bind(this);
         this.openEditModal = this.openEditModal.bind(this);
         this.closeEditModal = this.closeEditModal.bind(this);
         this.addProject = this.addProject.bind(this);
@@ -73,7 +72,6 @@ class ProjectSection extends Component {
             noProjectsFound: this.noProjectsFound(nextProps),
             loadedFromRemote: nextProps.loadedFromRemote,
             projectNames: nextProps.projectNames,
-            showEditModal: nextProps.showEditModal,
             showAddModal: nextProps.showAddModal,
             closeAddModal: nextProps.closeAddModal,
             showLoadingModal: nextProps.showLoadingModal,
@@ -82,6 +80,7 @@ class ProjectSection extends Component {
             addProject_originalName: "",
             addProject_minGoal: 2,
             addProject_idealGoal: 5,
+            showEditModal: nextProps.showEditModal,
             editModal_name: nextProps.editModal_name,
             editModal_originalName: nextProps.editModal_name,
             editModal_minGoal: nextProps.editModal_minGoal,
@@ -110,17 +109,6 @@ class ProjectSection extends Component {
         this.setState({showEditProject: false});
     }
 
-    deleteProjectPassthru() {
-        this.state.callbacks.deleteProject(this.state.editModal_name);
-    }
-    editProjectPassthru() {
-        var newProjectInfo = {};
-        newProjectInfo.newName = this.state.editModal_name;
-        newProjectInfo.originalName = this.state.editModal_originalName;
-        newProjectInfo.minGoal = this.state.editModal_minGoal;
-        newProjectInfo.idealGoal = this.state.editModal_idealGoal;
-        this.state.callbacks.editProject(newProjectInfo);
-    }
 
     render(){
         return(
@@ -136,40 +124,15 @@ class ProjectSection extends Component {
                     projectNames={this.state.projectNames}
                 />
 
-                {/* EDIT PROJECT MODAL */}
-                <Modal show={this.state.showEditModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit project</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <h5>Title</h5>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={this.state.editModal_name}
-                            onChange={(event) => {this.setState({editModal_name: event.target.value})}}
-                        />
-                        <h5>Minimum Weekly Goal (hours)</h5>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={this.state.editModal_minGoal}
-                            onChange={(event) => {this.setState({editModal_minGoal: event.target.value})}}
-                        />
-                        <h5>Ideal Weekly Goal (hours)</h5>
-                        <input
-                            type="number"
-                            className="form-control"
-                            value={this.state.editModal_idealGoal}
-                            onChange={(event) => {this.setState({editModal_idealGoal: event.target.value})}}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button bsStyle="danger" onClick={this.deleteProjectPassthru} className="pull-left">Delete</Button>
-                        <Button onClick={this.state.callbacks.closeEditModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.editProjectPassthru}>Save Changes</Button>
-                    </Modal.Footer>
-                </Modal>
+                {/* Edit Project Modal */}
+                <EditModal
+                    callbacks={this.state.callbacks}
+                    showEditModal={this.state.showEditModal}
+                    editModal_idealGoal={this.state.editModal_idealGoal}
+                    editModal_minGoal={this.state.editModal_minGoal}
+                    editModal_name={this.state.editModal_name}
+                />
+                
 
                 {/* LOADING MODAL */}
                 <div className="loading-modal-container">
