@@ -9,10 +9,6 @@ class TimerContainer extends Component{
     constructor(props){
         super(props);
 
-        /* Bindings */
-        this.stopButtonClick = this.stopButtonClick.bind(this);
-        this.startStudySession = this.startStudySession.bind(this);
-
         this.state={
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
@@ -24,8 +20,6 @@ class TimerContainer extends Component{
             showStopSession: props.showStopSession,
             cancelStudySession: props.cancelStudySession,
             showStudyModal: props.showStudyModal,
-            //closeStudyWarningModal: props.closeStudyWarningModal,
-            //showStudyWarningModal: props.showStudyWarningModal,
             showStudyWarningModal: false,
             showQuickWarningModal: false,
             projectNames: [],
@@ -37,6 +31,8 @@ class TimerContainer extends Component{
                 hideQuickWarningModal: this.hideQuickWarningModal.bind(this),
                 hideStopSessionModal: this.hideStopSessionModal.bind(this),
                 closeStudyModal: this.closeStudyModal.bind(this),
+                stopButtonClick: this.stopButtonClick.bind(this),
+                settingsButtonClick: this.settingsButtonClick.bind(this),
                 startStudySession: props.startStudySession,
             }
         }
@@ -92,20 +88,13 @@ class TimerContainer extends Component{
     closeStudyModal(){
         this.setState({showStudyModal: false});
     }
+    /*
     startStudySession(){
         var timerTime = this.state.studySession_hours * 3600 + this.state.studySession_minutes * 60;
         console.log(this.state.studySession_hours);
         console.log(this.state.studySession_minutes);
         console.log(timerTime);
 
-        /*
-        var studySessionData = {
-            timerDirection: 'down',
-            timerRunning: true,
-            timerTitle: this.state.studySession_selectedProject,
-            timerTime: timerTime,
-        };
-        */
         this.setState({
             timerDirection: 'down',
             timerRunning: true,
@@ -118,6 +107,7 @@ class TimerContainer extends Component{
         });
         //this.state.startStudySession(studySessionData);
     }
+    */
 
     stopButtonClick(){
         console.log("stop button click");
@@ -134,7 +124,6 @@ class TimerContainer extends Component{
         if(timerDirection === 'up'){
             timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
-                //this.state.showQuickWarning();
                 this.setState({showQuickWarningModal: true});
             }
             else{
@@ -144,19 +133,14 @@ class TimerContainer extends Component{
         else if(timerDirection === 'down'){
             timerStopInfo.timerTime = this.state.timerStartTime;
             if(timerTime > 0){
-                //this.state.showStudyWarning();
                 this.setState({showStopSessionModal: true});
             }
-            //TODO: if (timerTime > 0){ show fractional modal; }
-            //TODO: will there need to be an active check to see when a study session ends?
-            //TODO: what happens when teh user presses the stop button in a full weight study session?
-            //TODO: fractional amount of time right?
-            //TODO: need to show warning
         }
     }
 
 
-    timerSettings(){
+    settingsButtonClick(){
+        console.log("show the settings modal here");
         //TODO: show a modal here...
     }
 
@@ -230,10 +214,9 @@ class TimerContainer extends Component{
         return (
             <div>
                 <Timer
+                    callbacks={this.state.callbacks}
                     timerCurrentTime={this.state.timerCurrentTime}
                     timerTitle={this.state.timerTitle}
-                    stopButtonClick={this.stopButtonClick}
-                    timerSettings={this.state.timerSettings}
                 />
                 {this.timerModals()}
             </div>

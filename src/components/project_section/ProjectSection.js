@@ -21,7 +21,6 @@ class ProjectSection extends Component {
             showAddModal: false,
             showLoadingModal: false,
             loadingModalMessage: "",
-            //TODO: I have two sets of edit modal/project info
             addModal_name: "",
             addModal_minGoal: 2,
             addModal_idealGoal: 5,
@@ -31,19 +30,8 @@ class ProjectSection extends Component {
             editModal_idealGoal: props.editModal_idealGoal,
         };
 
-        this.openEditModal = this.openEditModal.bind(this);
-        this.closeEditModal = this.closeEditModal.bind(this);
     }
 
-    /*
-    addProject(){
-        this.state.callbacks.addProject({
-            title: this.state.addProject_name,
-            minGoal: this.state.addProject_minGoal,
-            idealGoal: this.state.addProject_idealGoal,
-        });
-    }
-    */
 
     noProjectsFound(props){
         var noProjectsFound;
@@ -59,12 +47,6 @@ class ProjectSection extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        /*
-        var editModal_originalName = "";
-        if(nextProps.showEditModal){
-            editModal_originalName = nextProps.editModal_name;
-        }
-        */
 
         this.setState({
             noProjectsFound: this.noProjectsFound(nextProps),
@@ -84,24 +66,6 @@ class ProjectSection extends Component {
             editModal_minGoal: nextProps.editModal_minGoal,
             editModal_idealGoal: nextProps.editModal_idealGoal,
         });
-    }
-
-    openEditModal(projectName){
-        //TODO: get the info about the selected project...
-        //TODO: how?
-        //TODO: this has to get moved up to track page...
-
-        /*
-        var woy = DateUtil.WeekOfYear();
-
-        var projectGoals = this.state.studyData[woy - 1][0][projectName];
-        this.setState({
-            showEditProject: true,
-            editProject_name: projectName,
-            editProject_minGoal: projectGoals.minGoal,
-            editProject_idealGoal: projectGoals.idealGoal,
-        });
-        */
     }
     closeEditModal(){
         this.setState({showEditProject: false});
