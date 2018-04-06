@@ -1,8 +1,8 @@
-import {DropdownButton, Modal, Button, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
 import Timer from './TimerDisplay';
 import QuickWarningModal from './modals/QuickWarningModal';
 import StopSessionModal from './modals/StopSessionModal';
+import StudyModal from './modals/StudyModal';
 
 
 class TimerContainer extends Component{
@@ -11,8 +11,6 @@ class TimerContainer extends Component{
 
         /* Bindings */
         this.stopButtonClick = this.stopButtonClick.bind(this);
-        this.cancelStudySession = this.cancelStudySession.bind(this);
-        this.closeStudyModal = this.closeStudyModal.bind(this);
         this.startStudySession = this.startStudySession.bind(this);
 
         this.state={
@@ -34,11 +32,12 @@ class TimerContainer extends Component{
             studySession_selectedProject: "Loading projects...",
             studySession_minutes: 30,
             studySession_hours: 0,
-            startStudySession: props.startStudySession,
             callbacks: {
-                cancelStudySession: this.cancelStudySession,
+                cancelStudySession: this.cancelStudySession.bind(this),
                 hideQuickWarningModal: this.hideQuickWarningModal.bind(this),
                 hideStopSessionModal: this.hideStopSessionModal.bind(this),
+                closeStudyModal: this.closeStudyModal.bind(this),
+                startStudySession: props.startStudySession,
             }
         }
 
@@ -59,11 +58,6 @@ class TimerContainer extends Component{
 
 
     componentWillReceiveProps(nextProps){
-        var selectedProject = this.state.studySession_selectedProject;
-        if(nextProps.projectNames && nextProps.projectNames.length > 0 && this.state.studySession_selectedProject === "Loading projects..."){
-            //this.state.studySession_selectedProject = nextProps.projectNames[0];
-            selectedProject = nextProps.projectNames[0];
-        }
 
         //Start the timer this update
         var startTimerNow = false;
@@ -76,6 +70,7 @@ class TimerContainer extends Component{
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
 
+        console.log(nextProps.showStudyModal);
 
         this.setState({
             timerDirection: nextProps.timerDirection,
@@ -85,7 +80,6 @@ class TimerContainer extends Component{
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,
             projectNames: projectNames,
-            studySession_selectedProject: selectedProject,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
@@ -94,9 +88,6 @@ class TimerContainer extends Component{
         });
     }
 
-    changeSelectedStudySessionProject(projectTitle){
-        this.setState({studySession_selectedProject: projectTitle});
-    }
 
     closeStudyModal(){
         this.setState({showStudyModal: false});
@@ -185,65 +176,6 @@ class TimerContainer extends Component{
         }
     }
 
-    timerModals(){
-        return(
-            <div>
-
-
-                {/* STUDY SESSION MODAL */}
-                <Modal show={this.state.showStudyModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Start a Study Session</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <h4>Project</h4>
-                        <DropdownButton
-                            title={this.state.studySession_selectedProject}
-                            key={1}
-                            id={`dropdown-basic-${1}`}
-                        >
-                            {
-                                this.state.projectNames.map( (projectName, i) => {
-                                    return (
-                                        <MenuItem key={i} onClick={this.changeSelectedStudySessionProject.bind(this, projectName)} eventKey={i}>{projectName}</MenuItem>
-                                    )
-                                })
-                            }
-                        </DropdownButton>
-                        <h4>Duration</h4>
-                        <div>
-                            <p>Hours</p>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={this.state.studySession_hours}
-                                onChange={(event) => {this.setState({studySession_hours: event.target.value})}}
-                                min="0"
-                                max="12"
-                            />
-                        </div>
-                        <div>
-                            <p>Minutes</p>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={this.state.studySession_minutes}
-                                onChange={(event) => {this.setState({studySession_minutes: event.target.value})}}
-                                min="0"
-                                max="59"
-                            />
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.closeStudyModal}>Cancel</Button>
-                        <Button bsStyle="primary" onClick={this.startStudySession}>Start</Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
-        );
-    }
-
-
     cancelStudySession(){
         console.log("cancel study session pls...");
         //TODO: do the calculation for how much time should be saved to the sheet
@@ -270,10 +202,30 @@ class TimerContainer extends Component{
 
     }
 
+    timerModals(){
+        return(
+            <div>
+                <QuickWarningModal
+                    callbacks={this.state.callbacks}
+                    showQuickWarningModal={this.state.showQuickWarningModal}
+                />
+                <StopSessionModal
+                    callbacks={this.state.callbacks}
+                    showStopSessionModal={this.state.showStopSessionModal}
+                />
+                <StudyModal
+                    callbacks={this.state.callbacks}
+                    projectNames={this.state.projectNames}
+                    showStudyModal={this.state.showStudyModal}
+                />
+            </div>
+        );
+    }
+
 
     render(){
         if(!this.state.timerRunning){
-            return <div>{this.timerModals()}</div>;
+            return this.timerModals();
         }
         return (
             <div>
@@ -284,14 +236,6 @@ class TimerContainer extends Component{
                     timerSettings={this.state.timerSettings}
                 />
                 {this.timerModals()}
-                <QuickWarningModal
-                    callbacks={this.state.callbacks}
-                    showQuickWarningModal={this.state.showQuickWarningModal}
-                />
-                <StopSessionModal
-                    callbacks={this.state.callbacks}
-                    showStopSessionModal={this.state.showStopSessionModal}
-                />
             </div>
         );
     }

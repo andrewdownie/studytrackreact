@@ -1,5 +1,4 @@
 /* Imports */
-import {Modal, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
 
 /* Component Imports */
