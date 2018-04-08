@@ -25,20 +25,20 @@ class TrackPage extends Component {
 
         this.startStudySession = this.startStudySession.bind(this);
 
-        this.stopTimerCallback = this.stopTimerCallback.bind(this);
+        this.stopTimerClick = this.stopTimerCallback.bind(this);
 
 
         this.quickStartStudyCallback = this.quickStartStudyCallback.bind(this);
 
         this.cancelStudySession = this.cancelStudySession.bind(this);
-        this.stopTimerWarning = this.stopTimerWarning.bind(this);
+        this.stopTimerClick = this.stopTimerWarning.bind(this);
 
 
         this.saveTimerDuration = this.saveTimerDuration.bind(this);
-        this.showTimerWarning = this.showQuickWarning.bind(this);
+        this.showTimerWarning = this.openQuickWarning.bind(this);
 
-        this.showQuickWarning = this.showQuickWarning.bind(this);
-        this.showStudyWarning = this.showStudyWarning.bind(this);
+        this.openQuickWarning = this.openQuickWarning.bind(this);
+        this.openStudyWarning = this.openStudyWarning.bind(this);
 
         this.closeStudyWarningModal = this.closeStudyWarningModal.bind(this);
 
@@ -52,7 +52,8 @@ class TrackPage extends Component {
             showEditModal: false,
             showLoadingModal: false,
             showStudyModal: false,
-            showQuickWarningModal: false,
+            quickWarningVisible: false,
+            stopSessionVisible: false,
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
@@ -78,6 +79,7 @@ class TrackPage extends Component {
                 editProject: this.editProjectCallback,
                 addProject: this.addProjectCallback,
                 quickStartStudy: this.quickStartStudyCallback,
+                cancelStudySession: this.cancelStudySession,
             }
         };
 
@@ -97,7 +99,7 @@ class TrackPage extends Component {
         this.setState({showStudyModal: false});
     }
     closeWarningModal(){
-        this.setState({showQuickWarningModal: false});
+        this.setState({openQuickWarningModal: false});
     }
     closeStudyWarningModal(){
         this.setState({showStudyWarningModal: false});
@@ -288,13 +290,16 @@ class TrackPage extends Component {
         });
     }
 
+    //TODO: hide the timer here, let timer container know that the timer has stopped
+    //TODO: the only state I should have to set here is the timer being displayed, right?
     stopTimerCallback(stopTimerInfo){
+        console.log("Stop timer click in track page");
 
         if(stopTimerInfo.timerDirection === 'up'){
             if(stopTimerInfo.timerTime < 10 * 60){
                 //TODO: show confimation modal to stop timer if less than 10 minutes
                 //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
-                this.setState({showQuickWarningModal: true});
+                this.setState({openQuickWarningModal: true});
             }
         }
         this.setState({
@@ -311,7 +316,7 @@ class TrackPage extends Component {
             if(stopTimerInfo.timerTime < 10 * 60){
                 //TODO: show confimation modal to stop timer if less than 10 minutes
                 //alert("You have studied less than 10 minutes, no progress will be saved if you stop now");
-                this.setState({showQuickWarningModal: true});
+                this.setState({openQuickWarningModal: true});
             }
             else{
                 //TODO: save teh timer
@@ -332,9 +337,15 @@ class TrackPage extends Component {
         });
     }
 
-    cancelStudySession(timePassed){
-        var timeToAddToSheet = Math.ceil(timePassed / 2);
-        console.log("Time to add to sheet: " + timeToAddToSheet);
+    cancelStudySession(){
+        console.log("Stop study sesssion");
+        this.setState(
+            {
+                timerRunning: false,
+                quickWarningVisible: false,
+                stopSessionVisible: false,
+            }
+        );
     }
 
     saveTimerDuration(timerStopInfo){
@@ -379,12 +390,13 @@ class TrackPage extends Component {
             GapiUtil.SetTodaysStudyData(this.state.gapiInfo, repackedData);
         });
     }
-    showQuickWarning(){
+    openQuickWarning(){
         this.setState({showQuickWarningModal: true});
     }
-    showStudyWarning(){
+    openStudyWarning(){
         this.setState({showStudyWarningModal: true});
     }
+    
 
     render(){
         this.loadTrackPageData();
@@ -408,7 +420,8 @@ class TrackPage extends Component {
                         studyData={this.state.studyData}
                         callbacks={this.state.callbacks}
                         loadedFromRemote={this.state.loadedFromRemote}
-                        showStudyWarningModal={this.showStudyWarning}
+                        showStudyWarningModal={this.openStudyWarning}
+                        showQuickWarningModal={this.showQuickWarningModal}
                         showEditModal={this.state.showEditModal}
                         showAddModal={this.state.showAddModal}
                         closeAddModal={this.state.callbacks.closeAddModal}
@@ -450,12 +463,14 @@ class TrackPage extends Component {
                         timerTitle={this.state.timerTitle}
                         timerStartTime={this.state.timerTime}
                         saveTimerDuration={this.saveTimerDuration}
-                        showQuickWarning={this.showQuickWarning}
-                        showStudyWarning={this.showStudyWarning}
+                        openQuickWarning={this.openQuickWarning}
+                        openStudyWarning={this.openStudyWarning}
                         cancelStudySession={this.cancelStudySession}
                         closeStudyWarningModal={this.closeStudyWarningModal}
                         showStudyModal={this.state.showStudyModal}
                         startStudySession={this.startStudySession}
+                        quickWarningVisible={this.state.quickWarningVisible}
+                        stopSessionVisible={this.state.stopSessionVisible}
                     />
                 </Col>
             </Row>

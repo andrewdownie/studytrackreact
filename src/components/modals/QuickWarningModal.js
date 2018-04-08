@@ -8,20 +8,20 @@ class QuickWarningModal extends Component{
 
         this.state = {
             callbacks: props.callbacks,
-            showQuickWarningModal: false,
+            quickWarningVisible: false,
         };
     }
 
     componentWillReceiveProps(nextProps){
         this.setState({
-            showQuickWarningModal: nextProps.showQuickWarningModal,
+            quickWarningVisible: nextProps.quickWarningVisible,
         });
     }
 
     render(){
         return(
             /* 10 MINUTE WARNING MODAL */
-            <Modal show={this.state.showQuickWarningModal}>
+            <Modal show={this.state.quickWarningVisible}>
                 <Modal.Header closeButton>
                     <Modal.Title>Warning!</Modal.Title>
                 </Modal.Header>

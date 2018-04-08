@@ -7,20 +7,20 @@ class StopSessionModal extends Component{
 
         this.state = {
             callbacks: props.callbacks,
-            showStopSessionModal: false,
+            stopSessionVisible: false,
         };
     }
 
     componentWillReceiveProps(nextProps){
         this.setState({
-            showStopSessionModal: nextProps.showStopSessionModal,
+            stopSessionVisible: nextProps.stopSessionVisible,
         });
     }
 
     render(){
         return(
             /* STUDY SESSION WARNING MODAL */
-            <Modal show={this.state.showStopSessionModal}>
+            <Modal show={this.state.stopSessionVisible}>
                 <Modal.Header closeButton>
                     <Modal.Title>WARNING! Timer not done yet</Modal.Title>
                 </Modal.Header>
@@ -32,8 +32,8 @@ class StopSessionModal extends Component{
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button bsStyle="danger" onClick={this.state.callbacks.cancelStudySession}>Cancel Session</Button>
                     <Button bsStyle="default" onClick={this.state.callbacks.hideStopSessionModal}>Continue Session</Button>
+                    <Button bsStyle="danger" onClick={this.state.callbacks.cancelStudySession}>Cancel Session</Button>
                 </Modal.Footer>
             </Modal>
         );

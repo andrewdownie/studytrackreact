@@ -9,6 +9,7 @@ class TimerContainer extends Component{
     constructor(props){
         super(props);
 
+
         this.state={
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
@@ -16,9 +17,8 @@ class TimerContainer extends Component{
             timerStartTime: props.timerStartTime,
             timerCurrentTime: 0,
             saveTimerDuration: props.saveTimerDuration,
-            showQuickWarning: props.showQuickWarning,
-            showStopSession: props.showStopSession,
-            cancelStudySession: props.cancelStudySession,
+            quickWarningVisible: props.quickWarningVisible,
+            stopSessionVisible: props.stopSessionVisible,
             showStudyModal: props.showStudyModal,
             showStudyWarningModal: false,
             showQuickWarningModal: false,
@@ -27,7 +27,8 @@ class TimerContainer extends Component{
             studySession_minutes: 30,
             studySession_hours: 0,
             callbacks: {
-                cancelStudySession: this.cancelStudySession.bind(this),
+                //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
+                cancelStudySession: props.cancelStudySession,
                 hideQuickWarningModal: this.hideQuickWarningModal.bind(this),
                 hideStopSessionModal: this.hideStopSessionModal.bind(this),
                 closeStudyModal: this.closeStudyModal.bind(this),
@@ -76,6 +77,8 @@ class TimerContainer extends Component{
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,
             projectNames: projectNames,
+            quickWarningVisible: nextProps.quickWarningVisible,
+            stopSessionVisible: nextProps.stopSessionVisible,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
@@ -111,6 +114,7 @@ class TimerContainer extends Component{
 
     stopButtonClick(){
         console.log("stop button click");
+        console.log("how come the modal doesn't get shown here?");
         var timerDirection = this.state.timerDirection;
         var timerTime = this.state.timerCurrentTime;
 
@@ -124,7 +128,7 @@ class TimerContainer extends Component{
         if(timerDirection === 'up'){
             timerStopInfo.timerTime = this.state.timerCurrentTime;
             if(timerTime < 60 * 10){
-                this.setState({showQuickWarningModal: true});
+                this.setState({quickWarningVisible: true});
             }
             else{
                 this.state.saveTimerDuration(timerStopInfo);
@@ -133,7 +137,7 @@ class TimerContainer extends Component{
         else if(timerDirection === 'down'){
             timerStopInfo.timerTime = this.state.timerStartTime;
             if(timerTime > 0){
-                this.setState({showStopSessionModal: true});
+                this.setState({stopSessionVisible: true});
             }
         }
     }
@@ -160,6 +164,8 @@ class TimerContainer extends Component{
         }
     }
 
+    //TODO: move this up to track page
+    /*
     cancelStudySession(){
         console.log("cancel study session pls...");
         //TODO: do the calculation for how much time should be saved to the sheet
@@ -182,20 +188,19 @@ class TimerContainer extends Component{
             timerDirection: '',
             timerStartTime: 0,
         });
-
-
     }
+    */
 
     timerModals(){
         return(
             <div>
                 <QuickWarningModal
                     callbacks={this.state.callbacks}
-                    showQuickWarningModal={this.state.showQuickWarningModal}
+                    quickWarningVisible={this.state.quickWarningVisible}
                 />
                 <StopSessionModal
                     callbacks={this.state.callbacks}
-                    showStopSessionModal={this.state.showStopSessionModal}
+                    stopSessionVisible={this.state.stopSessionVisible}
                 />
                 <StudyModal
                     callbacks={this.state.callbacks}
