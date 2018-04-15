@@ -42,6 +42,9 @@ class TrackPage extends Component {
 
         this.closeStudyWarningModal = this.closeStudyWarningModal.bind(this);
 
+        this.hideQuickWarningModal = this.hideQuickWarningModal.bind(this);
+        this.hideStopSessionModal = this.hideStopSessionModal.bind(this);
+
 
         /* Initialize State */
         this.state = {
@@ -396,6 +399,13 @@ class TrackPage extends Component {
     openStudyWarning(){
         this.setState({showStudyWarningModal: true});
     }
+    hideQuickWarningModal(){
+        this.setState({quickWarningVisible: false});
+    }
+    hideStopSessionModal(){
+        this.setState({studyWarningVisible: false});
+    }
+
     
 
     render(){
@@ -471,6 +481,8 @@ class TrackPage extends Component {
                         startStudySession={this.startStudySession}
                         quickWarningVisible={this.state.quickWarningVisible}
                         stopSessionVisible={this.state.stopSessionVisible}
+                        hideQuickWarningModal={this.hideQuickWarningModal}
+                        hideStopSessionModal={this.hideStopSessionModal}
                     />
                 </Col>
             </Row>

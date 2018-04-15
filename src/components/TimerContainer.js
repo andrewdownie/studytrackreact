@@ -20,8 +20,6 @@ class TimerContainer extends Component{
             quickWarningVisible: props.quickWarningVisible,
             stopSessionVisible: props.stopSessionVisible,
             showStudyModal: props.showStudyModal,
-            showStudyWarningModal: false,
-            showQuickWarningModal: false,
             projectNames: [],
             studySession_selectedProject: "Loading projects...",
             studySession_minutes: 30,
@@ -29,8 +27,8 @@ class TimerContainer extends Component{
             callbacks: {
                 //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
                 cancelStudySession: props.cancelStudySession,
-                hideQuickWarningModal: this.hideQuickWarningModal.bind(this),
-                hideStopSessionModal: this.hideStopSessionModal.bind(this),
+                hideQuickWarningModal: props.hideQuickWarningModal,
+                hideStopSessionModal: props.hideStopSessionModal,
                 closeStudyModal: this.closeStudyModal.bind(this),
                 stopButtonClick: this.stopButtonClick.bind(this),
                 settingsButtonClick: this.settingsButtonClick.bind(this),
@@ -64,6 +62,17 @@ class TimerContainer extends Component{
             }
         }
 
+        //TODO: this should get hoisted up to TrackPage or all of this should get brought down...
+        var timerStartTime, timerCurrentTime;
+        if(startTimerNow){
+            timerStartTime = nextProps.timerStartTime;
+            timerCurrentTime = nextProps.timerCurrentTime;
+        }
+        else{
+            timerStartTime = this.state.timerStartTime;
+            timerCurrentTime = this.state.timerCurrentTime;
+        }
+
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
 
@@ -71,8 +80,8 @@ class TimerContainer extends Component{
 
         this.setState({
             timerDirection: nextProps.timerDirection,
-            timerStartTime: nextProps.timerStartTime,
-            timerCurrentTime: nextProps.timerStartTime,
+            timerStartTime: timerStartTime,
+            timerCurrentTime: timerCurrentTime,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,

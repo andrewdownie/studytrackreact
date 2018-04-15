@@ -40,7 +40,6 @@ const Timer = (props) => {
         <Navbar fixedBottom className="timer-container">
             <div className="timer-buttons">
                 <Button className="timer-stop" bsStyle="danger" onClick={props.callbacks.stopButtonClick}><FaStop/></Button>
-                <br/>
                 <Button className="timer-settings" bsStyle="default" onClick={props.callbacks.settingsButtonClick}><FaCog /></Button>
             </div>
             <div className="timer-labels">

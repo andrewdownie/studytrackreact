@@ -18,7 +18,7 @@ body {
     float:left;
 }
 .timer-stop{
-
+    display: block;
 }
 
 .timer-name{
@@ -61,6 +61,19 @@ body {
     flex-grow: 0;
 
 }
+
+@media(min-width: 550px) {
+    .timer-buttons {
+        flex-direction: column;
+    }
+    .timer-stop {
+        display: inline-block;
+    }
+    .timer-stop, .timer-settings {
+        padding: 8px 48px;
+    }
+}
+
 .timer-labels{
     flex-shrink: 1;
     flex-grow: 1;
