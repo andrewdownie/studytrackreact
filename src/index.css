@@ -4,6 +4,17 @@ body {
   padding: 0;
   margin: 0;
 }
+.project-row .start-project-timer-btn:hover{
+    background-color: #eee;
+    text-decoration: none;
+    border-radius: 1px 1px;
+    color: black;
+}
+
+.section-header:hover, .section-header:focus{
+    text-decoration: none;
+    color: black;
+}
 
 .container-fluid{
     padding: 0;

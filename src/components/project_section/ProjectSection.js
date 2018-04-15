@@ -28,6 +28,7 @@ class ProjectSection extends Component {
             editModal_name: props.editModal_name,
             editModal_minGoal: props.editModal_minGoal,
             editModal_idealGoal: props.editModal_idealGoal,
+            projectSectionVisible: props.projectSectionVisible,
         };
 
     }
@@ -65,6 +66,7 @@ class ProjectSection extends Component {
             editModal_originalName: nextProps.editModal_name,
             editModal_minGoal: nextProps.editModal_minGoal,
             editModal_idealGoal: nextProps.editModal_idealGoal,
+            projectSectionVisible: nextProps.projectSectionVisible,
         });
     }
     closeEditModal(){
@@ -73,6 +75,10 @@ class ProjectSection extends Component {
 
 
     render(){
+        if(!this.state.projectSectionVisible){
+            return <span></span>;
+        }
+
         return(
             <div className="show-grid project-section">
                 <ProjectButtonsWrapper

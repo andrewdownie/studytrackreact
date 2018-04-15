@@ -1,4 +1,4 @@
-import {Grid, Row, Col, PageHeader} from 'react-bootstrap';
+import {Button, Grid, Row, Col, PageHeader} from 'react-bootstrap';
 import React, { Component } from 'react';
 
 import ProjectSection from '../components/project_section/ProjectSection';
@@ -64,6 +64,8 @@ class TrackPage extends Component {
             timerDirection:'down',
             timerRunning:false,
             timerTime:0,
+            projectSectionVisible: true,
+            chartSectionVisible: true,
             closeModals: {
                 closeEditModal: this.closeEditModal.bind(this),
                 closeAddModal: this.closeAddModal.bind(this),
@@ -83,10 +85,21 @@ class TrackPage extends Component {
                 addProject: this.addProjectCallback,
                 quickStartStudy: this.quickStartStudyCallback,
                 cancelStudySession: this.cancelStudySession,
+                toggleChartSectionVisible: this.toggleChartSectionVisible.bind(this),
+                toggleProjectSectionVisible: this.toggleProjectSectionVisible.bind(this),
             }
         };
 
 
+    }
+
+    toggleChartSectionVisible(){
+        console.log("Toggle chart section visible: " + this.state.chartSectionVisible);
+        this.setState({chartSectionVisible: !this.state.chartSectionVisible});
+    }
+    toggleProjectSectionVisible(){
+        console.log("Toggle project section visible: " + this.state.projectSectionVisible);
+        this.setState({projectSectionVisible: !this.state.projectSectionVisible});
     }
 
     closeAddModal(){
@@ -406,6 +419,19 @@ class TrackPage extends Component {
         this.setState({studyWarningVisible: false});
     }
 
+    ChartHeader(){
+        if(this.state.chartSectionVisible){
+            return "- Track";
+        }
+        return "+ Track";
+    }
+    ProjectHeader(){
+        if(this.state.projectSectionVisible){
+            return "- Projects";
+        }
+        return "+ Projects";
+    }
+
     
 
     render(){
@@ -421,7 +447,11 @@ class TrackPage extends Component {
 
             <Row className="show-grid">
                 <Col xs={12} >
-                    <PageHeader>Projects</PageHeader>
+                    <PageHeader>
+                        <Button onClick={this.state.callbacks.toggleProjectSectionVisible} className="section-header" bsStyle="link">
+                            <h1>{this.ProjectHeader()}</h1>
+                        </Button>
+                    </PageHeader>
                     {/* There are way too many props being passed around here... is this a bad thing? */}
                     {/* Maybe put them all into an object, and save that object to this.state? then it can
                     be passed directly with any un/re-packing*/}
@@ -440,6 +470,7 @@ class TrackPage extends Component {
                         editModal_idealGoal={this.state.editModal_idealGoal}
                         editModal_minGoal={this.state.editModal_minGoal}
                         editModal_name={this.state.editModal_name}
+                        projectSectionVisible={this.state.projectSectionVisible}
                     />
                 </Col>
             </Row>
@@ -452,8 +483,16 @@ class TrackPage extends Component {
 
             <Row className="show-grid">
                 <Col xs={12} >
-                   <PageHeader>Track</PageHeader>
-                   <ChartSection chartColSize={6} gChartList={preparedChartData.chartList}/>
+                    <PageHeader>
+                        <Button onClick={this.state.callbacks.toggleChartSectionVisible} className="section-header" bsStyle="link">
+                            <h1>{this.ChartHeader()}</h1>
+                        </Button>
+                    </PageHeader>
+                   <ChartSection
+                    chartColSize={6}
+                    gChartList={preparedChartData.chartList}
+                    chartSectionVisible={this.state.chartSectionVisible}
+                   />
                 </Col>
             </Row>
 

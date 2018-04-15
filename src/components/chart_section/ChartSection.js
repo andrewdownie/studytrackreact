@@ -5,11 +5,16 @@ import FaSpinner from 'react-icons/lib/fa/spinner';
 
 
 const ChartSection = (props) => {
+    if(!props.chartSectionVisible){
+        return <span></span>;
+    }
+
     if(props.gChartList.length === 0){
         return(
             <p><FaSpinner className="spin"/> Loading chart data...</p>
         );
     }
+
 
     return(
         <Row className="show-grid">
