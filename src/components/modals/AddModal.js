@@ -8,6 +8,9 @@ class AddModal extends Component{
 
         /* Bindings */
         this.addProjectPassthru = this.addProjectPassthru.bind(this);
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onChangeMinGoal = this.onChangeMinGoal.bind(this);
+        this.onChangeIdealGoal = this.onChangeIdealGoal.bind(this);
 
         /* Initial State */
         this.state = {
@@ -38,6 +41,25 @@ class AddModal extends Component{
         });
     }
 
+    onChangeName(event){
+        console.log("change name pls");
+        var valid = /[a-zA-Z0-9_-]*/
+        var match = valid.exec(event.target.value);
+        this.setState({name: match});
+    }
+    onChangeMinGoal(event){
+        console.log("change min pls");
+        var numsOnly = /[0-9]*/
+        var match = numsOnly.exec(event.target.value);
+        this.setState({minGoal: match});
+    }
+    onChangeIdealGoal(event){
+        console.log("change ideal pls");
+        var numsOnly = /[0-9]*/
+        var match = numsOnly.exec(event.target.value);
+        this.setState({idealGoal: match});
+    }
+
     render(){
         return(
             /* ADD PROJECT MODAL */
@@ -51,21 +73,21 @@ class AddModal extends Component{
                         type="text"
                         className="form-control"
                         value={this.state.name}
-                        onChange={(event) => {this.setState({name: event.target.value})}}
+                        onChange={this.onChangeName}
                     />
                     <h5>Minimum Weekly Goal (hours)</h5>
                     <input
                         type="number"
                         className="form-control"
                         value={this.state.minGoal}
-                        onChange={(event) => {this.setState({minGoal: event.target.value})}}
+                        onChange={this.onChangeMinGoal}
                     />
                     <h5>Ideal Weekly Goal (hours)</h5>
                     <input
                         type="number"
                         className="form-control"
                         value={this.state.idealGoal}
-                        onChange={(event) => {this.setState({idealGoal: event.target.value})}}
+                        onChange={this.onChangeIdealGoal}
                     />
                 </Modal.Body>
                 <Modal.Footer>

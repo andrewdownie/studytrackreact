@@ -6,7 +6,11 @@ class StudyModal extends Component{
     constructor(props){
         super(props);
 
+        /* Bindings */
         this.startStudySessionPassthru = this.startStudySessionPassthru.bind(this);
+        this.onChangeHours = this.onChangeHours.bind(this);
+        this.onChangeMinutes = this.onChangeMinutes.bind(this);
+
         this.state = {
             callbacks: props.callbacks,
             projectNames: [],
@@ -47,6 +51,15 @@ class StudyModal extends Component{
         this.state.callbacks.startStudySession(sessionData);
     }
 
+    onChangeHours(event){
+        console.log("Change hours pls");
+        this.setState({hours: event.target.value});
+    }
+    onChangeMinutes(event){
+        console.log("Change minutes pls");
+        this.setState({minutes: event.target.value});
+    }
+
     render(){
         return(
             /* STUDY SESSION MODAL */
@@ -76,7 +89,7 @@ class StudyModal extends Component{
                             type="number"
                             className="form-control"
                             value={this.state.hours}
-                            onChange={(event) => {this.setState({hours: event.target.value})}}
+                            onChange={this.onChangeHours}
                             min="0"
                             max="12"
                         />
@@ -87,7 +100,7 @@ class StudyModal extends Component{
                             type="number"
                             className="form-control"
                             value={this.state.minutes}
-                            onChange={(event) => {this.setState({minutes: event.target.value})}}
+                            onChange={this.onChangeMinutes}
                             min="0"
                             max="59"
                         />
