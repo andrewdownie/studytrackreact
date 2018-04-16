@@ -75,13 +75,19 @@ body {
 
 @media(min-width: 550px) {
     .timer-buttons {
-        flex-direction: column;
+        position: relative;
     }
     .timer-stop {
         display: inline-block;
+        right: 4px;
+    }
+    .timer-settings {
+        right: 124px;
     }
     .timer-stop, .timer-settings {
         padding: 8px 48px;
+        bottom: -70px;
+        position: absolute;
     }
 }
 

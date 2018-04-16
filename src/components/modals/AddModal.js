@@ -42,19 +42,16 @@ class AddModal extends Component{
     }
 
     onChangeName(event){
-        console.log("change name pls");
         var valid = /[a-zA-Z0-9_-]*/
         var match = valid.exec(event.target.value);
         this.setState({name: match});
     }
     onChangeMinGoal(event){
-        console.log("change min pls");
         var numsOnly = /[0-9]*/
         var match = numsOnly.exec(event.target.value);
         this.setState({minGoal: match});
     }
     onChangeIdealGoal(event){
-        console.log("change ideal pls");
         var numsOnly = /[0-9]*/
         var match = numsOnly.exec(event.target.value);
         this.setState({idealGoal: match});

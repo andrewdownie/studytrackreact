@@ -41,7 +41,6 @@ class StudyModal extends Component{
     }
 
     startStudySessionPassthru(){
-        console.log("start study session");
         var sessionData = {
             timerDirection: 'down',
             timerRunning: true,
@@ -52,11 +51,9 @@ class StudyModal extends Component{
     }
 
     onChangeHours(event){
-        console.log("Change hours pls");
         this.setState({hours: event.target.value});
     }
     onChangeMinutes(event){
-        console.log("Change minutes pls");
         this.setState({minutes: event.target.value});
     }
 
