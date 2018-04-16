@@ -15,7 +15,7 @@ class TimerContainer extends Component{
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
             timerStartTime: props.timerStartTime,
-            timerCurrentTime: 0,
+            timerCurrentTime: props.timerStartTime,
             saveTimerDuration: props.saveTimerDuration,
             quickWarningVisible: props.quickWarningVisible,
             stopSessionVisible: props.stopSessionVisible,
@@ -158,6 +158,7 @@ class TimerContainer extends Component{
     }
 
     runTimer(){
+        console.log(this.state.timerCurrentTime);
         if(this.state.timerRunning){
             var dir = 1;
             if(this.state.timerDirection === 'down'){

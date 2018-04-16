@@ -421,15 +421,15 @@ class TrackPage extends Component {
 
     ChartHeader(){
         if(this.state.chartSectionVisible){
-            return "- Track";
+            return "Track";
         }
-        return "+ Track";
+        return "(Track)";
     }
     ProjectHeader(){
         if(this.state.projectSectionVisible){
-            return "- Projects";
+            return "Projects";
         }
-        return "+ Projects";
+        return "(Projects)";
     }
 
     
@@ -511,6 +511,7 @@ class TrackPage extends Component {
                         timerRunning={this.state.timerRunning}
                         timerTitle={this.state.timerTitle}
                         timerStartTime={this.state.timerTime}
+                        timerCurrentTime={this.state.timerTime}
                         saveTimerDuration={this.saveTimerDuration}
                         openQuickWarning={this.openQuickWarning}
                         openStudyWarning={this.openStudyWarning}
