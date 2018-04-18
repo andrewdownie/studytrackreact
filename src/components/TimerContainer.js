@@ -53,6 +53,7 @@ class TimerContainer extends Component{
 
 
     componentWillReceiveProps(nextProps){
+        var timerWasRunning = this.state.timerRunning;
 
         //Start the timer this update
         var startTimerNow = false;
@@ -60,6 +61,9 @@ class TimerContainer extends Component{
             if(nextProps.timerRunning === true){
                 startTimerNow = true;
             }
+        }
+        else if(this.state.timerDirection != nextProps.timerDirection){
+            startTimerNow = true;
         }
 
         //TODO: this should get hoisted up to TrackPage or all of this should get brought down...
@@ -90,7 +94,7 @@ class TimerContainer extends Component{
             stopSessionVisible: nextProps.stopSessionVisible,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
-            if(startTimerNow){
+            if(startTimerNow && timerWasRunning === false){
                 this.runTimer();
             }
         });
@@ -160,13 +164,12 @@ class TimerContainer extends Component{
     runTimer(){
         console.log(this.state.timerCurrentTime);
         if(this.state.timerRunning){
-            var dir = 1;
-            if(this.state.timerDirection === 'down'){
-                dir = -1;
-            }
-
 
             setTimeout(function() {
+                var dir = 1;
+                if(this.state.timerDirection === 'down'){
+                    dir = -1;
+                }
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
             }.bind(this),
