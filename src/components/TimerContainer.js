@@ -9,13 +9,20 @@ class TimerContainer extends Component{
     constructor(props){
         super(props);
 
+        var timerCurrentTime = props.timerStartTime;
+        if(localStorage.timerRunning != null){
+            if(localStorage.timerRunning){
+                timerCurrentTime = parseInt(localStorage.timerCurrentTime);
+            }
+        }
+
 
         this.state={
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
             timerStartTime: props.timerStartTime,
-            timerCurrentTime: props.timerStartTime,
+            timerCurrentTime: timerCurrentTime,
             saveTimerDuration: props.saveTimerDuration,
             quickWarningVisible: props.quickWarningVisible,
             stopSessionVisible: props.stopSessionVisible,
@@ -33,6 +40,12 @@ class TimerContainer extends Component{
                 stopButtonClick: this.stopButtonClick.bind(this),
                 settingsButtonClick: this.settingsButtonClick.bind(this),
                 startStudySession: props.startStudySession,
+            }
+        }
+
+        if(localStorage.timerRunning != null){
+            if(localStorage.timerRunning){
+                this.runTimer();
             }
         }
 
@@ -55,6 +68,14 @@ class TimerContainer extends Component{
     componentWillReceiveProps(nextProps){
         var timerWasRunning = this.state.timerRunning;
 
+        if(nextProps.timerRunning === false){
+            localStorage.timerTitle = 'no timer running';
+            localStorage.timerRunning = false;
+            localStorage.timerStartTime = 0;
+            localStorage.timerDirection = 'down';
+            localStorage.timerCurrentTime = 0;
+        }
+
         //Start the timer this update
         var startTimerNow = false;
         if(this.state.timerRunning === false){
@@ -62,7 +83,7 @@ class TimerContainer extends Component{
                 startTimerNow = true;
             }
         }
-        else if(this.state.timerDirection != nextProps.timerDirection){
+        else if(this.state.timerDirection !== nextProps.timerDirection){
             startTimerNow = true;
         }
 
@@ -94,8 +115,18 @@ class TimerContainer extends Component{
             stopSessionVisible: nextProps.stopSessionVisible,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
-            if(startTimerNow && timerWasRunning === false){
-                this.runTimer();
+            if(startTimerNow){
+                if(!timerWasRunning){
+                    this.runTimer();
+                }
+
+                //TODO save timer settings to local state
+                localStorage.timerTitle = this.state.timerTitle;
+                localStorage.timerRunning = this.state.timerRunning;
+                localStorage.timerStartTime = this.state.timerStartTime;
+                localStorage.timerDirection = this.state.timerDirection;
+                localStorage.timerCurrentTime = this.state.timerCurrentTime;
+
             }
         });
     }
@@ -162,7 +193,7 @@ class TimerContainer extends Component{
     }
 
     runTimer(){
-        console.log(this.state.timerCurrentTime);
+        //console.log(this.state.timerCurrentTime);
         if(this.state.timerRunning){
 
             setTimeout(function() {
@@ -226,11 +257,16 @@ class TimerContainer extends Component{
 
 
     render(){
-        if(!this.state.timerRunning){
-            return this.timerModals();
-        }
+
+        //console.log(typeof this.state.timerRunning);
+        //console.log(this.state.timerRunning);
+        //if(!this.state.timerRunning){
+            //return this.timerModals();
+        //}
+
         return (
             <div>
+                {this.timerModals()}
                 <Timer
                     callbacks={this.state.callbacks}
                     timerCurrentTime={this.state.timerCurrentTime}

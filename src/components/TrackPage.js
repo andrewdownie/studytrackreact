@@ -45,6 +45,29 @@ class TrackPage extends Component {
         this.hideQuickWarningModal = this.hideQuickWarningModal.bind(this);
         this.hideStopSessionModal = this.hideStopSessionModal.bind(this);
 
+        // Load current timer (if there is one)
+        var timerRunning = false;
+        var timerTitle = 'no timer running';
+        var timerDirection = 'down';
+        var timerTime = 0;
+
+        if(localStorage.timerRunning != null) {
+            console.log(localStorage.timerRunning);
+
+            timerRunning = localStorage.timerRunning === 'true';
+            if(localStorage.timerRunning === true){
+                if(localStorage.timerTitle != null) {
+                    timerTitle = localStorage.timerTitle;
+                }
+                if(localStorage.timerDirection != null) {
+                    timerDirection = localStorage.timerDirection;
+                }
+                if(localStorage.timerTime != null) {
+                    timerTime = localStorage.timerTime;
+                }
+            }
+        }
+
 
         /* Initialize State */
         this.state = {
@@ -60,10 +83,10 @@ class TrackPage extends Component {
             editProject_name: "",
             editProject_minGoal: 0,
             editProject_idealGoal: 0,
-            timerTitle:'no timer started',
-            timerDirection:'down',
-            timerRunning:false,
-            timerTime:0,
+            timerTitle: timerTitle,
+            timerDirection: timerDirection,
+            timerRunning: timerRunning,
+            timerTime: timerTime,
             projectSectionVisible: true,
             chartSectionVisible: true,
             closeModals: {
@@ -90,6 +113,7 @@ class TrackPage extends Component {
             }
         };
 
+        console.log(this.state.timerRunning);
 
     }
 
