@@ -49,24 +49,35 @@ class TrackPage extends Component {
         var timerRunning = false;
         var timerTitle = 'no timer running';
         var timerDirection = 'down';
+        var timerStart = 0;
+        var timerEnd = 0;
         var timerTime = 0;
 
         if(localStorage.timerRunning != null) {
             console.log(localStorage.timerRunning);
 
             timerRunning = localStorage.timerRunning === 'true';
-            if(localStorage.timerRunning === true){
+            if(timerRunning === true){
+                console.log("timer is running, please load other local storage");
                 if(localStorage.timerTitle != null) {
                     timerTitle = localStorage.timerTitle;
                 }
                 if(localStorage.timerDirection != null) {
                     timerDirection = localStorage.timerDirection;
                 }
-                if(localStorage.timerTime != null) {
+                if(localStorage.timerStart != null){
+                    timerStart = localStorage.timerStart;
+                }
+                if(localStorage.timerEnd != null){
+                    timerEnd = localStorage.timerEnd;
+                }
+                if(localStorage.timerTime != null){
                     timerTime = localStorage.timerTime;
                 }
+
             }
         }
+
 
 
         /* Initialize State */
@@ -87,6 +98,8 @@ class TrackPage extends Component {
             timerDirection: timerDirection,
             timerRunning: timerRunning,
             timerTime: timerTime,
+            timerStart: timerStart,
+            timerEnd: timerEnd,
             projectSectionVisible: true,
             chartSectionVisible: true,
             closeModals: {

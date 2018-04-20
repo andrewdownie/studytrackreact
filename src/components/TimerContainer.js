@@ -12,7 +12,7 @@ class TimerContainer extends Component{
         var timerCurrentTime = props.timerStartTime;
         if(localStorage.timerRunning != null){
             if(localStorage.timerRunning){
-                timerCurrentTime = parseInt(localStorage.timerCurrentTime);
+                timerCurrentTime = parseInt(localStorage.timerCurrentTime, 10);
             }
         }
 
@@ -255,23 +255,23 @@ class TimerContainer extends Component{
         );
     }
 
-
-    render(){
-
-        //console.log(typeof this.state.timerRunning);
-        //console.log(this.state.timerRunning);
-        //if(!this.state.timerRunning){
-            //return this.timerModals();
-        //}
-
-        return (
-            <div>
-                {this.timerModals()}
+    timer(){
+        if(this.state.timerRunning){
+            return(
                 <Timer
                     callbacks={this.state.callbacks}
                     timerCurrentTime={this.state.timerCurrentTime}
                     timerTitle={this.state.timerTitle}
                 />
+            );
+        }
+    }
+
+
+    render(){
+        return (
+            <div>
+                {this.timer()}
                 {this.timerModals()}
             </div>
         );
