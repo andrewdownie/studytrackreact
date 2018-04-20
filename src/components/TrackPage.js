@@ -340,6 +340,8 @@ class TrackPage extends Component {
             timerRunning: studySessionData.timerRunning,
             timerTitle: studySessionData.timerTitle,
             timerTime: studySessionData.timerTime,
+            timerStart: studySessionData.timerStart,
+            timerEnd: studySessionData.timerEnd,
         });
     }
 
@@ -387,6 +389,8 @@ class TrackPage extends Component {
             timerRunning: true,
             timerTitle: projectName,
             timerTime: 0,
+            timerStart: new Date().getTime(),
+            timerEnd: new Date().getTime(),
         });
     }
 
@@ -479,6 +483,7 @@ class TrackPage extends Component {
         var preparedChartData = this.prepareChartData(this.state.studyData);
 
 
+
         return(
         <Grid fluid>
 
@@ -549,6 +554,8 @@ class TrackPage extends Component {
                         timerTitle={this.state.timerTitle}
                         timerStartTime={this.state.timerTime}
                         timerCurrentTime={this.state.timerTime}
+                        timerStart={this.state.timerStart}
+                        timerEnd={this.state.timerEnd}
                         saveTimerDuration={this.saveTimerDuration}
                         openQuickWarning={this.openQuickWarning}
                         openStudyWarning={this.openStudyWarning}

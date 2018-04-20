@@ -23,6 +23,8 @@ class TimerContainer extends Component{
             timerTitle: props.timerTitle,
             timerStartTime: props.timerStartTime,
             timerCurrentTime: timerCurrentTime,
+            timerStart: props.timerStart,
+            timerEnd: props.timerEnd,
             saveTimerDuration: props.saveTimerDuration,
             quickWarningVisible: props.quickWarningVisible,
             stopSessionVisible: props.stopSessionVisible,
@@ -48,6 +50,7 @@ class TimerContainer extends Component{
                 this.runTimer();
             }
         }
+
 
 
     }
@@ -257,10 +260,15 @@ class TimerContainer extends Component{
 
     timer(){
         if(this.state.timerRunning){
+            console.log(this.state.timerStart);
+            console.log(this.state.timerEnd);
             return(
                 <Timer
                     callbacks={this.state.callbacks}
                     timerCurrentTime={this.state.timerCurrentTime}
+                    timerStart={this.state.timerStart}
+                    timerEnd={this.state.timerEnd}
+                    timerDirection={this.state.timerDirection}
                     timerTitle={this.state.timerTitle}
                 />
             );

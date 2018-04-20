@@ -3,7 +3,20 @@ import {Button, Navbar} from 'react-bootstrap';
 import FaStop from 'react-icons/lib/fa/stop';
 import FaCog from 'react-icons/lib/fa/cog';
 
-const formatTimer = (seconds) => {
+const formatTimer = (startTime, endTime, direction) => {
+    console.log(startTime);
+    console.log(endTime);
+    console.log(direction);
+    var seconds = 0;
+
+    if(direction === 'down'){
+        seconds = (endTime - startTime) / 1000;
+    }
+    else{
+        seconds = (new Date().getTime() - startTime) / 1000;
+    }
+
+    console.log(seconds);
 
     //TODO: this could be made cleaner
     var remaining = seconds;
@@ -47,7 +60,7 @@ const Timer = (props) => {
                     {props.timerTitle}
                 </div>
                 <h1 className="timer-time">
-                    {formatTimer(props.timerCurrentTime)}
+                    {formatTimer(props.timerStart, props.timerEnd, props.timerDirection)}
                 </h1>
             </div>
         </Navbar>

@@ -41,10 +41,15 @@ class StudyModal extends Component{
     }
 
     startStudySessionPassthru(){
+        var startTime = new Date().getTime();
+        var endTime = (this.state.hours * 3600 + this.state.minutes * 60) * 1000 + startTime;
+
         var sessionData = {
             timerDirection: 'down',
             timerRunning: true,
             timerTitle: this.state.selectedProject,
+            timerStart: startTime,
+            timerEnd: endTime,
             timerTime: this.state.hours * 3600 + this.state.minutes * 60,
         };
         this.state.callbacks.startStudySession(sessionData);
