@@ -211,6 +211,7 @@ class TimerContainer extends Component{
                 }
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
+                console.log(this.state.timerCurrentTime);
             }.bind(this),
             1000);
         }

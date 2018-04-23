@@ -12,12 +12,15 @@ const formatTimer = (startTime, endTime, direction) => {
     console.log(direction);
 
     var seconds = 0;
+    var currentTime = new Date().getTime();
 
-    if(direction === 'down'){
-        seconds = (endTime - startTime) / 1000;
+    //TODO: need to use current time for both...
+    if(direction === 'down') {
+        //seconds = (endTime - startTime) / 1000;
+        seconds = (endTime - currentTime) / 1000;
     }
-    else{
-        seconds = (new Date().getTime() - startTime) / 1000;
+    else {
+        seconds = (currentTime - startTime) / 1000;
     }
 
     console.log(seconds);
@@ -30,11 +33,11 @@ const formatTimer = (startTime, endTime, direction) => {
     remaining = remaining - (hours * 3600);
     minutes = Math.floor(seconds / 60);
     remaining = remaining - (minutes * 60);
-    seconds = remaining;
+    seconds = Math.round(remaining);
 
     outputHours = hours;
     outputMinutes = minutes;
-    outputSeconds = Math.round(seconds);
+    outputSeconds = seconds;
 
     if(hours === 0){
         outputHours = "";
@@ -46,7 +49,7 @@ const formatTimer = (startTime, endTime, direction) => {
         outputMinutes = "0" + minutes;
     }
     if(seconds < 10){
-        outputSeconds = "0" + Math.round(seconds);
+        outputSeconds = "0" + seconds;
     }
 
     return outputHours + outputMinutes + ":" + outputSeconds;
