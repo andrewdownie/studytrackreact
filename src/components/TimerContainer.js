@@ -110,6 +110,8 @@ class TimerContainer extends Component{
             timerDirection: nextProps.timerDirection,
             timerStartTime: timerStartTime,
             timerCurrentTime: timerCurrentTime,
+            timerStart: nextProps.timerStart,
+            timerEnd: nextProps.timerEnd,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
             showStudyModal: nextProps.showStudyModal,

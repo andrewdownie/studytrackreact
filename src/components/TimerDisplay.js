@@ -4,9 +4,13 @@ import FaStop from 'react-icons/lib/fa/stop';
 import FaCog from 'react-icons/lib/fa/cog';
 
 const formatTimer = (startTime, endTime, direction) => {
+    console.log("Why is everything zero?");
+    //TODO: figure out why the values coming into to 
+    //TODO: here become zero?
     console.log(startTime);
     console.log(endTime);
     console.log(direction);
+
     var seconds = 0;
 
     if(direction === 'down'){

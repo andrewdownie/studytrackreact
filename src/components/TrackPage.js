@@ -342,6 +342,8 @@ class TrackPage extends Component {
             timerTime: studySessionData.timerTime,
             timerStart: studySessionData.timerStart,
             timerEnd: studySessionData.timerEnd,
+        }, () => {
+            console.log(this.state.timerStart);
         });
     }
 
