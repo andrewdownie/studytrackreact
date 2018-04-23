@@ -34,7 +34,7 @@ const formatTimer = (startTime, endTime, direction) => {
 
     outputHours = hours;
     outputMinutes = minutes;
-    outputSeconds = seconds;
+    outputSeconds = Math.round(seconds);
 
     if(hours === 0){
         outputHours = "";
@@ -46,7 +46,7 @@ const formatTimer = (startTime, endTime, direction) => {
         outputMinutes = "0" + minutes;
     }
     if(seconds < 10){
-        outputSeconds = "0" + seconds;
+        outputSeconds = "0" + Math.round(seconds);
     }
 
     return outputHours + outputMinutes + ":" + outputSeconds;

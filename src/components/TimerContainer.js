@@ -132,6 +132,9 @@ class TimerContainer extends Component{
                 localStorage.timerDirection = this.state.timerDirection;
                 localStorage.timerCurrentTime = this.state.timerCurrentTime;
 
+                localStorage.timerStart = this.state.timerStart;
+                localStorage.timerEnd = this.state.timerEnd;
+
             }
         });
     }
