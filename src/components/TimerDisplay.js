@@ -4,12 +4,6 @@ import FaStop from 'react-icons/lib/fa/stop';
 import FaCog from 'react-icons/lib/fa/cog';
 
 const formatTimer = (startTime, endTime, direction) => {
-    console.log("Why is everything zero?");
-    //TODO: figure out why the values coming into to 
-    //TODO: here become zero?
-    console.log(startTime);
-    console.log(endTime);
-    console.log(direction);
 
     var seconds = 0;
     var currentTime = new Date().getTime();
@@ -22,8 +16,6 @@ const formatTimer = (startTime, endTime, direction) => {
     else {
         seconds = (currentTime - startTime) / 1000;
     }
-
-    console.log(seconds);
 
     //TODO: this could be made cleaner
     var remaining = seconds;

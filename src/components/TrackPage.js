@@ -342,8 +342,6 @@ class TrackPage extends Component {
             timerTime: studySessionData.timerTime,
             timerStart: studySessionData.timerStart,
             timerEnd: studySessionData.timerEnd,
-        }, () => {
-            console.log(this.state.timerStart);
         });
     }
 
@@ -397,17 +395,33 @@ class TrackPage extends Component {
     }
 
     cancelStudySession(){
+        //TODO: this needs to call saveTimerDuration?
         console.log("Stop study sesssion");
-        this.setState(
-            {
+
+        this.setState({
                 timerRunning: false,
                 quickWarningVisible: false,
                 stopSessionVisible: false,
-            }
-        );
+            }, () => {
+                this.saveTimerDuration(null);
+            });
     }
 
     saveTimerDuration(timerStopInfo){
+        var timePassed = 0;
+        var curTime = new Date().getTime();
+
+        if(timerStopInfo.timerDirection === 'down'){
+            if(curTime >= timerStopInfo.timerEnd){
+                timePassed = (timerStopInfo.timerEnd - timerStopInfo.timerStart) / 1000;
+            }
+            else{
+                timePassed = (timerStopInfo.timerEnd - curTime) / 1000;
+            }
+        }
+        else{
+            timePassed = (curTime - timerStopInfo.timerStart) / 1000;
+        }
 
 
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
@@ -434,7 +448,7 @@ class TrackPage extends Component {
                 currentStudyTime = todaysObject[timerStopInfo.timerTitle].studied;
             }
             todaysObject[timerStopInfo.timerTitle].studied = 0;
-            todaysObject[timerStopInfo.timerTitle].studied = currentStudyTime + timerStopInfo.timerTime;
+            todaysObject[timerStopInfo.timerTitle].studied = currentStudyTime + timePassed;
             
             var updatedStudyData = this.state.studyData;
 

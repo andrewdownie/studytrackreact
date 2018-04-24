@@ -104,7 +104,6 @@ class TimerContainer extends Component{
         var projectNames = nextProps.projectNames;
         projectNames = projectNames ? projectNames : [];
 
-        console.log(nextProps.showStudyModal);
 
         this.setState({
             timerDirection: nextProps.timerDirection,
@@ -165,21 +164,22 @@ class TimerContainer extends Component{
     */
 
     stopButtonClick(){
-        console.log("stop button click");
-        console.log("how come the modal doesn't get shown here?");
+        var TEN_MINUTES = 10 * 60;
         var timerDirection = this.state.timerDirection;
-        var timerTime = this.state.timerCurrentTime;
+        var timerStart = this.state.timerStart;
+        var timerEnd = this.state.timerEnd;
 
         var timerStopInfo = {
-            timerDirection: this.state.timerDirection,
+            timerDirection: timerDirection,
             timerTitle: this.state.timerTitle,
+            timerStart: this.state.timerStart,
+            timerEnd: this.state.timerEnd,
         }
 
 
 
         if(timerDirection === 'up'){
-            timerStopInfo.timerTime = this.state.timerCurrentTime;
-            if(timerTime < 60 * 10){
+            if( (new Date().getTime() - timerStart) < TEN_MINUTES){
                 this.setState({quickWarningVisible: true});
             }
             else{
@@ -187,8 +187,7 @@ class TimerContainer extends Component{
             }
         }
         else if(timerDirection === 'down'){
-            timerStopInfo.timerTime = this.state.timerStartTime;
-            if(timerTime > 0){
+            if(new Date().getTime() <= timerEnd){
                 this.setState({stopSessionVisible: true});
             }
         }
@@ -211,7 +210,6 @@ class TimerContainer extends Component{
                 }
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
-                console.log(this.state.timerCurrentTime);
             }.bind(this),
             1000);
         }
@@ -266,8 +264,6 @@ class TimerContainer extends Component{
 
     timer(){
         if(this.state.timerRunning){
-            console.log(this.state.timerStart);
-            console.log(this.state.timerEnd);
             return(
                 <Timer
                     callbacks={this.state.callbacks}
