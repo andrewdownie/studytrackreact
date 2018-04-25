@@ -164,7 +164,7 @@ class TimerContainer extends Component{
     */
 
     stopButtonClick(){
-        var TEN_MINUTES = 10 * 60;
+        var TEN_MINUTES_IN_MS = 10 * 60 * 1000;
         var timerDirection = this.state.timerDirection;
         var timerStart = this.state.timerStart;
         var timerEnd = this.state.timerEnd;
@@ -179,7 +179,7 @@ class TimerContainer extends Component{
 
 
         if(timerDirection === 'up'){
-            if( (new Date().getTime() - timerStart) < TEN_MINUTES){
+            if( (new Date().getTime() - timerStart) < TEN_MINUTES_IN_MS){
                 this.setState({quickWarningVisible: true});
             }
             else{

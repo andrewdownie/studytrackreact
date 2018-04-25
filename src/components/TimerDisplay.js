@@ -25,7 +25,7 @@ const formatTimer = (startTime, endTime, direction) => {
     remaining = remaining - (hours * 3600);
     minutes = Math.floor(seconds / 60);
     remaining = remaining - (minutes * 60);
-    seconds = Math.round(remaining);
+    seconds = Math.floor(remaining);
 
     outputHours = hours;
     outputMinutes = minutes;

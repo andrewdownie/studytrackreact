@@ -395,33 +395,42 @@ class TrackPage extends Component {
     }
 
     cancelStudySession(){
-        //TODO: this needs to call saveTimerDuration?
-        console.log("Stop study sesssion");
-
         this.setState({
-                timerRunning: false,
-                quickWarningVisible: false,
-                stopSessionVisible: false,
-            }, () => {
-                this.saveTimerDuration(null);
+            quickWarningVisible: false,
+            stopSessionVisible: false,
+            timerRunning: false,
+        }, () => {
+            console.log("Why does study session save the ms as hours?");
+            this.saveTimerDuration({
+                timerDirection: this.state.timerDirection,
+                timerTitle: this.state.timerTitle,
+                timerStart: this.state.timerStart,
+                timerEnd: this.state.timerEnd,
             });
+        });
     }
 
     saveTimerDuration(timerStopInfo){
+
         var timePassed = 0;
         var curTime = new Date().getTime();
 
         if(timerStopInfo.timerDirection === 'down'){
+            console.log("Regular timer");
             if(curTime >= timerStopInfo.timerEnd){
                 timePassed = (timerStopInfo.timerEnd - timerStopInfo.timerStart) / 1000;
             }
             else{
-                timePassed = (timerStopInfo.timerEnd - curTime) / 1000;
+                timePassed = (curTime - timerStopInfo.timerStart) / 1000;
+                console.log("Partial, time passed: " + timePassed);
+
             }
         }
         else{
+            console.log("Quick timer");
             timePassed = (curTime - timerStopInfo.timerStart) / 1000;
         }
+
 
 
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
