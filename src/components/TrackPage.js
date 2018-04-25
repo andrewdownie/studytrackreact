@@ -207,6 +207,13 @@ class TrackPage extends Component {
             GapiUtil.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
+
+                var currentWeek = DateUtil.WeekOfYear() - 1;
+                if(studyData[currentWeek] == undefined){
+                    console.log("running setup this week");
+                    this.setupThisWeek(gapiInfo);
+                }
+
             });
         }
     }
@@ -221,6 +228,7 @@ class TrackPage extends Component {
 
         //TODO: keep going back until we find a week with goals
         var currentWeek = DateUtil.WeekOfYear() - 1;
+
         while(currentWeek > 0){
             currentWeek = currentWeek - 1;
 
@@ -232,8 +240,26 @@ class TrackPage extends Component {
             var numberOfGoals = Object.keys(weekGoals).length;
             if(numberOfGoals > 0){
                 //TODO: take this week and send it in for this weeks goals
+
                 
-                GapiUtil.Put(gapiInfo, "A" + (DateUtil.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]]);
+                GapiUtil.Put(gapiInfo, "A" + (DateUtil.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]])
+                .then( () => {
+                    var newWeekStudyData = [];
+                    newWeekStudyData[0] = weekGoals;
+                    for(let i = 1; i < 8; i++){
+                        newWeekStudyData[i] = {};
+                    }
+                    var studyData = this.state.studyData;
+                    console.log(currentWeek);
+                    studyData[currentWeek + 1] = newWeekStudyData;
+
+                    console.log(this.state.studyData);
+                    this.setState({studyData: studyData},
+                    () => {
+                        console.log(this.state.studyData);
+                    });
+
+                });
                 break;
             }
             else{
@@ -501,6 +527,7 @@ class TrackPage extends Component {
     
 
     render(){
+        console.log(this.state.studyData);
         this.loadTrackPageData();
 
         //TODO: does this get passed the correct values?
