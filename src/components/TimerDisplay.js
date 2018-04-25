@@ -11,7 +11,9 @@ const formatTimer = (startTime, endTime, direction) => {
     //TODO: need to use current time for both...
     if(direction === 'down') {
         //seconds = (endTime - startTime) / 1000;
-        seconds = (endTime - currentTime) / 1000;
+        var timePassed = currentTime - startTime;
+        var totalTime = endTime - startTime;
+        seconds = (totalTime - timePassed) / 1000;
     }
     else {
         seconds = (currentTime - startTime) / 1000;
