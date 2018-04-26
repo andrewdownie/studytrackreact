@@ -18,6 +18,9 @@ class TimerContainer extends Component{
         }
 
 
+        this.completeTimer = this.completeTimer.bind(this);
+
+
         this.state={
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
@@ -34,6 +37,7 @@ class TimerContainer extends Component{
             studySession_selectedProject: "Loading projects...",
             studySession_minutes: 30,
             studySession_hours: 0,
+            finishedModalVisible: false,
             callbacks: {
                 //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
                 cancelStudySession: props.cancelStudySession,
@@ -56,6 +60,18 @@ class TimerContainer extends Component{
 
     }
 
+    completeTimer(productivityFactor){
+        console.log("This is complete timer in timer container");
+        //TODO: call completeTimer here with timer info in an object passed as an arg
+        this.state.saveTimerDuration({
+            timerDirection: 'down',
+            timerEnd: this.state.timerEnd,
+            timerStart: this.state.timerStart,
+            timerTitle: this.state.timerTitle,
+            productivityFactor: productivityFactor,
+        });
+        this.setState({finishedModalVisible: false});
+    }
 
     hideQuickWarningModal(){
         console.log("hide quick warning modal");
@@ -210,6 +226,11 @@ class TimerContainer extends Component{
                     dir = -1;
                     if(new Date().getTime() >= this.state.timerEnd){
                         console.log("TODO: show finished modal here, stop this timer as well...");
+                        this.setState({
+                            finishedModalVisible: true,
+                            timerRunning: false,
+                            //TODO: clear local storage for timer
+                        })
                     }
                 }
                 this.runTimer();
@@ -263,6 +284,8 @@ class TimerContainer extends Component{
                     showStudyModal={this.state.showStudyModal}
                 />
                 <FinishedModal
+                    completeTimer={this.completeTimer}
+                    finishedModalVisible={this.state.finishedModalVisible}
                 />
             </div>
         );

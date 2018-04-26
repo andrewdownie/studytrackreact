@@ -58,7 +58,7 @@ class TrackPage extends Component {
 
             timerRunning = localStorage.timerRunning === 'true';
             if(timerRunning === true){
-                console.log("timer is running, please load other local storage");
+                console.log("timer is running, please load other local storage");//TODO: I have no idea what I meant by this 
                 if(localStorage.timerTitle != null) {
                     timerTitle = localStorage.timerTitle;
                 }
@@ -123,6 +123,7 @@ class TrackPage extends Component {
                 cancelStudySession: this.cancelStudySession,
                 toggleChartSectionVisible: this.toggleChartSectionVisible.bind(this),
                 toggleProjectSectionVisible: this.toggleProjectSectionVisible.bind(this),
+                saveTimerDuration: this.saveTimerDuration,
             }
         };
 
@@ -209,7 +210,7 @@ class TrackPage extends Component {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
 
                 var currentWeek = DateUtil.WeekOfYear() - 1;
-                if(studyData[currentWeek] == undefined){
+                if(studyData[currentWeek] === undefined){
                     console.log("running setup this week");
                     this.setupThisWeek(gapiInfo);
                 }
@@ -458,6 +459,9 @@ class TrackPage extends Component {
         }
 
 
+        timePassed = timePassed * timerStopInfo.productivityFactor;
+
+
 
         //Step 1: get todays current total study time for the project (will require loading the entire day fresh)
         GapiUtil.GetTodaysStudyData(this.state.gapiInfo)
@@ -466,13 +470,12 @@ class TrackPage extends Component {
             //Step 2: add the timer duration to the loaded total from step 1
             var todaysObject = JSON.parse(todaysStudyData.result.values[0]);
             var projectFound = false;
-            for(var projName in todaysObject){
 
+            for(var projName in todaysObject){
                 if(projName === timerStopInfo.timerTitle){
                     projectFound = true;
                     break;
                 }
-
             }
 
             var currentStudyTime = 0;

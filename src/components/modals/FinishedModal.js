@@ -1,43 +1,48 @@
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 
+const TIME_LEFT_DEFAULT = 10;
+
 class FinishedModal extends Component{
+
     constructor(props){
         super(props);
 
-        this.completeTimer = this.completeTimer.bind(this);
-
         this.state = {
-            timeLeft: 120,
-            showFinishedModal: false,
+            completeTimer: props.completeTimer,
+            finishedModalVisible: false,
+            timeLeft: TIME_LEFT_DEFAULT,//TODO: set this to 120
         };
 
         this.runTimer();
     }
 
     componentWillReceiveProps(nextProps){
+        var timeLeft = this.state.timeLeft;
+
+        if(this.state.finishedModalVisible === false){
+            timeLeft = TIME_LEFT_DEFAULT;
+        }
+
         this.setState({
-            showFinishedModal: false,
+            finishedModalVisible: nextProps.finishedModalVisible,
         });
     }
 
 
-    completeTimer(productivityPercent){
-        console.log("THis is complete timer" + productivityPercent);
-    }
 
     runTimer(){
         //console.log(this.state.timerCurrentTime);
-        if(this.state.timeLeft > 0){
+        if(this.state.timeLeft > 1){
 
             setTimeout(function() {
                 
-                if(this.state.timeLeft > 0){
+                if(this.state.timeLeft > 1){
                     this.runTimer();
                 }
                 else{
                     this.setState({showFinishedModal: false});
-                    this.completeTimer(0.25);
+                    this.state.completeTimer(0.25);
                 }
                 this.setState({timeLeft: this.state.timeLeft - 1});
             }.bind(this),
@@ -67,13 +72,13 @@ class FinishedModal extends Component{
     render(){
         return(
             /* FINSIHED MODAL */
-            <Modal show={this.state.showFinishedModal}>
+            <Modal show={this.state.finishedModalVisible}>
                 <Modal.Header closeButton>
                     <Modal.Title>Rate your productivity</Modal.Title>
                 </Modal.Header>
                 <Modal.Footer>
-                    <Button className="pull-right" onClick={() => this.completeTimer(1.00)}>100%</Button>
-                    <Button className="pull-right" bsStyle="primary" onClick={() => this.completeTimer(0.50)}>50%</Button>
+                    <Button className="pull-right" onClick={() => this.state.completeTimer(1.00)}>100%</Button>
+                    <Button className="pull-right" bsStyle="primary" onClick={() => this.state.completeTimer(0.50)}>50%</Button>
                     <h2 className="pull-left">{this.formatTime(this.state.timeLeft)}</h2>
                 </Modal.Footer>
             </Modal>
