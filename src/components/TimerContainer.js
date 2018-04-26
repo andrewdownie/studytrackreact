@@ -3,6 +3,7 @@ import Timer from './TimerDisplay';
 import QuickWarningModal from './modals/QuickWarningModal';
 import StopSessionModal from './modals/StopSessionModal';
 import StudyModal from './modals/StudyModal';
+import FinishedModal from './modals/FinishedModal';
 
 
 class TimerContainer extends Component{
@@ -257,6 +258,8 @@ class TimerContainer extends Component{
                     callbacks={this.state.callbacks}
                     projectNames={this.state.projectNames}
                     showStudyModal={this.state.showStudyModal}
+                />
+                <FinishedModal
                 />
             </div>
         );
