@@ -9,10 +9,16 @@ class FinishedModal extends Component{
 
         this.state = {
             timeLeft: 120,
-            showFinishedModal: true,
+            showFinishedModal: false,
         };
 
         this.runTimer();
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            showFinishedModal: false,
+        });
     }
 
 

@@ -208,6 +208,9 @@ class TimerContainer extends Component{
                 var dir = 1;
                 if(this.state.timerDirection === 'down'){
                     dir = -1;
+                    if(new Date().getTime() >= this.state.timerEnd){
+                        console.log("TODO: show finished modal here, stop this timer as well...");
+                    }
                 }
                 this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
