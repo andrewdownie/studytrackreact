@@ -4,11 +4,15 @@ import QuickWarningModal from './modals/QuickWarningModal';
 import StopSessionModal from './modals/StopSessionModal';
 import StudyModal from './modals/StudyModal';
 import FinishedModal from './modals/FinishedModal';
+import SettingsModal from './modals/SettingsModal';
 
 
 class TimerContainer extends Component{
     constructor(props){
         super(props);
+
+
+        this.hideSettingsModal = this.hideSettingsModal.bind(this);
 
         var timerCurrentTime = props.timerStartTime;
         if(localStorage.timerRunning != null){
@@ -22,6 +26,7 @@ class TimerContainer extends Component{
 
 
         this.state={
+            timerVolume: 0.5,
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
@@ -38,6 +43,7 @@ class TimerContainer extends Component{
             studySession_minutes: 30,
             studySession_hours: 0,
             finishedModalVisible: false,
+            settingsModalVisible: true,
             callbacks: {
                 //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
                 cancelStudySession: props.cancelStudySession,
@@ -81,6 +87,11 @@ class TimerContainer extends Component{
     hideStopSessionModal(){
         console.log("hide stop session modal");
         this.setState({showStopSessionModal: false});
+    }
+
+    hideSettingsModal(timerVolume){
+        console.log("Timer volume has been set to: " + timerVolume);
+        this.setState({settingsModalVisible: false, timerVolume});
     }
 
 
@@ -286,6 +297,11 @@ class TimerContainer extends Component{
                 <FinishedModal
                     completeTimer={this.completeTimer}
                     finishedModalVisible={this.state.finishedModalVisible}
+                />
+                <SettingsModal
+                    settingsModalVisible={this.state.settingsModalVisible}
+                    hideSettingsModal={this.hideSettingsModal}
+                    timerVolume={this.state.timerVolume}
                 />
             </div>
         );
