@@ -54,7 +54,6 @@ class TrackPage extends Component {
         var timerTime = 0;
 
         if(localStorage.timerRunning != null) {
-            console.log(localStorage.timerRunning);
 
             timerRunning = localStorage.timerRunning === 'true';
             if(timerRunning === true){
@@ -127,7 +126,6 @@ class TrackPage extends Component {
             }
         };
 
-        console.log(this.state.timerRunning);
 
     }
 
@@ -443,7 +441,6 @@ class TrackPage extends Component {
         var curTime = new Date().getTime();
 
         if(timerStopInfo.timerDirection === 'down'){
-            console.log("Regular timer");
             if(curTime >= timerStopInfo.timerEnd){
                 timePassed = (timerStopInfo.timerEnd - timerStopInfo.timerStart) / 1000;
             }
@@ -460,6 +457,7 @@ class TrackPage extends Component {
 
 
         timePassed = timePassed * timerStopInfo.productivityFactor;
+        console.log("Final time passed is: " + timePassed);
 
 
 
@@ -530,7 +528,6 @@ class TrackPage extends Component {
     
 
     render(){
-        console.log(this.state.studyData);
         this.loadTrackPageData();
 
         //TODO: does this get passed the correct values?

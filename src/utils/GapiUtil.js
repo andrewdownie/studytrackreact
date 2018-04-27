@@ -531,7 +531,7 @@ const SetTodaysStudyData = (gapiInfo, studyData) => {
     return new Promise((resolve, reject) => {
 
         var targetCell = GetTodaysCell();
-        console.log(studyData);
+        // console.log(studyData);
         console.log(targetCell);
 
 

@@ -14,7 +14,6 @@ class FinishedModal extends Component{
             timeLeft: TIME_LEFT_DEFAULT,//TODO: set this to 120
         };
 
-        this.runTimer();
     }
 
     componentWillReceiveProps(nextProps){
@@ -24,8 +23,15 @@ class FinishedModal extends Component{
             timeLeft = TIME_LEFT_DEFAULT;
         }
 
+        if(nextProps.finishedModalVisible === true){
+            if(this.state.finishedModalVisible === false){
+                this.runTimer();
+            }
+        }
+
         this.setState({
             finishedModalVisible: nextProps.finishedModalVisible,
+            timeLeft: timeLeft,
         });
     }
 
