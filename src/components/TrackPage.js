@@ -540,6 +540,13 @@ class TrackPage extends Component {
 
         return(
         <Grid fluid>
+            <audio
+                id="audio_tickSound30"
+                ref="audio_tickSound30"
+                src="./../../resources/tickSound30.mp3"
+                type='audio/mpeg; codecs="mp3"'
+                autoPlay
+            />
 
             <Row className="show-grid">
                 <Col xs={12} >
@@ -621,6 +628,7 @@ class TrackPage extends Component {
                         stopSessionVisible={this.state.stopSessionVisible}
                         hideQuickWarningModal={this.hideQuickWarningModal}
                         hideStopSessionModal={this.hideStopSessionModal}
+                        tickSound={this.refs.audio_tickSound30}
                     />
                 </Col>
             </Row>

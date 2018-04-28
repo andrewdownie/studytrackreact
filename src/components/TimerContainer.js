@@ -11,6 +11,8 @@ class TimerContainer extends Component{
     constructor(props){
         super(props);
 
+        console.log(props.audio_tickSound30);
+
 
         this.hideSettingsModal = this.hideSettingsModal.bind(this);
 
@@ -22,6 +24,15 @@ class TimerContainer extends Component{
         }
 
         this.completeTimer = this.completeTimer.bind(this);
+
+        // if(tickSound30 == null){
+            // var tickSound30 = this.refs.audio_tickSound30;
+            // console.log(tickSound30);
+            // tickSound30.addEventListener('ended', function() {
+            //     this.currentTime = 0;
+            //     this.play();
+            // }, false);
+        // }
 
 
         this.state={
@@ -311,14 +322,16 @@ class TimerContainer extends Component{
     timer(){
         if(this.state.timerRunning){
             return(
-                <Timer
-                    callbacks={this.state.callbacks}
-                    timerCurrentTime={this.state.timerCurrentTime}
-                    timerStart={this.state.timerStart}
-                    timerEnd={this.state.timerEnd}
-                    timerDirection={this.state.timerDirection}
-                    timerTitle={this.state.timerTitle}
-                />
+                <div>
+                    <Timer
+                        callbacks={this.state.callbacks}
+                        timerCurrentTime={this.state.timerCurrentTime}
+                        timerStart={this.state.timerStart}
+                        timerEnd={this.state.timerEnd}
+                        timerDirection={this.state.timerDirection}
+                        timerTitle={this.state.timerTitle}
+                    />
+                </div>
             );
         }
     }
