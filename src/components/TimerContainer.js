@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import Timer from './TimerDisplay';
 import QuickWarningModal from './modals/QuickWarningModal';
 import StopSessionModal from './modals/StopSessionModal';
-import StudyModal from './modals/StudyModal';
 import FinishedModal from './modals/FinishedModal';
 import SettingsModal from './modals/SettingsModal';
+import StudyModal from './modals/StudyModal';
+import React, {Component} from 'react';
+import Timer from './TimerDisplay';
 
 
 class TimerContainer extends Component{
@@ -20,7 +20,6 @@ class TimerContainer extends Component{
                 timerCurrentTime = parseInt(localStorage.timerCurrentTime, 10);
             }
         }
-
 
         this.completeTimer = this.completeTimer.bind(this);
 
@@ -43,7 +42,7 @@ class TimerContainer extends Component{
             studySession_minutes: 30,
             studySession_hours: 0,
             finishedModalVisible: false,
-            settingsModalVisible: true,
+            settingsModalVisible: false,
             callbacks: {
                 //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
                 cancelStudySession: props.cancelStudySession,
@@ -61,8 +60,6 @@ class TimerContainer extends Component{
                 this.runTimer();
             }
         }
-
-
 
     }
 
@@ -223,14 +220,13 @@ class TimerContainer extends Component{
 
 
     settingsButtonClick(){
-        console.log("show the settings modal here");
-        //TODO: show a modal here...
+        this.setState({settingsModalVisible: true});
     }
 
-    runTimer(){
-        //console.log(this.state.timerCurrentTime);
-        if(this.state.timerRunning){
 
+    runTimer(){
+
+        if(this.state.timerRunning){
             setTimeout(function() {
                 var dir = 1;
                 if(this.state.timerDirection === 'down'){
@@ -249,6 +245,7 @@ class TimerContainer extends Component{
             }.bind(this),
             1000);
         }
+
     }
 
     //TODO: move this up to track page

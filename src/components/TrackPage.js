@@ -240,7 +240,7 @@ class TrackPage extends Component {
             if(numberOfGoals > 0){
                 //TODO: take this week and send it in for this weeks goals
 
-                
+
                 GapiUtil.Put(gapiInfo, "A" + (DateUtil.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]])
                 .then( () => {
                     var newWeekStudyData = [];

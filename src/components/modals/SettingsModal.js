@@ -1,5 +1,5 @@
 
-import {DropdownButton, Modal, Button, MenuItem} from 'react-bootstrap';
+import {Modal, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
 
 class SettingsModal extends Component{
@@ -18,10 +18,19 @@ class SettingsModal extends Component{
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState({
-            settingsModalVisible: nextProps.settingsModalVisible,
-            timerVolume: nextProps.timerVolume,
-        });
+
+        if(this.state.settingsModalVisible === false){
+            this.setState({
+                settingsModalVisible: nextProps.settingsModalVisible,
+                timerVolume: nextProps.timerVolume,
+            });
+        }
+        else{
+            this.setState({
+                settingsModalVisible: nextProps.settingsModalVisible,
+            });
+        }
+
     }
 
     onChangeTimerVolume(event){
