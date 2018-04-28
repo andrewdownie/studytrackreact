@@ -357,7 +357,8 @@ class TrackPage extends Component {
     }
 
     startStudySession(studySessionData){
-        console.log(studySessionData);
+        console.log("Start study session");
+        // console.log(studySessionData);
 
         this.setState({
             showStudyModal: false,
@@ -425,17 +426,18 @@ class TrackPage extends Component {
             stopSessionVisible: false,
             timerRunning: false,
         }, () => {
-            console.log("Why does study session save the ms as hours?");
             this.saveTimerDuration({
                 timerDirection: this.state.timerDirection,
                 timerTitle: this.state.timerTitle,
                 timerStart: this.state.timerStart,
                 timerEnd: this.state.timerEnd,
+                productivityFactor: 0.5,
             });
         });
     }
 
     saveTimerDuration(timerStopInfo){
+        console.log("Productivity factor is: " + timerStopInfo.productivityFactor);
 
         var timePassed = 0;
         var curTime = new Date().getTime();

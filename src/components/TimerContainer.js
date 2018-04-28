@@ -189,15 +189,19 @@ class TimerContainer extends Component{
     */
 
     stopButtonClick(){
+        //TODO: need to handle productivity factor ---------------------------------------
+
         var TEN_MINUTES_IN_MS = 10 * 60 * 1000;
         var timerDirection = this.state.timerDirection;
         var timerStart = this.state.timerStart;
         var timerEnd = this.state.timerEnd;
+        var productivityFactor = 1;
 
         var timerStopInfo = {
-            timerDirection: timerDirection,
+            productivityFactor: productivityFactor,
             timerTitle: this.state.timerTitle,
             timerStart: this.state.timerStart,
+            timerDirection: timerDirection,
             timerEnd: this.state.timerEnd,
         }
 
