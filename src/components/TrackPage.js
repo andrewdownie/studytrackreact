@@ -131,7 +131,15 @@ class TrackPage extends Component {
             }
         };
 
+        // TODO: I don't think this works in the constuctor for where the tag is defined...
+        // this.refs.audio_tickSound30.play();
+    }
 
+    componentDidMount(){
+        console.log("this is component did mount");
+        console.log(this.refs.audio_tickSound30);
+        //TODO: seems like there should be a better way to get this info...
+        this.setState({audio_tickSound30: this.refs.audio_tickSound30});
     }
 
     toggleChartSectionVisible(){
@@ -543,6 +551,8 @@ class TrackPage extends Component {
 
 
 
+
+
         return(
         <Grid fluid>
             <audio
@@ -550,8 +560,8 @@ class TrackPage extends Component {
                 ref="audio_tickSound30"
                 src={tickSound}
                 type='audio/mpeg; codecs="mp3"'
-                autoPlay
             />
+
 
             <Row className="show-grid">
                 <Col xs={12} >
@@ -597,9 +607,9 @@ class TrackPage extends Component {
                         </Button>
                     </PageHeader>
                    <ChartSection
-                    chartColSize={6}
-                    gChartList={preparedChartData.chartList}
-                    chartSectionVisible={this.state.chartSectionVisible}
+                        chartColSize={6}
+                        gChartList={preparedChartData.chartList}
+                        chartSectionVisible={this.state.chartSectionVisible}
                    />
                 </Col>
             </Row>
@@ -633,7 +643,7 @@ class TrackPage extends Component {
                         stopSessionVisible={this.state.stopSessionVisible}
                         hideQuickWarningModal={this.hideQuickWarningModal}
                         hideStopSessionModal={this.hideStopSessionModal}
-                        tickSound={this.refs.audio_tickSound30}
+                        audio_tickSound30={this.state.audio_tickSound30}
                     />
                 </Col>
             </Row>

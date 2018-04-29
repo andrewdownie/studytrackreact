@@ -11,7 +11,6 @@ class TimerContainer extends Component{
     constructor(props){
         super(props);
 
-        console.log(props.audio_tickSound30);
 
 
         this.hideSettingsModal = this.hideSettingsModal.bind(this);
@@ -106,6 +105,8 @@ class TimerContainer extends Component{
 
     componentWillReceiveProps(nextProps){
         var timerWasRunning = this.state.timerRunning;
+
+        console.log(nextProps.audio_tickSound30);
 
         if(nextProps.timerRunning === false){
             localStorage.timerTitle = 'no timer running';
