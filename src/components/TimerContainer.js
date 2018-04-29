@@ -107,6 +107,16 @@ class TimerContainer extends Component{
         var timerWasRunning = this.state.timerRunning;
 
         console.log(nextProps.audio_tickSound30);
+        console.log(nextProps.audio_tickSound30.paused);
+        if(nextProps.timerRunning){
+            if(nextProps.audio_tickSound30.paused){
+                nextProps.audio_tickSound30.play();
+            }
+        }
+        else{
+            nextProps.audio_tickSound30.pause();
+        }
+
 
         if(nextProps.timerRunning === false){
             localStorage.timerTitle = 'no timer running';
