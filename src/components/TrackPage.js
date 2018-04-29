@@ -10,6 +10,11 @@ import ChartUtil from '../utils/ChartUtil';
 import DateUtil from '../utils/DateUtil';
 import GapiUtil from '../utils/GapiUtil';
 
+/* Html5 audio in react
+https://stackoverflow.com/questions/44121471/html5-audio-is-not-playing-in-my-react-app-in-localhost
+*/
+import tickSound from "./../resources/tickSound30.mp3";
+
 class TrackPage extends Component {
     constructor(props){
         super(props);
@@ -543,7 +548,7 @@ class TrackPage extends Component {
             <audio
                 id="audio_tickSound30"
                 ref="audio_tickSound30"
-                src="./../../resources/tickSound30.mp3"
+                src={tickSound}
                 type='audio/mpeg; codecs="mp3"'
                 autoPlay
             />
