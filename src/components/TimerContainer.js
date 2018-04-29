@@ -98,6 +98,7 @@ class TimerContainer extends Component{
 
     hideSettingsModal(timerVolume){
         console.log("Timer volume has been set to: " + timerVolume);
+        this.state.audio_tickSound30.volume = timerVolume;
         this.setState({settingsModalVisible: false, timerVolume});
     }
 
@@ -164,6 +165,7 @@ class TimerContainer extends Component{
             projectNames: projectNames,
             quickWarningVisible: nextProps.quickWarningVisible,
             stopSessionVisible: nextProps.stopSessionVisible,
+            audio_tickSound30: nextProps.audio_tickSound30,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
