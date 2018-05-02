@@ -133,12 +133,17 @@ class TrackPage extends Component {
 
         // TODO: I don't think this works in the constuctor for where the tag is defined...
         // this.refs.audio_tickSound30.play();
+        // tickSound.addEventListener('ended', function() {
+        //     this.currentTime = 0;
+        //     this.play();
+        // }, false);
     }
 
     componentDidMount(){
         console.log("this is component did mount");
         console.log(this.refs.audio_tickSound30);
         //TODO: seems like there should be a better way to get this info...
+        this.refs.audio_tickSound30.loop = true;
         this.setState({audio_tickSound30: this.refs.audio_tickSound30});
     }
 

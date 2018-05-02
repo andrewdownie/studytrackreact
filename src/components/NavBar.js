@@ -1,4 +1,7 @@
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
+import FaSpinner from 'react-icons/lib/fa/spinner';
+import FaSignIn from 'react-icons/lib/fa/sign-in';
+import FaSignOut from 'react-icons/lib/fa/sign-out';
 import React from 'react';
 
 
@@ -8,8 +11,9 @@ const NavBar = (props) => {
 		var auth2 = props.gapi.auth2.getAuthInstance();
 
 		if(props.isSignedIn){
+            localStorage.clear();
 			auth2.signOut();
-			console.log("Signed out");
+			console.log("Signed out, clearing all localStorage");
 		}
 		else{
 			//TODO: sign in here
@@ -22,14 +26,18 @@ const NavBar = (props) => {
 
 
 	const signInButtonText = () => {
+        
 		if(props.isSignedIn){
-			return <span>Sign Out</span>
-		}
-		return <span>Sign In</span>
+			return <span><FaSignOut /> Sign Out</span>
+        }
+        else if(props.gapi == null){
+            return <div className="text-center sign-in-loading"><FaSpinner className="spin"/> Loading</div>;
+        }
+		return <span><FaSignIn /> Sign In</span>
 	}
 
 	return (
-		<Navbar>
+		<Navbar className="top-nav">
 			<Navbar.Header>
 				<Navbar.Brand>
 					<a href="#home">StudyTrack (React)</a>
