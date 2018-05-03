@@ -225,6 +225,10 @@ class TrackPage extends Component {
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
 
+                console.log(gapiInfo);
+                localStorage.spreadsheet_id = gapiInfo.spreadsheet.id;
+                localStorage.studysheet_title = gapiInfo.studysheet.title;
+
                 var currentWeek = DateUtil.WeekOfYear() - 1;
                 if(studyData[currentWeek] === undefined){
                     console.log("running setup this week");
