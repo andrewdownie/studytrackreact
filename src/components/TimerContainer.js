@@ -35,7 +35,6 @@ class TimerContainer extends Component{
 
 
         this.state={
-            timerVolume: 0.5,
             timerDirection: props.timerDirection,
             timerRunning: props.timerRunning,
             timerTitle: props.timerTitle,
@@ -100,6 +99,7 @@ class TimerContainer extends Component{
     hideSettingsModal(timerVolume){
         console.log("Timer volume has been set to: " + timerVolume);
         this.state.audio_tickSound30.volume = timerVolume;
+        this.state.audio_alarmSound.volume = timerVolume;
         this.setState({settingsModalVisible: false, timerVolume});
     }
 
@@ -108,8 +108,6 @@ class TimerContainer extends Component{
     componentWillReceiveProps(nextProps){
         var timerWasRunning = this.state.timerRunning;
 
-        console.log(nextProps.audio_tickSound30);
-        console.log(nextProps.audio_tickSound30.paused);
         if(nextProps.timerRunning){
             if(nextProps.audio_tickSound30.paused){
                 nextProps.audio_tickSound30.play();
@@ -168,6 +166,7 @@ class TimerContainer extends Component{
             quickWarningVisible: nextProps.quickWarningVisible,
             stopSessionVisible: nextProps.stopSessionVisible,
             audio_tickSound30: nextProps.audio_tickSound30,
+            audio_alarmSound: nextProps.audio_alarmSound,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
@@ -263,6 +262,9 @@ class TimerContainer extends Component{
                     dir = -1;
                     if(new Date().getTime() >= this.state.timerEnd){
                         console.log("TODO: show finished modal here, stop this timer as well...");
+                        this.state.audio_tickSound30.pause();
+                        this.state.audio_alarmSound.play();
+
                         this.setState({
                             finishedModalVisible: true,
                             timerRunning: false,

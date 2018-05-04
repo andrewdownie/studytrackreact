@@ -14,6 +14,7 @@ import GapiUtil from '../utils/GapiUtil';
 https://stackoverflow.com/questions/44121471/html5-audio-is-not-playing-in-my-react-app-in-localhost
 */
 import tickSound from "./../resources/tickSound30.mp3";
+import alarmSound from "./../resources/alarmSound.mp3";
 
 class TrackPage extends Component {
     constructor(props){
@@ -146,10 +147,14 @@ class TrackPage extends Component {
 
     componentDidMount(){
         console.log("this is component did mount");
-        console.log(this.refs.audio_tickSound30);
         //TODO: seems like there should be a better way to get this info...
         this.refs.audio_tickSound30.loop = true;
-        this.setState({audio_tickSound30: this.refs.audio_tickSound30});
+        this.refs.audio_tickSound30.volume = this.state.timerVolume;
+        this.refs.audio_alarmSound.volume = this.state.timerVolume;
+        this.setState({
+            audio_tickSound30: this.refs.audio_tickSound30,
+            audio_alarmSound: this.refs.audio_alarmSound,
+        });
     }
 
     toggleChartSectionVisible(){
@@ -576,6 +581,13 @@ class TrackPage extends Component {
                 type='audio/mpeg; codecs="mp3"'
             />
 
+            <audio
+                id="audio_alarmSound"
+                ref="audio_alarmSound"
+                src={alarmSound}
+                type='audio/mpeg; codecs="mp3"'
+            />
+
 
             <Row className="show-grid">
                 <Col xs={12} >
@@ -659,6 +671,7 @@ class TrackPage extends Component {
                         hideQuickWarningModal={this.hideQuickWarningModal}
                         hideStopSessionModal={this.hideStopSessionModal}
                         audio_tickSound30={this.state.audio_tickSound30}
+                        audio_alarmSound={this.state.audio_alarmSound}
                     />
                 </Col>
             </Row>

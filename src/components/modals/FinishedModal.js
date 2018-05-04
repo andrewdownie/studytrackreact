@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Modal, Button} from 'react-bootstrap';
 
-const TIME_LEFT_DEFAULT = 10;
+const TIME_LEFT_DEFAULT = 30;
 
 class FinishedModal extends Component{
 
@@ -11,7 +11,7 @@ class FinishedModal extends Component{
         this.state = {
             completeTimer: props.completeTimer,
             finishedModalVisible: false,
-            timeLeft: TIME_LEFT_DEFAULT,//TODO: set this to 120
+            timeLeft: TIME_LEFT_DEFAULT,
         };
 
     }
