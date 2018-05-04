@@ -57,6 +57,7 @@ class TrackPage extends Component {
         var timerStart = 0;
         var timerEnd = 0;
         var timerTime = 0;
+        var timerVolume = 0.5;
 
         if(localStorage.timerRunning != null) {
 
@@ -77,6 +78,9 @@ class TrackPage extends Component {
                 }
                 if(localStorage.timerTime != null){
                     timerTime = localStorage.timerTime;
+                }
+                if(localStorage.timerVolume != null){
+                    timerVolume = localStorage.timerVolume;
                 }
 
             }
@@ -104,6 +108,7 @@ class TrackPage extends Component {
             timerTime: timerTime,
             timerStart: timerStart,
             timerEnd: timerEnd,
+            timerVolume: timerVolume,
             projectSectionVisible: true,
             chartSectionVisible: true,
             closeModals: {
@@ -641,6 +646,7 @@ class TrackPage extends Component {
                         timerCurrentTime={this.state.timerTime}
                         timerStart={this.state.timerStart}
                         timerEnd={this.state.timerEnd}
+                        timerVolume={this.state.timerVolume}
                         saveTimerDuration={this.saveTimerDuration}
                         openQuickWarning={this.openQuickWarning}
                         openStudyWarning={this.openStudyWarning}

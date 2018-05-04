@@ -38,7 +38,8 @@ class SettingsModal extends Component{
     }
 
     hideSettingsModalPassthru(){
-        //TODO: make the other end use the timer volume value passed
+        localStorage.timerVolume = this.state.timerVolume;
+
         this.state.hideSettingsModal(this.state.timerVolume);
     }
 
