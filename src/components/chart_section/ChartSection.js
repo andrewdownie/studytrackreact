@@ -11,7 +11,7 @@ const ChartSection = (props) => {
 
     if(props.gChartList.length === 0){
         return(
-            <p><FaSpinner className="spin"/> Loading chart data...</p>
+            <p className="text-center"><br/><FaSpinner className="spin"/> Loading chart data...</p>
         );
     }
 

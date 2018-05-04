@@ -7,6 +7,7 @@ import ProjectList from './ProjectList';
 import LoadingModal from '../modals/LoadingModal';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 
 
 
@@ -77,6 +78,14 @@ class ProjectSection extends Component {
     render(){
         if(!this.state.projectSectionVisible){
             return <span></span>;
+        }
+
+        if(this.state.loadedFromRemote === false){
+            return(
+                <div className="project-list">
+                    <p className="text-center"><br/><FaSpinner className="spin"/> Loading project list</p>
+                </div>
+            );
         }
 
         return(

@@ -2,26 +2,16 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 
 import FaPlayCircle from 'react-icons/lib/fa/play-circle';
-import FaSpinner from 'react-icons/lib/fa/spinner';
 import FaEdit from 'react-icons/lib/fa/edit';
 
 
 const ProjectList = (props) => {
     if(props.projectNames == null || props.projectNames.length === 0 ){
-        if(props.loadedFromRemote === false){
-            return(
-                <div className="project-list">
-                    <p className="text-center"><FaSpinner className="spin"/> Loading project list</p>
-                </div>
-            );
-        }
-        else{
-            return(
-                <div className="project-list">
-                    <p className="text-center">You don't have any projects yet</p>
-                </div>
-            );
-        }
+        return(
+            <div className="project-list">
+                <p className="text-center">You don't have any projects yet</p>
+            </div>
+        );
     }
 
     return(
