@@ -219,10 +219,16 @@ class TrackPage extends Component {
 
         var gapiInfo = GapiUtil.InitializeGAPIInfo(this.props.gapi, DateUtil.Year());
 
-        //TODO: check local cache to see if we know the id of the sheet already (and also have study data)
-        var local_data_cached = false;//TODO: note: this is just explaining what I want to do in the future using a simple code example
+        var local_data_cached = localStorage.spreadsheet_id != null && localStorage.studysheet_title != null;
 
         if(local_data_cached){
+
+            gapiInfo.spreadsheet.exists = true;
+            gapiInfo.spreadsheet.id = localStorage.spreadsheet_id;
+            gapiInfo.studysheet.exists = true;
+            gapiInfo.studysheet.title = localStorage.studysheet_title;
+            console.log(gapiInfo);
+
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
             GapiUtil.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)

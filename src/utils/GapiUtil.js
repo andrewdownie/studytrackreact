@@ -22,12 +22,15 @@ const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
     });
 }
 
-const QuickLoad_ReturnRelevantStudyData = (gapiInfo) => {
-    // After the full load is taken place, a local persitant varaible should be updated to reflect that all data has been loaded and cached locally
-    // If there is cached study data, we can assume the spreadsheet and the sheet exists, and load from the sheet directly using the cache spreadsheet id
-
-    //TODO: do I need to load apis or will they be saved locally?
-    //TODO: ReadStudyData by passing in the sheet id from local cache into the gapiInfo object and calling ReadStudyData
+const QuickLoad_LoadApisAndReturnAllStudyData= (gapiInfo) => {
+    return new Promise((resolve, reject) => {
+        LoadAPIs(gapiInfo)
+        .then(ReadSheetData)
+        .then(JsonifyRawStudyData)
+        .then((studyData) => {
+            resolve(studyData);
+        });
+    });
 }
 
 const JsonifyRawStudyData = (rawStudyData) => {
@@ -551,8 +554,8 @@ const GetTodaysCell = () => {
 }
 
 const GapiUtil = {
+    QuickLoad_LoadApisAndReturnAllStudyData,
     FullLoad_LoadApisAndReturnAllStudyData,
-    QuickLoad_ReturnRelevantStudyData,
     FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
