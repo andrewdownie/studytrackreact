@@ -43,6 +43,7 @@ class TimerContainer extends Component{
             timerStart: props.timerStart,
             timerEnd: props.timerEnd,
             timerVolume: props.timerVolume,
+            alarmVolume: props.alarmVolume,
             saveTimerDuration: props.saveTimerDuration,
             quickWarningVisible: props.quickWarningVisible,
             stopSessionVisible: props.stopSessionVisible,
@@ -96,11 +97,12 @@ class TimerContainer extends Component{
         this.setState({showStopSessionModal: false});
     }
 
-    hideSettingsModal(timerVolume){
+    hideSettingsModal(timerVolume, alarmVolume){
         console.log("Timer volume has been set to: " + timerVolume);
+        console.log("Alarm volume has been set to: " + alarmVolume);
         this.state.audio_tickSound30.volume = timerVolume;
-        this.state.audio_alarmSound.volume = timerVolume;
-        this.setState({settingsModalVisible: false, timerVolume});
+        this.state.audio_alarmSound.volume = alarmVolume;
+        this.setState({settingsModalVisible: false, timerVolume, alarmVolume});
     }
 
 
@@ -160,7 +162,8 @@ class TimerContainer extends Component{
             timerEnd: nextProps.timerEnd,
             timerRunning: nextProps.timerRunning,
             timerTitle: nextProps.timerTitle,
-            timerVolume: nextProps.timerVolume,
+            // timerVolume: nextProps.timerVolume,
+            // alarmVolume: nextProps.alarmVolume,
             showStudyModal: nextProps.showStudyModal,
             projectNames: projectNames,
             quickWarningVisible: nextProps.quickWarningVisible,
@@ -331,6 +334,8 @@ class TimerContainer extends Component{
                     settingsModalVisible={this.state.settingsModalVisible}
                     hideSettingsModal={this.hideSettingsModal}
                     timerVolume={this.state.timerVolume}
+                    alarmVolume={this.state.alarmVolume}
+                    timerRunning={this.state.timerRunning}
                 />
             </div>
         );
