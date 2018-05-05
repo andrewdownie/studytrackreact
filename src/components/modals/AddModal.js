@@ -34,11 +34,13 @@ class AddModal extends Component{
 
 
     addProjectPassthru(){
-        this.state.callbacks.addProject({
-            title: this.state.name,
-            minGoal: this.state.minGoal,
-            idealGoal: this.state.idealGoal,
-        });
+        if(this.state.name.length > 0){
+            this.state.callbacks.addProject({
+                title: this.state.name,
+                minGoal: this.state.minGoal,
+                idealGoal: this.state.idealGoal,
+            });
+        }
     }
 
     onChangeName(event){
