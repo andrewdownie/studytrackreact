@@ -12,6 +12,7 @@ class FinishedModal extends Component{
             completeTimer: props.completeTimer,
             finishedModalVisible: false,
             timeLeft: 0,
+            isSignedIn: props.isSignedIn,
         };
 
     }
@@ -27,6 +28,7 @@ class FinishedModal extends Component{
             this.setState({
                 finishedModalVisible: nextProps.finishedModalVisible,
                 timeLeft: TIME_LEFT_DEFAULT,
+                isSignedIn: nextProps.isSignedIn,
             }, () => {
                 this.runTimer();
             });
@@ -34,6 +36,7 @@ class FinishedModal extends Component{
         else{
             this.setState({
                 finishedModalVisible: nextProps.finishedModalVisible,
+                isSignedIn: nextProps.isSignedIn,
             });
         }
 
@@ -43,7 +46,8 @@ class FinishedModal extends Component{
 
     runTimer(){
         //console.log(this.state.timerCurrentTime);
-        if(this.state.timeLeft > 1){
+        console.log(this.state.isSignedIn);
+        if(this.state.timeLeft > 1 && this.state.isSignedIn){
 
             setTimeout(function() {
                 
@@ -57,6 +61,10 @@ class FinishedModal extends Component{
                 this.setState({timeLeft: this.state.timeLeft - 1});
             }.bind(this),
             1000);
+        }
+
+        if(this.state.isSignedIn === false){
+            this.setState({timeLeft: 0});
         }
     }
 

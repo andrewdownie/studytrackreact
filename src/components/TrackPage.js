@@ -116,6 +116,7 @@ class TrackPage extends Component {
             alarmVolume: alarmVolume,
             projectSectionVisible: true,
             chartSectionVisible: true,
+            isSignedIn: props.isSignedIn,
             closeModals: {
                 closeEditModal: this.closeEditModal.bind(this),
                 closeAddModal: this.closeAddModal.bind(this),
@@ -152,6 +153,12 @@ class TrackPage extends Component {
 
 
         this.loadTrackPageData();
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            isSignedIn: nextProps.isSignedIn,
+        });
     }
 
     componentDidMount(){
@@ -667,6 +674,7 @@ class TrackPage extends Component {
                         hideStopSessionModal={this.hideStopSessionModal}
                         audio_tickSound30={this.state.audio_tickSound30}
                         audio_alarmSound={this.state.audio_alarmSound}
+                        isSignedIn={this.state.isSignedIn}
                     />
                 </Col>
             </Row>

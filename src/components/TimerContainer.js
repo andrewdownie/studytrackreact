@@ -54,6 +54,7 @@ class TimerContainer extends Component{
             studySession_hours: 0,
             finishedModalVisible: false,
             settingsModalVisible: false,
+            isSignedIn: props.isSignedIn,
             callbacks: {
                 //cancelStudySession: this.cancelStudySession.bind(this),//TODO: make this a prop
                 cancelStudySession: props.cancelStudySession,
@@ -170,6 +171,7 @@ class TimerContainer extends Component{
             stopSessionVisible: nextProps.stopSessionVisible,
             audio_tickSound30: nextProps.audio_tickSound30,
             audio_alarmSound: nextProps.audio_alarmSound,
+            isSignedIn: nextProps.isSignedIn,
             //showStudyWarningModal: nextProps.showStudyWarningModal,
         }, ()=>{
             if(startTimerNow){
@@ -266,6 +268,7 @@ class TimerContainer extends Component{
                     if(new Date().getTime() >= this.state.timerEnd){
                         console.log("TODO: show finished modal here, stop this timer as well...");
                         this.state.audio_tickSound30.pause();
+
                         this.state.audio_alarmSound.play();
 
                         this.setState({
@@ -275,8 +278,9 @@ class TimerContainer extends Component{
                         })
                     }
                 }
-                this.runTimer();
                 this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
+                this.runTimer();
+
             }.bind(this),
             1000);
         }
@@ -329,6 +333,7 @@ class TimerContainer extends Component{
                 <FinishedModal
                     completeTimer={this.completeTimer}
                     finishedModalVisible={this.state.finishedModalVisible}
+                    isSignedIn={this.state.isSignedIn}
                 />
                 <SettingsModal
                     settingsModalVisible={this.state.settingsModalVisible}
