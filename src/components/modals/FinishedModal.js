@@ -11,28 +11,32 @@ class FinishedModal extends Component{
         this.state = {
             completeTimer: props.completeTimer,
             finishedModalVisible: false,
-            timeLeft: TIME_LEFT_DEFAULT,
+            timeLeft: 0,
         };
 
     }
 
+
+
     componentWillReceiveProps(nextProps){
         var timeLeft = this.state.timeLeft;
 
-        if(this.state.finishedModalVisible === false){
-            timeLeft = TIME_LEFT_DEFAULT;
-        }
 
-        if(nextProps.finishedModalVisible === true){
-            if(this.state.finishedModalVisible === false){
+        if(nextProps.finishedModalVisible === true
+            && this.state.finishedModalVisible === false){
+            this.setState({
+                finishedModalVisible: nextProps.finishedModalVisible,
+                timeLeft: TIME_LEFT_DEFAULT,
+            }, () => {
                 this.runTimer();
-            }
+            });
+        }
+        else{
+            this.setState({
+                finishedModalVisible: nextProps.finishedModalVisible,
+            });
         }
 
-        this.setState({
-            finishedModalVisible: nextProps.finishedModalVisible,
-            timeLeft: timeLeft,
-        });
     }
 
 
@@ -46,8 +50,8 @@ class FinishedModal extends Component{
                 if(this.state.timeLeft > 1){
                     this.runTimer();
                 }
-                else{
-                    this.setState({showFinishedModal: false});
+                else if(this.state.finishedModalVisible){
+                    this.setState({showFinishedModal: false, timeLeft: 0});
                     this.state.completeTimer(0.25);
                 }
                 this.setState({timeLeft: this.state.timeLeft - 1});

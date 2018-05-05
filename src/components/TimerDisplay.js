@@ -49,11 +49,8 @@ const formatTimer = (startTime, endTime, direction) => {
     }
 
     if(seconds < 10){
-        outputSeconds = "0" + seconds;
+        outputSeconds = "0" + outputSeconds;
     }
-
-
-    //TODO: why does this output negatives, if the time is more than 1 hour?
 
     return outputHours + outputMinutes + ":" + outputSeconds;
 }

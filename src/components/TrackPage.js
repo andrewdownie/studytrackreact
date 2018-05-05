@@ -65,7 +65,6 @@ class TrackPage extends Component {
 
             timerRunning = localStorage.timerRunning === 'true';
             if(timerRunning === true){
-                console.log("timer is running, please load other local storage");//TODO: I have no idea what I meant by this 
                 if(localStorage.timerTitle != null) {
                     timerTitle = localStorage.timerTitle;
                 }
@@ -156,11 +155,10 @@ class TrackPage extends Component {
     }
 
     componentDidMount(){
-        console.log("this is component did mount");
         //TODO: seems like there should be a better way to get this info...
         this.refs.audio_tickSound30.loop = true;
         this.refs.audio_tickSound30.volume = this.state.timerVolume;
-        this.refs.audio_alarmSound.volume = this.state.timerVolume;
+        this.refs.audio_alarmSound.volume = this.state.alarmVolume;
         this.setState({
             audio_tickSound30: this.refs.audio_tickSound30,
             audio_alarmSound: this.refs.audio_alarmSound,
@@ -168,11 +166,9 @@ class TrackPage extends Component {
     }
 
     toggleChartSectionVisible(){
-        console.log("Toggle chart section visible: " + this.state.chartSectionVisible);
         this.setState({chartSectionVisible: !this.state.chartSectionVisible});
     }
     toggleProjectSectionVisible(){
-        console.log("Toggle project section visible: " + this.state.projectSectionVisible);
         this.setState({projectSectionVisible: !this.state.projectSectionVisible});
     }
 
@@ -236,29 +232,24 @@ class TrackPage extends Component {
             gapiInfo.spreadsheet.id = localStorage.spreadsheet_id;
             gapiInfo.studysheet.exists = true;
             gapiInfo.studysheet.title = localStorage.studysheet_title;
-            console.log(gapiInfo);
 
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
-            console.log("Performing quick load");
             GapiUtil.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
         else{
-            console.log("Perform full load");
             GapiUtil.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
 
-                console.log(gapiInfo);
                 localStorage.spreadsheet_id = gapiInfo.spreadsheet.id;
                 localStorage.studysheet_title = gapiInfo.studysheet.title;
 
                 var currentWeek = DateUtil.WeekOfYear() - 1;
                 if(studyData[currentWeek] === undefined){
-                    console.log("running setup this week");
                     this.setupThisWeek(gapiInfo);
                 }
 
@@ -298,13 +289,10 @@ class TrackPage extends Component {
                         newWeekStudyData[i] = {};
                     }
                     var studyData = this.state.studyData;
-                    console.log(currentWeek);
                     studyData[currentWeek + 1] = newWeekStudyData;
 
-                    console.log(this.state.studyData);
                     this.setState({studyData: studyData},
                     () => {
-                        console.log(this.state.studyData);
                     });
 
                 });
@@ -331,7 +319,6 @@ class TrackPage extends Component {
 
     }
     openAddProjectModalCallback(){
-        console.log("Show add project now pls");
         this.setState({
             showAddModal: true,
             showStudyModal: false,
@@ -340,14 +327,11 @@ class TrackPage extends Component {
         });
     }
     openEditProjectModalCallback(projectName){
-        console.log("Show edit project now pls");
 
         var wok = DateUtil.WeekOfYear();
 
         var projectGoals = this.state.studyData[wok - 1][0][projectName];
 
-        console.log(projectName);
-        console.log(projectGoals);
 
 
         var minGoal, idealGoal;
@@ -392,7 +376,6 @@ class TrackPage extends Component {
     }
 
     openStudySessionModalCallback(){
-        console.log("open study session modal");
         this.setState({showStudyModal: true});
     }
 
@@ -406,7 +389,6 @@ class TrackPage extends Component {
     }
 
     startStudySession(studySessionData){
-        console.log("Start study session");
         // console.log(studySessionData);
 
         this.setState({
@@ -423,7 +405,6 @@ class TrackPage extends Component {
     //TODO: hide the timer here, let timer container know that the timer has stopped
     //TODO: the only state I should have to set here is the timer being displayed, right?
     stopTimerCallback(stopTimerInfo){
-        console.log("Stop timer click in track page");
 
         if(stopTimerInfo.timerDirection === 'up'){
             if(stopTimerInfo.timerTime < 10 * 60){
@@ -486,7 +467,6 @@ class TrackPage extends Component {
     }
 
     saveTimerDuration(timerStopInfo){
-        console.log("Productivity factor is: " + timerStopInfo.productivityFactor);
 
         var timePassed = 0;
         var curTime = new Date().getTime();
@@ -497,18 +477,15 @@ class TrackPage extends Component {
             }
             else{
                 timePassed = (curTime - timerStopInfo.timerStart) / 1000;
-                console.log("Partial, time passed: " + timePassed);
 
             }
         }
         else{
-            console.log("Quick timer");
             timePassed = (curTime - timerStopInfo.timerStart) / 1000;
         }
 
 
         timePassed = timePassed * timerStopInfo.productivityFactor;
-        console.log("Final time passed is: " + timePassed);
 
 
 
