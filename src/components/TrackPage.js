@@ -143,6 +143,11 @@ class TrackPage extends Component {
         //     this.currentTime = 0;
         //     this.play();
         // }, false);
+
+
+
+
+        this.loadTrackPageData();
     }
 
     componentDidMount(){
@@ -212,7 +217,6 @@ class TrackPage extends Component {
     }
 
     async loadTrackPageData(){
-        //TODO: there is a lot that will be done here in the future, for now it's working code mixed with example code
         if(this.props.isSignedIn === false || this.state.loadedFromRemote){
             return;
         }
@@ -231,12 +235,14 @@ class TrackPage extends Component {
 
             //Quick load will use the cached sheet name to do a single ajax request and grab the data
             // quick load is seperate from instant load, where previous data is display the moment the user visits a page, along with showing a loading icon to show that its checking the server for changes
+            console.log("Performing quick load");
             GapiUtil.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
             });
         }
         else{
+            console.log("Perform full load");
             GapiUtil.FullLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
@@ -568,7 +574,6 @@ class TrackPage extends Component {
     
 
     render(){
-        this.loadTrackPageData();
 
         //TODO: does this get passed the correct values?
         //TODO: if this does get passed the correct values, does it render the old ones first anyway?
