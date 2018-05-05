@@ -23,28 +23,37 @@ const formatTimer = (startTime, endTime, direction) => {
     var remaining = seconds;
     var outputHours, outputMinutes, outputSeconds;
     var hours, minutes;
+
     hours = Math.floor(seconds / 3600);
     remaining = remaining - (hours * 3600);
-    minutes = Math.floor(seconds / 60);
+    minutes = Math.floor(remaining/ 60);
     remaining = remaining - (minutes * 60);
-    seconds = Math.floor(remaining);
+
 
     outputHours = hours;
     outputMinutes = minutes;
-    outputSeconds = seconds;
+    outputSeconds = Math.floor(remaining);
 
     if(hours === 0){
         outputHours = "";
     }
     else if(hours < 10){
-        outputHours = "0" + hours + ":"
+        outputHours = "0" + hours + ":";
     }
+    else{
+        outputHours = hours + ":";
+    }
+
     if(minutes < 10){
         outputMinutes = "0" + minutes;
     }
+
     if(seconds < 10){
         outputSeconds = "0" + seconds;
     }
+
+
+    //TODO: why does this output negatives, if the time is more than 1 hour?
 
     return outputHours + outputMinutes + ":" + outputSeconds;
 }
