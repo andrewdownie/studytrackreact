@@ -36,7 +36,7 @@ const QuickLoad_LoadApisAndReturnAllStudyData= (gapiInfo) => {
 const JsonifyRawStudyData = (rawStudyData) => {
     return new Promise((resolve, reject) => {
         var studyData = [];
-        if(rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
+        if(rawStudyData != null && rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
 
             // Go through each row of the sheet
             for(var i = 0; i < rawStudyData.result.values.length; i++){
@@ -58,7 +58,9 @@ const JsonifyRawStudyData = (rawStudyData) => {
 }
 
 const ReadSheetData = (gapiInfo) => {
+    
     return new Promise((resolve, reject) => {
+
         var gapi = gapiInfo.gapi;
 
         //TODO: do I still need these checks?
