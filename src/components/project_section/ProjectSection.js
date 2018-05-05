@@ -30,6 +30,7 @@ class ProjectSection extends Component {
             editModal_minGoal: props.editModal_minGoal,
             editModal_idealGoal: props.editModal_idealGoal,
             projectSectionVisible: props.projectSectionVisible,
+            timerRunning: props.timerRunning,
         };
 
     }
@@ -68,6 +69,7 @@ class ProjectSection extends Component {
             editModal_minGoal: nextProps.editModal_minGoal,
             editModal_idealGoal: nextProps.editModal_idealGoal,
             projectSectionVisible: nextProps.projectSectionVisible,
+            timerRunning: nextProps.timerRunning,
         });
     }
     closeEditModal(){
@@ -93,6 +95,8 @@ class ProjectSection extends Component {
                 <ProjectButtonsWrapper
                     callbacks={this.state.callbacks}
                     highlightAddProjectButton={this.state.noProjectsFound}
+                    noProjectsFound={this.state.noProjectsFound}
+                    timerRunning={this.state.timerRunning}
                 />
 
                 <ProjectList
@@ -100,6 +104,7 @@ class ProjectSection extends Component {
                     loadedFromRemote={this.state.loadedFromRemote}
                     noProjectsFound={this.state.noProjectsFound}
                     projectNames={this.state.projectNames}
+                    timerRunning={this.state.timerRunning}
                 />
 
                 {/* Edit Project Modal */}

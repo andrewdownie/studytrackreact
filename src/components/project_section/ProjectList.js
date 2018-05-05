@@ -20,8 +20,8 @@ const ProjectList = (props) => {
                 props.projectNames.map( (projectName, i) => {
                     return (
                         <div className="project-row" key={"chartcol" + i}>
-                            <Button onClick={props.callbacks.quickStartStudy.bind(this,projectName)} className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
-                            <Button projectname={projectName} onClick={props.callbacks.openEditModal.bind(this, projectName)} className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
+                            <Button disabled={props.timerRunning} onClick={props.callbacks.quickStartStudy.bind(this,projectName)} className="btn-responsive start-project-timer-btn" bsStyle="link"><FaPlayCircle/> {projectName}</Button>
+                            <Button disabled={props.timerRunning} projectname={projectName} onClick={props.callbacks.openEditModal.bind(this, projectName)} className="edit-project-btn" bsSize="sm" bsStyle="primary"><FaEdit/></Button>
                         </div>
                     )
                 })

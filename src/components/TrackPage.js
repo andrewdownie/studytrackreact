@@ -626,6 +626,7 @@ class TrackPage extends Component {
                         editModal_minGoal={this.state.editModal_minGoal}
                         editModal_name={this.state.editModal_name}
                         projectSectionVisible={this.state.projectSectionVisible}
+                        timerRunning={this.state.timerRunning}
                     />
                 </Col>
             </Row>
