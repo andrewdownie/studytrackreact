@@ -48,7 +48,7 @@ const formatTimer = (startTime, endTime, direction) => {
         outputMinutes = "0" + minutes;
     }
 
-    if(seconds < 10){
+    if(outputSeconds < 10){
         outputSeconds = "0" + outputSeconds;
     }
 
