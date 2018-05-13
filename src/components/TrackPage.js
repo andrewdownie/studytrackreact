@@ -87,6 +87,8 @@ class TrackPage extends Component {
                     alarmVolume = localStorage.alarmVolume;
                 }
 
+
+
             }
         }
 
@@ -151,7 +153,6 @@ class TrackPage extends Component {
 
 
 
-
         this.loadTrackPageData();
     }
 
@@ -162,7 +163,10 @@ class TrackPage extends Component {
     }
 
     componentDidMount(){
-        //TODO: seems like there should be a better way to get this info...
+        // if(this.state.timerRunning){
+            //this.refs.audio_tickSound30.play();
+        // }
+
         this.refs.audio_tickSound30.loop = true;
         this.refs.audio_tickSound30.volume = this.state.timerVolume;
         this.refs.audio_alarmSound.volume = this.state.alarmVolume;
@@ -245,6 +249,11 @@ class TrackPage extends Component {
             GapiUtil.QuickLoad_LoadApisAndReturnAllStudyData(gapiInfo)
             .then((studyData) => {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
+
+                var currentWeek = DateUtil.WeekOfYear() - 1;
+                if(studyData[currentWeek] === undefined){
+                    this.setupThisWeek(gapiInfo);
+                }
             });
         }
         else{

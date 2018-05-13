@@ -20,7 +20,6 @@ class FinishedModal extends Component{
 
 
     componentWillReceiveProps(nextProps){
-        var timeLeft = this.state.timeLeft;
 
 
         if(nextProps.finishedModalVisible === true

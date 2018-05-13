@@ -101,8 +101,10 @@ class TimerContainer extends Component{
     hideSettingsModal(timerVolume, alarmVolume){
         console.log("Timer volume has been set to: " + timerVolume);
         console.log("Alarm volume has been set to: " + alarmVolume);
-        this.state.audio_tickSound30.volume = timerVolume;
-        this.state.audio_alarmSound.volume = alarmVolume;
+        var tickSound30 = this.state.audio_tickSound30;
+        var alarmSound = this.state.alarmVolume;
+        tickSound30.volume = timerVolume;
+        alarmSound.volume = alarmSound;
         this.setState({settingsModalVisible: false, timerVolume, alarmVolume});
     }
 
@@ -257,6 +259,13 @@ class TimerContainer extends Component{
         this.setState({settingsModalVisible: true});
     }
 
+    componentDidMount(){
+        this._mounted = true;
+    }
+    componentWillUnmount(){
+        this._mounted = false;
+    }
+
 
     runTimer(){
 
@@ -267,9 +276,11 @@ class TimerContainer extends Component{
                     dir = -1;
                     if(new Date().getTime() >= this.state.timerEnd){
                         console.log("TODO: show finished modal here, stop this timer as well...");
-                        this.state.audio_tickSound30.pause();
 
-                        this.state.audio_alarmSound.play();
+                        if(this._mounted){
+                            this.state.audio_tickSound30.pause();
+                            this.state.audio_alarmSound.play();
+                        }
 
                         this.setState({
                             finishedModalVisible: true,
@@ -278,8 +289,11 @@ class TimerContainer extends Component{
                         })
                     }
                 }
-                this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
-                this.runTimer();
+
+                if(this._mounted){
+                    this.setState({timerCurrentTime: this.state.timerCurrentTime + dir});
+                    this.runTimer();
+                }
 
             }.bind(this),
             1000);
