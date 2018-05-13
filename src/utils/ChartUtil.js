@@ -134,10 +134,10 @@ const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
         idealRemaining = 0;
     }
 
-    return [projectTitle, studiedHours, minRemaining, idealRemaining, ""];
+    return [projectTitle, studiedHours, "meow", minRemaining, "meow", idealRemaining, "meow"];
 }
 
-const chart_data_header = ['Time Tracking', 'Studied', 'Min', 'Ideal', { role: 'annotation' } ];
+const chart_data_header = ['Time Tracking', 'Studied', {role:'tooltip'}, 'Min', {role: 'tooltip'}, 'Ideal', { role: 'tooltip' } ];
 
 const ChartUtil = {
     Week,

@@ -1,6 +1,6 @@
 {
-  "short_name": "Study Track",
-  "name": "Study Track React",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
