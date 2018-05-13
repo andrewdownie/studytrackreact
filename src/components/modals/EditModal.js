@@ -49,7 +49,7 @@ class EditModal extends Component {
     }
 
     onChangeName(event){
-        var valid = /[a-zA-Z0-9_-]*/
+        var valid = /[ a-zA-Z0-9_-]*/
         var match = valid.exec(event.target.value);
         this.setState({name: match});
     }

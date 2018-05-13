@@ -3,6 +3,7 @@ preparing it for being passed into a Google Chart */
 
 import SheetUtil from "./SheetUtil";
 import DateUtil from "./DateUtil";
+import TimeUtil from "./TimeUtil";
 
 const Day = (studyData, dayOfYear) => {
     // Vars
@@ -42,7 +43,7 @@ const Day = (studyData, dayOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, 0, 0, ""]);
+        output.push(["No study data this period", 0, "", 0, "", 0, ""]);
     }
 
     return output;
@@ -82,7 +83,7 @@ const Week = (studyData, weekOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, 0, 0, ""]);
+        output.push(["No study data this period", 0, "", 0, "", 0, ""]);
     }
 
     return output;
@@ -134,7 +135,19 @@ const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
         idealRemaining = 0;
     }
 
-    return [projectTitle, studiedHours, "meow", minRemaining, "meow", idealRemaining, "meow"];
+    var totalTooltip = "Total Remaining: " + TimeUtil.FormatChartToolTip(idealRemaining + minRemaining);
+    var idealTooltip = "Ideal Remaining: " + TimeUtil.FormatChartToolTip(idealRemaining);
+    var minTooltip = "Min Remaining: " + TimeUtil.FormatChartToolTip(minRemaining);
+    var studiedTooltip = "Studied: " + TimeUtil.FormatChartToolTip(studiedHours);
+
+
+    var tooltip = projectTitle + "\n\n" + totalTooltip + "\n" + idealTooltip + "\n" + minTooltip + "\n" + studiedTooltip;
+
+    return [
+        projectTitle,
+        studiedHours, tooltip, 
+        minRemaining, tooltip,
+        idealRemaining, tooltip];
 }
 
 const chart_data_header = ['Time Tracking', 'Studied', {role:'tooltip'}, 'Min', {role: 'tooltip'}, 'Ideal', { role: 'tooltip' } ];
