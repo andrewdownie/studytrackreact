@@ -251,7 +251,7 @@ class TrackPage extends Component {
                 this.setState({gapiInfo, studyData, loadedFromRemote: true});
 
                 var currentWeek = DateUtil.WeekOfYear() - 1;
-                if(studyData[currentWeek] === undefined){
+                if(studyData[currentWeek] === undefined || Object.keys(studyData[currentWeek][0]).length === 0){
                     this.setupThisWeek(gapiInfo);
                 }
             });
@@ -265,7 +265,7 @@ class TrackPage extends Component {
                 localStorage.studysheet_title = gapiInfo.studysheet.title;
 
                 var currentWeek = DateUtil.WeekOfYear() - 1;
-                if(studyData[currentWeek] === undefined){
+                if(studyData[currentWeek] === undefined || Object.keys(studyData[currentWeek][0]).length === 0){
                     this.setupThisWeek(gapiInfo);
                 }
 
