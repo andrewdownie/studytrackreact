@@ -298,20 +298,7 @@ class TrackPage extends Component {
 
 
                 GapiUtil.Put(gapiInfo, "A" + (DateUtil.WeekOfYear()), [[JSON.stringify(weekGoals), "{}","{}","{}","{}","{}","{}","{}"]])
-                .then( () => {
-                    var newWeekStudyData = [];
-                    newWeekStudyData[0] = weekGoals;
-                    for(let i = 1; i < 8; i++){
-                        newWeekStudyData[i] = {};
-                    }
-                    var studyData = this.state.studyData;
-                    studyData[currentWeek + 1] = newWeekStudyData;
-
-                    this.setState({studyData: studyData},
-                    () => {
-                    });
-
-                });
+                .then(this.copyGoalsToThisWeek(weekGoals, currentWeek));
                 break;
             }
             else{
@@ -319,7 +306,19 @@ class TrackPage extends Component {
             }
         }
     }
-    
+
+    copyGoalsToThisWeek(weekGoals, currentWeek){
+        var newWeekStudyData = [];
+        newWeekStudyData[0] = weekGoals;
+        for(let i = 1; i < 8; i++){
+            newWeekStudyData[i] = {};
+        }
+        var studyData = this.state.studyData;
+        studyData[currentWeek + 1] = newWeekStudyData;
+
+        this.setState({studyData: studyData}, () => {});
+    }
+
     addProjectCallback(newProjectData){
         this.openLoadingModalCallback("Creating: " + newProjectData.title + "...");
 
