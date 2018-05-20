@@ -163,9 +163,9 @@ class TrackPage extends Component {
     }
 
     componentDidMount(){
-        // if(this.state.timerRunning){
-            //this.refs.audio_tickSound30.play();
-        // }
+        if(this.state.timerRunning){
+            this.refs.audio_tickSound30.play();
+        }
 
         this.refs.audio_tickSound30.loop = true;
         this.refs.audio_tickSound30.volume = this.state.timerVolume;
