@@ -102,9 +102,9 @@ class TimerContainer extends Component{
         console.log("Timer volume has been set to: " + timerVolume);
         console.log("Alarm volume has been set to: " + alarmVolume);
         var tickSound30 = this.state.audio_tickSound30;
-        var alarmSound = this.state.alarmVolume;
+        var alarmSound = this.state.audio_alarmSound;
         tickSound30.volume = timerVolume;
-        alarmSound.volume = alarmSound;
+        alarmSound.volume = alarmVolume;
         this.setState({settingsModalVisible: false, timerVolume, alarmVolume});
     }
 
