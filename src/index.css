@@ -5,7 +5,14 @@ body {
   margin: 0;
 }
 
-.row{
+
+.col-xs-12,
+.chart-section-col,
+.chart-col{
+    padding: 0;
+}
+
+.row {
     margin-right: 0;
     margin-left: 0;
     width: 100%;

@@ -638,7 +638,7 @@ class TrackPage extends Component {
                 </Col>
             </Row>
 
-            <Row className="show-grid">
+            <Row className="show-grid chart-section-col">
                 <Col xs={12} >
                     <PageHeader>
                         <Button onClick={this.state.callbacks.toggleChartSectionVisible} className="section-header" bsStyle="link">

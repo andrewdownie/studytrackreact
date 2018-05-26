@@ -12,7 +12,7 @@ const StudyChart = (props) => {
         <Chart
             chartType="ColumnChart"
             data={chartData}
-            options={{isStacked: true, legend: { position: 'none', maxLines: 0, textStyle: {color: 'black', fontSize: 16 } }}}
+            options={{isStacked: true, chartArea:{width:"80%",height:"70%"}, legend: { position: 'none', maxLines: 0, textStyle: {color: 'black', fontSize: 16 } }}}
             graph_id={props.graph_id}
             width="100%"
             height="400px"

@@ -21,7 +21,7 @@ const ChartSection = (props) => {
             {
                 props.gChartList.map( (gChart, i) => {
                     return (
-                        <Col key={"chartcol" + i} sm={props.chartColSize} >
+                        <Col key={"chartcol" + i} sm={props.chartColSize} className="chart-col">
                             <h2 className="chart-header">{gChart.title}</h2>
                             <StudyChart graph_id={"chart" + i} googleChartData={gChart.data} />
                         </Col>
