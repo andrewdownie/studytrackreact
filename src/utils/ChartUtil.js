@@ -5,6 +5,8 @@ import SheetUtil from "./SheetUtil";
 import DateUtil from "./DateUtil";
 import TimeUtil from "./TimeUtil";
 
+import FaCheck from 'react-icons/lib/fa/check';
+
 const Day = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
@@ -43,7 +45,7 @@ const Day = (studyData, dayOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, "", 0, "", 0, ""]);
+        output.push(["No study data this period", 0, "", "", 0, "", 0, "", ""]);
     }
 
     return output;
@@ -83,7 +85,7 @@ const Week = (studyData, weekOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, "", 0, "", 0, ""]);
+        output.push(["No study data this period", 0, "", "", 0, "", 0, ""]);
     }
 
     return output;
@@ -143,14 +145,38 @@ const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
 
     var tooltip = projectTitle + "\n\n" + totalTooltip + "\n" + idealTooltip + "\n" + minTooltip + "\n" + studiedTooltip;
 
+
+    var studiedColor = '#2ECC71';
+    var minColor = '#E51400';
+    var idealColor = '#F1C40f';
+
+
+    var annotation = "";
+    if(minRemaining === 0){
+        minColor = studiedColor;
+        annotation = "✓";
+    }
+
+    if(idealRemaining === 0){
+        idealColor = studiedColor;
+        annotation = "★";
+    }
+
+
     return [
         projectTitle,
-        studiedHours, tooltip, 
-        minRemaining, tooltip,
-        idealRemaining, tooltip];
+        studiedHours, tooltip, studiedColor, annotation,
+        minRemaining, tooltip, minColor,
+        idealRemaining, tooltip, idealColor,
+    ];
 }
 
-const chart_data_header = ['Time Tracking', 'Studied', {role:'tooltip'}, 'Min', {role: 'tooltip'}, 'Ideal', { role: 'tooltip' } ];
+const chart_data_header = [
+        'Time Tracking',
+        'Studied', {role:'tooltip'}, {role: 'style'}, {role: 'annotation'},
+        'Min', {role: 'tooltip'}, {role: 'style'},
+        'Ideal', { role: 'tooltip' }, {role: 'style'},
+    ];
 
 const ChartUtil = {
     Week,
