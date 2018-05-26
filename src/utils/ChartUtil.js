@@ -45,7 +45,7 @@ const Day = (studyData, dayOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, "", "", 0, "", 0, "", ""]);
+        output.push(['', 0, '', 'black', '', 0, '', 'black', 0, '', 'black']);
     }
 
     return output;
@@ -85,7 +85,7 @@ const Week = (studyData, weekOfYear) => {
     }
 
     if(output.length === 1){
-        output.push(["No study data this period", 0, "", "", 0, "", 0, ""]);
+        output.push(['', 0, '', 'black', '', 0, '', 'black', 0, '', 'black']);
     }
 
     return output;
@@ -176,7 +176,7 @@ const chart_data_header = [
         'Studied', {role:'tooltip'}, {role: 'style'}, {role: 'annotation'},
         'Min', {role: 'tooltip'}, {role: 'style'},
         'Ideal', { role: 'tooltip' }, {role: 'style'},
-    ];
+];
 
 const ChartUtil = {
     Week,

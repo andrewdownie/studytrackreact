@@ -215,6 +215,8 @@ class TrackPage extends Component {
         var currentWeeksGChartData = ChartUtil.Week(studyData, wok - 1);
         var lastWeeksGChartData = ChartUtil.Week(studyData, wok - 2);
         var twoWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 3);
+        var threeWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 4);
+        var fourWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 5);
 
 
 
@@ -222,6 +224,8 @@ class TrackPage extends Component {
         chartList.push({title: "Current Week",  data: currentWeeksGChartData});
         chartList.push({title: "Last Week",     data: lastWeeksGChartData});
         chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
+        chartList.push({title: "Three Weeks Ago", data: threeWeeksAgoGChartData});
+        chartList.push({title: "Four Weeks Ago", data: fourWeeksAgoGChartData});
 
         var projectNames = SheetUtil.ProjectNames(studyData, wok);//TODO: this had -1 before???
 
