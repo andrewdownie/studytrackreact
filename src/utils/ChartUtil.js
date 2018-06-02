@@ -217,6 +217,13 @@ const FormatTime = (seconds) => {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds / 60) - (hours * 60));
 
+    if(minutes == 0){
+        minutes = "00";
+    }
+    else if (minutes <= 9){
+        minutes = "0" + minutes;
+    }
+
     return hours + ":" + minutes;
 }
 
