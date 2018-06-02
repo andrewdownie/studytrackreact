@@ -218,14 +218,21 @@ class TrackPage extends Component {
         var threeWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 4);
         var fourWeeksAgoGChartData = ChartUtil.Week(studyData, wok - 5);
 
+        var todaysTotalStudy = ChartUtil.TotalDayStudyTime(studyData, doy);
+        var currentWeeksTotalStudy = ChartUtil.TotalWeekStudyTime(studyData, wok - 1);
+        var lastWeeksTotalStudy = ChartUtil.TotalWeekStudyTime(studyData, wok - 2);
+        var twoWeeksAgoTotalStudy = ChartUtil.TotalWeekStudyTime(studyData, wok - 3);
+        var threeWeeksAgoTotalStudy = ChartUtil.TotalWeekStudyTime(studyData, wok - 4);
+        var fourWeeksAgoTotalStudy = ChartUtil.TotalWeekStudyTime(studyData, wok - 5);
 
 
-        chartList.push({title: "Today",         data: todaysGChartData});
-        chartList.push({title: "Current Week",  data: currentWeeksGChartData});
-        chartList.push({title: "Last Week",     data: lastWeeksGChartData});
-        chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData});
-        chartList.push({title: "Three Weeks Ago", data: threeWeeksAgoGChartData});
-        chartList.push({title: "Four Weeks Ago", data: fourWeeksAgoGChartData});
+
+        chartList.push({title: "Today",         data: todaysGChartData, studiedThisPeriod: todaysTotalStudy});
+        chartList.push({title: "Current Week",  data: currentWeeksGChartData, studiedThisPeriod: currentWeeksTotalStudy});
+        chartList.push({title: "Last Week",     data: lastWeeksGChartData, studiedThisPeriod: lastWeeksTotalStudy});
+        chartList.push({title: "Two Weeks Ago", data: twoWeeksAgoGChartData, studiedThisPeriod: twoWeeksAgoTotalStudy});
+        chartList.push({title: "Three Weeks Ago", data: threeWeeksAgoGChartData, studiedThisPeriod: threeWeeksAgoTotalStudy});
+        chartList.push({title: "Four Weeks Ago", data: fourWeeksAgoGChartData, studiedThisPeriod: fourWeeksAgoTotalStudy});
 
         var projectNames = SheetUtil.ProjectNames(studyData, wok);//TODO: this had -1 before???
 

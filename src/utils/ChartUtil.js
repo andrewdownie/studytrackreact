@@ -7,6 +7,7 @@ import TimeUtil from "./TimeUtil";
 
 import FaCheck from 'react-icons/lib/fa/check';
 
+//Prepares data to be passed into a google chart
 const Day = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
@@ -51,6 +52,7 @@ const Day = (studyData, dayOfYear) => {
     return output;
 }
 
+//Prepares data to be passed into a google chart
 const Week = (studyData, weekOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
@@ -171,6 +173,53 @@ const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     ];
 }
 
+const TotalWeekStudyTime = (studyData, weekOfYear) => {
+    // Vars
+    var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
+    var projectTotals = WeeksGoals(weekInfo);
+    var output = 0;
+    var projName;
+
+    // Tally the amount of study time spent this week on each project
+    for(var i = 1; i < weekInfo.length; i++){
+        for(projName in weekInfo[i]){
+
+            if(projectTotals[projName]){
+                output += weekInfo[i][projName].studied;
+            }
+
+        }
+    }
+
+    return FormatTime(output);
+};
+
+
+const TotalDayStudyTime = (studyData, dayOfYear) => {
+    // Vars
+    var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
+    var todaysCellIndex = DateUtil.CellFromDayOfYear(dayOfYear);
+    var projectTotals = WeeksGoals(weekInfo);
+    var output = 0;
+    var projName;
+    
+    //Grab the amount of time studied today for each project
+    for(projName in weekInfo[todaysCellIndex]){
+        if(projectTotals[projName]){
+            output += weekInfo[todaysCellIndex][projName].studied;
+        }
+    }
+
+    return FormatTime(output);
+};
+
+const FormatTime = (seconds) => {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds / 60) - (hours * 60));
+
+    return hours + ":" + minutes;
+}
+
 const chart_data_header = [
         'Time Tracking',
         'Studied', {role:'tooltip'}, {role: 'style'}, {role: 'annotation'},
@@ -180,7 +229,9 @@ const chart_data_header = [
 
 const ChartUtil = {
     Week,
-    Day
+    Day,
+    TotalWeekStudyTime,
+    TotalDayStudyTime,
 }
 
 export default ChartUtil;
