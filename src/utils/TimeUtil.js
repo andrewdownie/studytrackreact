@@ -1,3 +1,4 @@
+// Format the times that get shown on the google chart tooltip
 const FormatChartToolTip = (hours) => {
     var outputHours = "", outputMinutes = "";
 

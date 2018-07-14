@@ -8,20 +8,27 @@ import React from 'react';
 const NavBar = (props) => {
 
 	const signInButtonClick = () => {
-		var auth2 = props.gapi.auth2.getAuthInstance();
+        if(props.gapi != null && props.gapi.auth2 != null){
+            var auth2 = props.gapi.auth2.getAuthInstance();
 
-		if(props.isSignedIn){
-            localStorage.clear();
-			auth2.signOut();
-			console.log("Signed out, clearing all localStorage");
-		}
-		else{
-			//TODO: sign in here
-			console.log("Signing in...");
-			auth2.signIn().then(
-				//DO NOTHING...
-			);
-		}
+            if(props.isSignedIn){
+                localStorage.clear();
+                auth2.signOut();
+                console.log("Signed out, clearing all localStorage");
+            }
+            else{
+                //TODO: sign in here
+                console.log("Signing in...");
+                auth2.signIn().then(
+                    //DO NOTHING... BUT SIGN IN????!?!?!?@/11?!?
+                );
+            }
+
+        }
+        else{
+            // don't do nuthin
+            // if the user spams the login button while it says loading, it can result in the error: "user does not have permission"?
+        }
 	}
 
 

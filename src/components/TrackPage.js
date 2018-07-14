@@ -377,7 +377,7 @@ class TrackPage extends Component {
     editProjectCallback(editProjectData){
         this.openLoadingModalCallback("Editing: " + editProjectData.originalName + "...");
 
-        GapiUtil.UpdateProject(this.state.gapiInfo, editProjectData)
+        GapiUtil.UpdateProjectGoals(this.state.gapiInfo, editProjectData)
         .then((response) => {
 
             var wok = DateUtil.WeekOfYear();

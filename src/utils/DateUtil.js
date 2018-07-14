@@ -1,3 +1,4 @@
+// Returns the current day of the year
 const DayOfYear = () => {
     //https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
     var now = new Date();
@@ -8,10 +9,12 @@ const DayOfYear = () => {
     return parseInt(day, 10);
 }
 
+// Returns the current year
 const Year = () => {
     return parseInt(new Date().getUTCFullYear(), 10);
 }
 
+// Returns the week of the current year
 const WeekOfYear = () => {
     var d = new Date();
     var dayNum = d.getUTCDay() || 7;
@@ -20,14 +23,17 @@ const WeekOfYear = () => {
     return parseInt(Math.ceil((((d - yearStart) / 86400000) + 1)/7), 10);
 }
 
+// Given a day of the year, returns the day of the current week
 const DayOfWeekFromDayOfYear = (dayOfYear) => {
     return dayOfYear % 7;
 }
 
+// Returns the first day of the week, as a day of the year
 const FirstDayOfWeek = (weekOfYear) => {
     return (weekOfYear - 1) * 7;
 }
 
+// Returns the index of the cell that holds info about the given day of the year
 const CellFromDayOfYear = (dayOfYear) => {
     return DayOfWeekFromDayOfYear(dayOfYear) + 1;
 }

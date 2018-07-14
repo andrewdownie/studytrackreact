@@ -6,6 +6,7 @@
   "dependencies": {
     "gh-pages": "^1.1.0",
     "google-client-api": "^1.0.4",
+    "googleapis": "^27.0.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",

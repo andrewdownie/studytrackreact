@@ -5,9 +5,10 @@ import SheetUtil from "./SheetUtil";
 import DateUtil from "./DateUtil";
 import TimeUtil from "./TimeUtil";
 
-import FaCheck from 'react-icons/lib/fa/check';
 
-//Prepares data to be passed into a google chart
+// Prepares data to be passed into a google chart
+// Grabs a day of the year, and calculates the studied, min, ideal values
+//  for all projects of that week and formats it to the form that google chart expects
 const Day = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
@@ -52,7 +53,9 @@ const Day = (studyData, dayOfYear) => {
     return output;
 }
 
-//Prepares data to be passed into a google chart
+// Prepares data to be passed into a google chart
+// Grabs a week of the year, and calculates the studied, min, ideal values
+//  for all projects of that week and formats it to the form that google chart expects
 const Week = (studyData, weekOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
@@ -93,6 +96,7 @@ const Week = (studyData, weekOfYear) => {
     return output;
 }
 
+// Grabs the goals from the provided week of the year
 const WeeksGoals = (weekInfo) => {
     var projectTotals = {};
     var projName;
@@ -107,7 +111,7 @@ const WeeksGoals = (weekInfo) => {
         projectTotals[projName] = {};
         projectTotals[projName].minGoal = goals[projName].minGoal;
         projectTotals[projName].idealGoal = goals[projName].idealGoal;
-        projectTotals[projName].studied = 0;
+        projectTotals[projName].studied = 0; // REFACTOR: why is studied set to 0 here?
     }
     return projectTotals;
 }
@@ -115,6 +119,11 @@ const WeeksGoals = (weekInfo) => {
 ///
 /// ChartifySingleProject
 ///
+
+// Prepares a signle project to be feed into a google chart
+// Calculates studied, min and ideal times
+// Creates the tooltip
+// Formats data to the form google charts expects
 const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     // Vars
     var idealRemaining = talliedProjectInfo.idealGoal;
@@ -173,6 +182,7 @@ const ChartifySingleProject = (projectTitle, talliedProjectInfo) => {
     ];
 }
 
+// Total the amount of time spent studying for the target week
 const TotalWeekStudyTime = (studyData, weekOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_WOY(studyData, weekOfYear);
@@ -195,6 +205,7 @@ const TotalWeekStudyTime = (studyData, weekOfYear) => {
 };
 
 
+// Total the amount of time spent studying for the target day
 const TotalDayStudyTime = (studyData, dayOfYear) => {
     // Vars
     var weekInfo = SheetUtil.WeekData_DOY(studyData, dayOfYear);
@@ -213,11 +224,12 @@ const TotalDayStudyTime = (studyData, dayOfYear) => {
     return FormatTime(output);
 };
 
+// Format time to H:MM
 const FormatTime = (seconds) => {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds / 60) - (hours * 60));
 
-    if(minutes == 0){
+    if(minutes === 0){
         minutes = "00";
     }
     else if (minutes <= 9){
@@ -227,6 +239,7 @@ const FormatTime = (seconds) => {
     return hours + ":" + minutes;
 }
 
+// Google chart desciption of the charts header
 const chart_data_header = [
         'Time Tracking',
         'Studied', {role:'tooltip'}, {role: 'style'}, {role: 'annotation'},

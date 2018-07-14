@@ -1,38 +1,33 @@
 /* Helpers to help manipulate Google Sheet
-study data once it's been brought local*/
+study data once it's been brought local */
 
 import DateUtil from './DateUtil';
 
+// Returns the row of the sheet that corresponds to the given week of year
 const RowOfSheet_WOY = (weekOfYear) => {
     return weekOfYear - 1;
 }
 
+// Returns the goals for the given week of year
 const WeekGoals = (studyData, weekOfYear) => {
     //Each weeks goals are stored in the first cell of each row
     return studyData[weekOfYear][0];
 }
 
+// Returns the week data
+//TODO: it doesn't look like dayOfYear parameter is needed...
 const WeekData_DOY = (studyData, dayOfYear) => {
     var weekOfYear = DateUtil.WeekOfYear();
     var sheetRow = weekOfYear - 1
     return WeekData_WOY(studyData, sheetRow);
 }
 
+// Returns the week data for the given week of the year
 const WeekData_WOY = (studyData, weekOfYear) => {
     if(!studyData){
         return null;
     }
     return studyData[weekOfYear];
-}
-
-const UpdateData_StudyTime = (projectName, dayOfYear) => {
-
-}
-const UpdateData_MinGoal = (projectName, dayOfYear) => {
-
-}
-const UpdateData_IdealGoal = (projectName, dayOfYear) => {
-
 }
 
 const CreateWeekData = (projectGoals=[], studyData=[]) => {
@@ -76,7 +71,7 @@ const ProjectNames = (studyData, weekOfYear) => {
     //TODO: weeksDataRaw comes out with old name???
     //console.log(studyData[weekOfYear - 1]);
 
-    //TODO: THIS HAS THE WRONG DATA
+    //TODO: THIS HAS THE WRONG DATA //... has this been figured out?
 
     if(weeksDataRaw == null){
         return null;
@@ -95,9 +90,6 @@ const ProjectNames = (studyData, weekOfYear) => {
 
 const SheetUtil = {
     CreateProjectStudyTime,
-    UpdateData_StudyTime,
-    UpdateData_IdealGoal,
-    UpdateData_MinGoal,
     CreateProjectGoal,
     CreateWeekData,
     RowOfSheet_WOY,

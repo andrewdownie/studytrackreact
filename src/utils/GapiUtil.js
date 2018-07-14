@@ -3,6 +3,8 @@ import DateUtil from "./DateUtil";
 /* Interacts with Google APIs to get and send data */
 
 
+// If the user just signed in, we have to figure out what spreadsheet,
+//  and sheet to load from one after the other
 const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
     // The full promise chain to loading project data */
 
@@ -14,7 +16,7 @@ const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
         .then(CreateSheetIfNotExists)
         .then(FillSheetIfJustCreated)
         .then(ReadSheetData)
-        .then(JsonifyRawStudyData)
+        .then(ParseRawStudyData)
         .then((studyData) => {
             resolve(studyData);
         });
@@ -22,18 +24,22 @@ const FullLoad_LoadApisAndReturnAllStudyData = (gapiInfo) => {
     });
 }
 
+// If the user was already signed in, then the info about what spreadsheet and sheet to load
+//  from is already saved, so we just need to load up to date info from said sheet
 const QuickLoad_LoadApisAndReturnAllStudyData= (gapiInfo) => {
     return new Promise((resolve, reject) => {
         LoadAPIs(gapiInfo)
         .then(ReadSheetData)
-        .then(JsonifyRawStudyData)
+        .then(ParseRawStudyData)
         .then((studyData) => {
             resolve(studyData);
         });
     });
 }
 
-const JsonifyRawStudyData = (rawStudyData) => {
+// Read the sheets values, where each sheet cell holds json,
+//  and turn it into javascript object
+const ParseRawStudyData = (rawStudyData) => {
     return new Promise((resolve, reject) => {
         var studyData = [];
         if(rawStudyData != null && rawStudyData.result.values != null && rawStudyData.result.values.length > 0){
@@ -57,8 +63,9 @@ const JsonifyRawStudyData = (rawStudyData) => {
 
 }
 
+// Read the entirety of the sheets data
 const ReadSheetData = (gapiInfo) => {
-    
+
     return new Promise((resolve, reject) => {
 
         var gapi = gapiInfo.gapi;
@@ -83,12 +90,10 @@ const ReadSheetData = (gapiInfo) => {
 }
 
 
-/*
-const GetWeeksGoals = (gapiInfo, weekOfYear) => {
-    console.log("GetWeekGoals doesnt do anything yet");
-}
-*/
 
+// Get a list of all the files this app has access to
+//  and go through each, checking if any of them have the name
+//  of the user spread sheet
 const CheckIfSSExists = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
@@ -111,6 +116,8 @@ const CheckIfSSExists = (gapiInfo) => {
     });
 }
 
+// For this apps user data spreadsheet, check if there is a sheet
+//  with the current year as a name
 const CheckIfSheetExists = (gapiInfo) => {
 
     return new Promise((resolve, reject) => {
@@ -140,6 +147,7 @@ const CheckIfSheetExists = (gapiInfo) => {
     });
 }
 
+// Create a sheet with the current year as the name,
 const CreateSheetIfNotExists = (gapiInfo) => {
 
     return new Promise((resolve, reject) => {
@@ -178,6 +186,7 @@ const CreateSheetIfNotExists = (gapiInfo) => {
     });
 }
 
+// Delete a project from every cell of the current week
 const DeleteProject = (gapiInfo, deleteProjectName) => {
     var i;
     return new Promise((resolve, reject) => {
@@ -248,12 +257,9 @@ const DeleteProject = (gapiInfo, deleteProjectName) => {
     });
 }
 
-const UpdateProject = (gapiInfo, editProjectData) => {
+// Update goal info about the current week (name, min, ideal)
+const UpdateProjectGoals = (gapiInfo, editProjectData) => {
     var i;
-    //TODO: get most recent version of project goals
-    //TODO: check to make sure that the project that is to be edited actually exists
-    //TODO: update the project that is to be edited
-    //TODO: send the update
 
     return new Promise((resolve, reject) => {
         var wok = DateUtil.WeekOfYear();
@@ -335,6 +341,7 @@ const UpdateProject = (gapiInfo, editProjectData) => {
 }
 
 
+// Add a new project to the goal cell of the current week
 const AddNewProject = (gapiInfo, newProjectData) => {
     return new Promise((resolve, reject) => {
 
@@ -383,6 +390,7 @@ const AddNewProject = (gapiInfo, newProjectData) => {
 
 }
 
+// Get a range of cells from the user data sheet
 const Get = (gapiInfo, range) => {
     return new Promise((resolve, reject) =>{
         gapiInfo.gapi.client.sheets.spreadsheets.values.get({
@@ -397,6 +405,7 @@ const Get = (gapiInfo, range) => {
     });
 }
 
+// Put a range of values the user data sheet
 const Put = (gapiInfo, range, values) => {
     return new Promise((resolve, reject) => {
         var sendDataRequest = gapiInfo.gapi.client.sheets.spreadsheets.values.batchUpdate(
@@ -421,6 +430,7 @@ const Put = (gapiInfo, range, values) => {
     });
 }
 
+// Initialize the sheet with empty json objects if it's empty
 const FillSheetIfJustCreated = (gapiInfo) => {
     return new Promise((resolve, reject) => {
         //TODO: create a list of 63 week objects, and place them into the target sheet
@@ -450,6 +460,7 @@ const FillSheetIfJustCreated = (gapiInfo) => {
     });
 }
 
+// Create the userdata spreadsheet if it doesn't exist
 const CreateSSIfNotExists = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
@@ -472,7 +483,7 @@ const CreateSSIfNotExists = (gapiInfo) => {
     });
 }
 
-
+// Load the google apis needed to store/load this apps study data
 const LoadAPIs = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
@@ -495,6 +506,8 @@ const LoadAPIs = (gapiInfo) => {
     });
 }
 
+// Initialize the data object that holds state info about
+//  the user data study sheet
 const InitializeGAPIInfo = (gapi, studySheetName) => {
     return {
         gapi: gapi,
@@ -512,11 +525,13 @@ const InitializeGAPIInfo = (gapi, studySheetName) => {
     };
 }
 
+// Return the spreadsheet column letter that corresponds to the given day of the week
 const DayOfWeekToColumn = (dayOfWeek) => {
     var cols = ['B', 'C', 'D', 'E', 'F', 'G', 'H'];
     return cols[dayOfWeek];
 }
 
+// Gets the contents of the cell that holds todays study data
 const GetTodaysStudyData = (gapiInfo) => {
     return new Promise((resolve, reject) => {
 
@@ -532,6 +547,7 @@ const GetTodaysStudyData = (gapiInfo) => {
 
 }
 
+// Sets the contents of the cell that holds todays study data
 const SetTodaysStudyData = (gapiInfo, studyData) => {
     return new Promise((resolve, reject) => {
 
@@ -545,6 +561,7 @@ const SetTodaysStudyData = (gapiInfo, studyData) => {
     });
 }
 
+// Returns the A1 style sheet key for the cell that holds todays study data
 const GetTodaysCell = () => {
     var weekOfYear = DateUtil.WeekOfYear();
     var dayOfWeek = DateUtil.DayOfWeekFromDayOfYear(DateUtil.DayOfYear());
@@ -561,7 +578,8 @@ const GapiUtil = {
     FillSheetIfJustCreated,
     CreateSheetIfNotExists,
     CreateSSIfNotExists,
-    JsonifyRawStudyData,
+    UpdateProjectGoals,
+    ParseRawStudyData,
     GetTodaysStudyData,
     SetTodaysStudyData,
     CheckIfSheetExists,
@@ -570,7 +588,6 @@ const GapiUtil = {
     AddNewProject,
     DeleteProject,
     ReadSheetData,
-    UpdateProject,
     LoadAPIs,
     Put,
     Get,
